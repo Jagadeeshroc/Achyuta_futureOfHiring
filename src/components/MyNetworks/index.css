@@ -1,0 +1,198 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Body */
+  body {
+    background-color: #f0f2f5;
+    color: #333;
+    font-size: 16px;
+    padding: 20px;
+  }
+  
+  /* Network Container */
+  .network-container {
+   
+    margin: 20px auto;
+    background-image: url("https://media-hosting.imagekit.io/04593774b80f43e6/Untitled%20design%20(3).png?Expires=1838094141&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=xGPbbGarPVab68r80aEnV0YxFHYvWv9aqO~j2pChh-V7N6Ca1AvLmSWiJOeLn0UvL6skRob96NUjBRSpbikSE5571Q0MRcwTJNdzqrq6xiF4QRm~i~FMWNwT-E~23mQk6hWcJ05~uMu95m~KOmINdPcrfTw9XEWZ7asvEJ0mp8PlQN9hDvFJ15IJTy0Fh5Jz3L4b-bNSe2Z60IHtBl2VCdsI-7Newl7xTO76JhSgCS5HmsVDjSyfYL3zehfzI1Jn9nV2SYLAbayFhEHNVbS0eGa32qg77ZKA8ZVtf-hGpFwtarfDrHWdvZf~c1VAtPWUK5XGi40hIr-2tfrcURzMgA__");
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .network-container:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Header */
+  .network-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-bottom: 2px solid #eee;
+  }
+  
+  .network-header h1 {
+    font-size: 28px;
+    color: #222;
+  }
+  
+  .network-search {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 20px;
+    padding: 8px 12px;
+    transition: background 0.3s ease;
+  }
+  
+  .network-search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 8px;
+    width: 200px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .search-icon {
+    font-size: 20px;
+    color: #555;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .search-icon:hover {
+    color: #cd393e; /* LinkedIn blue as a futuristic touch */
+  }
+  
+  /* Connections List */
+  .connections-list {
+    margin-top: 20px;
+  }
+  
+  .connections-list h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: left;
+  }
+  
+  /* Connection Cards */
+  .connection-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .connection-card {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  
+  .connection-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+  
+  .connection-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0077b5;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .connection-avatar:hover {
+    transform: scale(1.05);
+  }
+  
+  .connection-info {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .connection-info h3 {
+    font-size: 18px;
+    color: #222;
+    margin-bottom: 5px;
+  }
+  
+  .connection-info p {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Connect Button */
+  .connect-button {
+    background: linear-gradient(90deg, #0077b5, #00a0dc);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+  }
+  
+  .connect-button:hover {
+    background: linear-gradient(90deg, #005582, #0077b5);
+    transform: scale(1.05);
+  }
+  
+  .connect-icon {
+    font-size: 18px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .network-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .network-search {
+      width: 100%;
+      margin-top: 10px;
+    }
+  
+    .connection-cards {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .network-header h1 {
+      font-size: 24px;
+    }
+  
+    .connection-info h3 {
+      font-size: 16px;
+    }
+  
+    .connect-button {
+      padding: 8px 16px;
+    }
+  }
+  

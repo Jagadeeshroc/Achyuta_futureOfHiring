@@ -1,0 +1,56 @@
+import './App.css'
+import "tailwindcss";
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './components/Home';
+import Jobs from './components/Jobs';
+import MyNetworks from './components/MyNetworks';
+import Notifications from './components/Notifications';
+import MyProfile from './components/MyProfile';
+import LoginPage from './components/LoginPage';
+import JobsDetails from './components/JobsItem'; // Ensure this import is correct
+import FullDetails from './components/FullDetails';
+import ProtectedRoute from './components/ProtectedRoute';
+import Signup from "./components/Signup";
+
+
+
+function App() {
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Header />
+        <Routes>
+
+
+          {/* Home Route */}
+          <Route path="/" element={<Home />} />
+          <Route path="/Home" element={<Home />} />
+
+          {/* Jobs Routes */}
+          <Route path="/Jobs" element={<Jobs />} />
+          <Route path="/jobs/:id" element={<JobsDetails/>} />
+         
+         
+
+          {/* Other Routes */}
+          <Route path="/MyNetworks" element={<MyNetworks />} />
+          <Route path="/Notifications" element={<Notifications />} />
+          <Route path="/MyProfile" element={<MyProfile />} />
+          <Route path="/FullDetails" element={<FullDetails />} />
+
+          {/* Catch-all Route for 404 Not Found */}
+          <Route path="*" element={<div>404 Not Found</div>} />
+          <Route element={<ProtectedRoute />}/>
+
+          <Route path="/Login" element={<LoginPage />} />
+          <Route path="/SignUp" element={<Signup />} />
+
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;

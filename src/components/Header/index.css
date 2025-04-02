@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+
+.navbar{
+    background-image: linear-gradient(to right,white,#6868ff);
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+}
+
+
+
+.button{
+    margin: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+    &:hover{
+        transform: scale(1.05);
+        cursor:pointer;
+    }
+    text-decoration: none;
+
+}
+.navbarR{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+}
+.navbarL{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+   
+   
+}
+@keyframes glow {
+    0% {
+        text-shadow: 0px 0px 5px rgba(255, 213, 4, 0.5);
+    }
+    50% {
+        text-shadow: 0px 0px 15px rgba(237, 199, 9, 0.8);
+    }
+    100% {
+        text-shadow: 0px 0px 5px rgba(1, 53, 19, 0.5);
+    }
+}
+
+.head {
+    font-family: 'Cherry Bomb One', cursive;
+    animation: glow 2s infinite; /* Apply the glow animation */
+    transition: transform 0.2s ease;
+}
+
+.head:hover {
+    
+    transform: scale(1.01)
+}
+.post{
+    font-size: 13px;
+    margin: 0px;
+    padding: 0%;
+}
+.posticon{
+    font-size: 20px;
+}
+.imageicon{
+height: 30px;
+width: 50px;
+border-radius: 20px;
+}
+
+
+@media (max-width: 575px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 5px;
+        text-align: center;
+    }
+
+    .navbarL, .navbarR {
+        flex-direction: column;
+    }
+
+    .button {
+        font-size: 13px;
+        margin: 5px;
+    }
+
+    .head {
+        font-size: 18px;
+        text-shadow: 0px 0px 3px rgba(19, 239, 45, 0.5);
+    }
+
+    .post {
+        font-size: 12px;
+    }
+
+    .imageicon {
+        height: 25px;
+        width: 40px;
+    }
+}
+
+/* Medium Screens (Tablets: 576px - 768px) */
+@media (min-width: 576px) and (max-width: 768px) {
+    .navbar {
+        height: 70px;
+    }
+
+    .button {
+        font-size: 14px;
+    }
+
+    .head {
+        font-size: 20px;
+    }
+
+    .post {
+        font-size: 14px;
+    }
+
+    .imageicon {
+        height: 30px;
+        width: 45px;
+    }
+}
+
+/* Large Screens (Laptops: 769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .navbar {
+        height: 80px;
+    }
+
+    .button {
+        font-size: 16px;
+    }
+
+    .head {
+        font-size: 22px;
+    }
+
+    .post {
+        font-size: 15px;
+    }
+
+    .imageicon {
+        height: 35px;
+        width: 50px;
+    }
+}
+
+/* Extra Large Screens (Desktops: 1025px and above) */
+@media (min-width: 1025px) {
+    .navbar {
+        height: 90px;
+    }
+
+    .button {
+        font-size: 18px;
+    }
+
+    .head {
+        font-size: 24px;
+    }
+
+    .post {
+        font-size: 16px;
+    }
+
+    .imageIcon {
+        height: 40px;
+        width: 55px;
+    }
+}

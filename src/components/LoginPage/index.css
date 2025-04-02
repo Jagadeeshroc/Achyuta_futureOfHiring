@@ -1,0 +1,183 @@
+
+  .login-form-container {
+    background-image: url('https://media-hosting.imagekit.io/f66e36e19e4341e9/Untitled%20design%20(1).png?Expires=1838046518&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=vV5egu6nsblwDchRv6R60sLSiasI8zRfREGhoO~KCcq3uIpAU936MvZsAv5uOQ1Lo68tmw0FmkzmU0-1aACrvPNUHEORNIdRvHBqvstRkphyTj7g28o4l-ow1fdk9ODjuJHh42nBYUux46yUjmlF8ZJDddDBcZ-z0hBVyTFo3aMLaS9XySUGXm2T-cwUKFUKVS359SYYEAj1TUoQ1P9vGOkEu9IlVkJqR3toPKyzt0ezOOA-qBh9LI9MXqolDsND7H15lMMd4ob4nKERoYReXC-QOySs3qUFz1d5g~JoKtDaC-sMJXGMX57NHYk3p0FGOb3ohdRPWWZHOt-281~8SA__');
+    background-size: cover;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    height: 80%;
+  
+    width: 100%;
+    padding: 20px;
+  }
+    
+  .nxtTrend {
+    margin-bottom: 20px;
+    margin-left:250px; 
+    box-shadow: #1e1e1e;
+  
+    } 
+   
+  
+    
+  
+ 
+  
+  
+  .login-image {
+    height: 40%;
+    width: 70%;
+    box-shadow: 0 25px 50px -12px rgba(248, 44, 44, 0.25);
+    border-radius: 10px;
+    &:hover{
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+  
+    
+  
+  }
+  .placeImg img {
+    width: 200px;
+    margin-bottom: 20px;
+  }
+  
+  .login-container {
+    background: #1e1e1e;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin-right: 150px;
+    margin-top: 100px;
+  }
+  
+  /* Input styles */
+  .input-container {
+    margin: 15px 0px 0px 0px;
+    text-align: left;
+  }
+  
+  .input-label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #b3b3b3;
+    display: block;
+  }
+  
+  .username-input-field,
+  .password-input-field {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background: #2c2c2c;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .username-input-field:focus,
+  .password-input-field:focus {
+    background: #333;
+    box-shadow: 0 0 8px rgba(169, 231, 247, 0.5);
+  }
+
+  .login-button {
+    width: 40%;
+    padding: 12px;
+    background: linear-gradient(135deg, #007BFF, #00C6FF);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 50px;
+    margin-right: 20px;
+  }
+  
+  .login-button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #00C6FF, #007BFF);
+  }
+  
+  /* Error message styles */
+  .error-message {
+    color: #ff4c4c;
+    font-size: 14px;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  
+  /* Animation for input focus and button hover */
+  input:focus,
+  button:hover {
+    animation: pulse 0.8s ease-in-out infinite;
+  }
+  
+  /* Futuristic glowing effect */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(0, 204, 255, 0.5), 0 0 20px rgba(0, 204, 255, 0.4);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 204, 255, 0.7), 0 0 30px rgba(0, 204, 255, 0.5);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(226, 246, 251, 0.5), 0 0 20px rgba(0, 204, 255, 0.4);
+    }
+  }
+  
+
+  /* Container for the password input and eye icon */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Style for the eye icon */
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #b3b3b3;
+  font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.eye-icon:hover {
+  color: #00c6ff; /* Change color when hovering */
+}
+
+/* Input styles */
+.username-input-field,
+.password-input-field {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: #2c2c2c;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.username-input-field:focus,
+.password-input-field:focus {
+  background: #333;
+  box-shadow: 0 0 8px rgba(169, 231, 247, 0.5);
+}
+
+/* Rest of your CSS remains the same as it is */

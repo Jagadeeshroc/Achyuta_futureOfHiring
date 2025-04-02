@@ -1,0 +1,204 @@
+/* Base Styles */
+.landing-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    padding: 20px;
+    margin: 10px;
+    
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+   
+  }
+  
+  .hero-content {
+    flex: 1;
+    padding-right: 40px;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #2c3e50;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #7f8c8d;
+  }
+  
+  .hero-image {
+    flex: 1;
+  }
+  
+  .hero-image img {
+    height: 60%;
+    border-radius: 10px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    margin: 10px;
+  }
+  
+  /* CTA Buttons */
+  .cta-buttons {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .cta-button {
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .login-btn {
+    background: #fff;
+    color: #3498db;
+    border: 2px solid #3498db;
+  }
+  
+  .login-btn:hover {
+    background: #3498db;
+    color: white;
+  }
+  
+  .signup-btn {
+    background: #3498db;
+    color: white;
+    border: 2px solid #3498db;
+  }
+  
+  .signup-btn:hover {
+    background: #2980b9;
+    border-color: #2980b9;
+  }
+  
+  /* Features Section */
+  .features-section {
+    padding: 80px 0;
+    background: #f9f9f9;
+    margin: 40px 0;
+    border-radius: 10px;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: #2c3e50;
+    font-weight: bold;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 0 20px;
+  }
+  
+  .feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #2c3e50;
+  }
+  
+  /* Testimonials */
+  .testimonials-section {
+    padding: 60px 0;
+    background-image: url('https://media-hosting.imagekit.io/3f488a5398fd47c7/Untitled%20design%20(6).png?Expires=1838115643&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=lPtFax2eIh6ifeP~0i3T9Kkw1N2lowvSdOKffnsCRfoB-r-4sfE-HDKUN6lDGD8E3qznwMLjEJ67H07WTxSeVwWq~QrvNF0IJYdniSK-qLdP8AsR7Gn-QRqI9oidSCnvss1Kf9Czzp44ri1igVaoFdDGZppbGfSjlJCN5WXOLQM~U1iXIcDJZD7-TaxuOjZuVcRLI9C~Jv2TLIFuORIFIY2eRVVJ0liD2x0sRU~3Z6DLisWlQbsaj0f8ukutUGDB73OZCmsYiU-66BS8vNz-PTFEfb7WHoxrBuEtitiJnVsXIOnstowUtM3xdvgdartpPjkIxVERAkBZH~yM~fzhsg__');
+    background-size: cover;
+  }
+  
+  .testimonial-card {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    background: transparent;
+    color: rgb(86, 85, 85);
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .testimonial-text {
+    font-size: 1.5rem;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+  
+  .testimonial-author {
+    font-weight: 600;
+  }
+  
+  /* Final CTA */
+  .final-cta {
+    text-align: center;
+    padding: 80px 0;
+  }
+  
+  .final-cta h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+  
+  .main-cta {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+  }
+  
+  .main-cta:hover {
+    background: #c0392b;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+      padding: 40px 0;
+    }
+    
+    .hero-content {
+      padding-right: 0;
+      margin-bottom: 40px;
+    }
+    
+    .cta-buttons {
+      justify-content: center;
+    }
+    
+    .hero-title {
+      font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+  }
