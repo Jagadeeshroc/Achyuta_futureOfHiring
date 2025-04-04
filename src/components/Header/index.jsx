@@ -1,25 +1,17 @@
 import React, { useState,useEffect  } from 'react';
 import { Link, useNavigate  } from 'react-router-dom';
-import Cookie from 'js-cookie';  
+import Cookies from 'js-cookie';  
 import './index.css';
+import {FiLogOut } from 'react-icons/fi';
 
 const Header = (props) => {
-  const [isLogin, setIsLogin] = useState(!!Cookie.get("jwt_token"));
-  const navigate = useNavigate();
+  
+  
+  const homeLogout=()=>{
+    Cookies.remove('jwt_token');
+    window.location.href = '/';
+  }
 
-  useEffect(() => {
-    setIsLogin(!!Cookie.get("jwt_token"));
-  }, [navigate]);
-
-  const handleLoginLogout = () => {
-    if (isLogin) {
-      Cookie.remove("jwt_token");
-      navigate("/login");
-      setIsLogin(false);
-    } else {
-      navigate("/login");
-    }
-  };
 
   return (
     <>
@@ -29,9 +21,6 @@ const Header = (props) => {
         </div>
 
         <div className="navbarR">
-            <Link  onClick={handleLoginLogout} className="button">
-              {isLogin ? " " : ""}
-            </Link>
             <Link to="/Home" className="button">Home</Link>
             <Link to="/Jobs" className="button">Jobs</Link>
             <Link to="/MyNetworks" className="button">My Network</Link>
@@ -43,6 +32,7 @@ const Header = (props) => {
               className="imageicon"
             />
             </Link>
+            
         </div>
       </div>
     </>

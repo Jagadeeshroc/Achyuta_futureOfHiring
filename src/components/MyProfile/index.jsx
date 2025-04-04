@@ -27,7 +27,7 @@ const MyProfile = () => {
             <FaCommentAlt className="sidebar-icon" />
             <span>Feedback</span>
           </Link>
-          <Link to="/goal" className="sidebar-item">
+          <Link to="/goals" className="sidebar-item">
             <FaBullseye className="sidebar-icon" />
             <span>Goals</span>
           </Link>
@@ -55,7 +55,7 @@ const MyProfile = () => {
               <img
                 src="https://media-hosting.imagekit.io//b66601905e134787/AChyuta.png?Expires=1837053793&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=NUMYiJKUd6n5r0NFviaEYAEeSN2n5km7VB1~qQppAyi~zOJpDZDsOpLcdlBlaD6fskIsbn-rFdI3JPUJoR8lfggtUtum2bn~B2iwkU~YHmvCURnna34ZCRG8D7zv3LKIj7rzYvw4e7eo272AbZA198~k2qqgtxPE5HzGtiUibgKQSwqxm~-~DqHxLP1EcshWKnu0qUgPNh-1UPHKmm~whGoviFpBFRjjJLdKjYxNBTtdIrZmtHs-2J2KeM8Sffwy-JuDc6FUT7YW1Qo3wEja3gjzeb69GW89MeAt2ZNTRYYDeixb5kPgx~Hez-nPpSFKqDnquO6ebmQdbzMZ4xuzrA__"
                 alt="Profile"
-                className="profile-image"
+                className="fullprofile-image"
                 onClick={openImagePopup}
                 style={{ cursor: "pointer" }}
               />

@@ -81,7 +81,7 @@ const MyNetwork = () => {
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          <FaSearch className="search-icon" />
+          
         </div>
       </div>
 

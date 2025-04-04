@@ -116,7 +116,8 @@ const FullDetails = () => {
                   <span className="skill-tag">React</span>
                   <span className="skill-tag">JavaScript (ES6+)</span>
                   <span className="skill-tag">HTML5</span>
-                  <span className="skill-tag">CSS3/SASS</span>
+                  <span className="skill-tag">CSS3</span>
+                  <span className="skill-tag">Tailwindcss</span>
                   <span className="skill-tag">Redux</span>
                   <span className="skill-tag">TypeScript</span>
                 </div>
@@ -149,7 +150,18 @@ const FullDetails = () => {
           <h2>Projects</h2>
           <div className="projects-grid">
             <div className="project-card">
-              <h3>E-commerce Platform</h3>
+            <h3>Achyuta</h3>
+            
+              <p> Future Of Hiring..Full-featured online JobbyApplication with React frontend and Node.js backend</p>
+              <button 
+                className="project-link"
+                onClick={() => {}}
+              >
+                View Project
+              </button>
+            </div>
+            <div className="project-card">
+              <h3>Protfolio</h3>
               <p>Full-featured online store with React frontend and Node.js backend</p>
               <button 
                 className="project-link"
@@ -169,17 +181,7 @@ const FullDetails = () => {
               </button>
             </div>
             <div className="project-card">
-              <h3>E-commerce Platform</h3>
-              <p>Full-featured online store with React frontend and Node.js backend</p>
-              <button 
-                className="project-link"
-                onClick={() => {}}
-              >
-                View Project
-              </button>
-            </div>
-            <div className="project-card">
-              <h3>E-commerce Platform</h3>
+              <h3>Social Media Platform</h3>
               <p>Full-featured online store with React frontend and Node.js backend</p>
               <button 
                 className="project-link"

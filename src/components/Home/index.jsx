@@ -66,13 +66,10 @@ class Home extends React.Component {
       >
 
         <div className="logout-container">
-          <button onClick={() => {
-            Cookies.remove('jwt_token');
-            window.location.href = '/';
-          }} className="logout-button">
-            Logout
-          </button>
+        
         </div>
+
+
         {/* ========== HERO SECTION ========== */}
         <section className="hero-section">
           <div className="hero-content">

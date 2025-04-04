@@ -4,6 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Importing eye icons for visibility toggle
 import './index.css';
 import 'tailwindcss'
+import axios from 'axios'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -37,9 +38,12 @@ const LoginForm = () => {
   const submitForm = async (event) => {
     event.preventDefault();
     const userDetails = { username, password };
-    const url = 'https://apis.ccbp.in/login';
+    const url = 'http://localhost:5000/login';
     const options = {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(userDetails),
     };
     const response = await fetch(url, options);
