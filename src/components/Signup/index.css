@@ -2,7 +2,7 @@
 
 /* Base styles */
 .registration-container {
-    height: 130vh;
+    height: 150vh;
     background: linear-gradient(135deg, #6366f1, #5cf69a, #ec4899);
     display: flex;
     align-items: center;
@@ -39,7 +39,7 @@
     position: absolute;
     right: 2.5rem;
     bottom: 33%;
-    color: white;
+    color: rgb(192, 189, 189);
     opacity: 0.1;
     font-size: 8rem;
     animation: pulse 2s ease infinite;
@@ -89,10 +89,7 @@
     max-width: 28rem;
     width: 100%;
     padding: 2.5rem;
-    position: relative;
-    z-index: 20;
-    margin-top: 40px;
-    transition: all 0.5s ease;
+    box-shadow: #0b0b0b;
 }
 
 .registration-card:hover {
@@ -161,36 +158,33 @@
 
 .input-icon {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    padding-left: 1rem;
-    display: flex;
-    align-items: center;
-    pointer-events: none;
-    transition: color 0.3s ease;
+    top: 0.875rem;
+    left: 1rem;
+    font-size: 1.2rem;
+    color: #0b0b0b;
+   
+    &:hover{
+        color: #050624;
+    }
 }
 
-.input-group:hover .input-icon {
-    color: #6366f1;
+.input-group:hover {
+    color: #050624;
 }
 
 .input-field {
     width: 100%;
-    padding-left: 3rem;
-    padding-right: 1rem;
-    padding-top: 0.875rem;
-    padding-bottom: 0.875rem;
+ padding: 10px !important;
+  padding-left: 45px !important;
     border-radius: 0.75rem;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid #e5e7eb;
-    
     color: #0b0b0b;
 }
 
 .input-field:focus {
-    outline: none;
+    outline: black;
   
 }
 
