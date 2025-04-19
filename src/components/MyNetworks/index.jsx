@@ -81,7 +81,7 @@ const MyNetwork = () => {
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          
+         
         </div>
       </div>
 
@@ -100,7 +100,11 @@ const MyNetwork = () => {
                 <h3>{connection.name}</h3>
                 <p>{connection.title}</p>
               </div>
-              <button className="connect-button">
+              <button className="connect-button"
+              onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <FaUserPlus className="connect-icon" />
                 Connect
               </button>

@@ -195,4 +195,95 @@
       padding: 8px 16px;
     }
   }
+  /* ... (keep all existing styles above) ... */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .network-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .network-search {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .connection-cards {
+    grid-template-columns: 1fr; /* Single column on mobile */
+    gap: 12px; /* Smaller gap between cards */
+  }
   
+  .connection-card {
+    flex-direction: row; /* Horizontal layout */
+    padding: 12px;
+    align-items: center;
+  }
+  
+  .connection-avatar {
+    width: 50px; /* Smaller avatar */
+    height: 50px;
+    margin-bottom: 0;
+    margin-right: 12px; /* Space between avatar and text */
+  }
+  
+  .connection-info {
+    text-align: left; /* Align text to left */
+    margin-bottom: 0;
+    flex-grow: 1; /* Take remaining space */
+  }
+  
+  .connection-info h3 {
+    font-size: 16px;
+    margin-bottom: 2px; /* Tighter spacing */
+  }
+  
+  .connection-info p {
+    font-size: 12px;
+  }
+  
+  .connect-button {
+    padding: 6px 12px;
+    font-size: 12px;
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+  }
+  
+  .connect-icon {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .network-header h1 {
+    font-size: 22px; /* Slightly smaller header */
+  }
+  
+  .connections-list h2 {
+    font-size: 18px; /* Smaller section header */
+  }
+  
+  .connection-card {
+    padding: 10px; /* Even more compact */
+  }
+  
+  .connection-avatar {
+    width: 45px;
+    height: 45px;
+    border-width: 2px; /* Thinner border */
+  }
+  
+  .connection-info h3 {
+    font-size: 15px;
+  }
+  
+  .connection-info p {
+    font-size: 11px;
+  }
+  
+  .connect-button {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}

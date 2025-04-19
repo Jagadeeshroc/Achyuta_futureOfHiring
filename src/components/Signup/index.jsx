@@ -265,13 +265,16 @@ class Registration extends React.Component {
                         {/* Social Login Buttons */}
                         <div className="social-buttons">
                             <button type="button" className="social-button facebook-button">
-                                <i className="fab fa-facebook-f social-icon"></i>
+                             <a href="https://facebook.com" > <i className="fab fa-facebook-f social-icon"></i></a>  
                             </button>
                             <button type="button" className="social-button google-button">
-                                <i className="fab fa-google social-icon"></i>
+                              <a href="https://myaccount.google.com/" > <i className="fab fa-google social-icon"></i></a>  
                             </button>
                             <button type="button" className="social-button github-button">
-                                <i className="fab fa-github social-icon"></i>
+                            <a href="https://www.github.com">  
+                            <i className="fab fa-github social-icon"></i>
+                            </a>
+                            
                             </button>
                         </div>
                     </form>

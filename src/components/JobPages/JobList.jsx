@@ -70,13 +70,13 @@ export default function JobList({ jobs, onDelete }) {
               </div>
             </Link>
             <div className="job-actions">
-              <Link to={`/jobs/${job.id}/edit`} className="btn-edit">
-                ✏️ Edit
-              </Link>
-              <button onClick={() => onDelete(job.id)} className="btn-delete">
+              <button className="btn-action btn-edit">
+                <Link to={`/jobs/${job.id}/edit`}>✏️ Edit</Link>
+              </button>
+              <button onClick={() => onDelete(job.id)} className="btn-action btn-delete">
                 🗑️ Delete
               </button>
-              <button onClick={() => handleShare(job)} className="btn-share">
+              <button onClick={() => handleShare(job)} className="btn-action btn-share">
                 ↗️ Share
               </button>
             </div>

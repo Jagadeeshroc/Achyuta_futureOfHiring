@@ -3,7 +3,7 @@
 /* Base styles */
 .registration-container {
     height: 150vh;
-    background: linear-gradient(135deg, #6366f1, #5cf69a, #ec4899);
+    background: linear-gradient(135deg, #e8e8fa, #cafade, #f4d2e3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -333,6 +333,9 @@
     color: #f4f6f9;
     margin-top: 2rem;
     font-size: 0.875rem;
+    &:hover{
+        color: #050624;
+    }
 }
 
 .login-link a {

@@ -57,16 +57,18 @@
     flex: 1;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+
     margin-left: 100px;
   }
   
   .hero-image img {
-    max-width: 100%;
+    width: 100%;
+    max-width: 500px; /* Set a max width to keep image neat on desktop */
     height: auto;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
   }
-  
   .hero-section h1 {
     font-size: 3.5rem;
     font-weight: 700;
@@ -393,21 +395,28 @@
   }
   
   .cta-button {
-    display: inline-flex;
-    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center; /* Vertically center text and icon */
+    justify-content: center; /* Horizontally center content if needed */
+    gap: 0.5rem; /* Add spacing between text and icon */
     background-color: white;
     color: var(--primary-color);
-    padding: 0.8rem 2rem;
+    
     border-radius: var(--border-radius);
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
     transition: var(--transition);
+    line-height: 1; /* Helps with vertical centering */
+   
   }
   
   .cta-button svg {
     margin-left: 0.5rem;
-    transition: var(--transition);
+  position: relative;
+  bottom: 10px;
+
   }
   
   .cta-button:hover {
@@ -509,4 +518,106 @@
   
   .logout-button:hover {
     background: #cc0000;
+  }
+  @media (max-width: 400px) {
+    .hero-section h1 {
+      font-size: 1.75rem;
+    }
+  
+    .hero-section p {
+      font-size: 1rem;
+    }
+  
+    .stat-number {
+      font-size: 1.5rem;
+    }
+  
+    .stat-label {
+      font-size: 0.8rem;
+    }
+  
+    .job-card {
+      padding: 1rem;
+    }
+  
+    .job-meta h3 {
+      font-size: 1rem;
+    }
+  
+    .job-meta p,
+    .job-details p,
+    .apply-now-btn {
+      font-size: 0.85rem;
+    }
+  
+    .cta-section h2 {
+      font-size: 1.8rem;
+    }
+  
+    .cta-section p {
+      font-size: 1rem;
+    }
+  
+    .cta-button {
+      font-size: 1rem;
+      padding: 0.6rem 1.5rem;
+    }
+  
+    .view-all-link {
+      font-size: 0.9rem;
+    }
+  
+    .how-it-works-section {
+      flex-direction: column;
+      padding: 3rem 5%;
+    }
+  
+    .how-it-works-content {
+      max-width: 100%;
+      text-align: center;
+    }
+  
+    .how-it-works-image {
+      margin: 2rem auto 0;
+      justify-content: center;
+    }
+  
+    .steps-container {
+      grid-template-columns: 1fr;
+    }
+  
+    .search-box input {
+      font-size: 0.95rem;
+    }
+  
+    .search-button {
+      font-size: 1rem;
+    }
+  
+    .logout-button {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+    }
+  
+    .para {
+      width: 100%;
+      padding: 0 1rem;
+    }
+  }
+  .arrow{
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+  }
+  @media (max-width: 1024px) {
+    .hero-image {
+      margin-left: 0;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+  
+    .hero-image img {
+      max-width: 100%;
+      height: auto;
+    }
   }

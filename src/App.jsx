@@ -2,9 +2,10 @@ import './App.css';
 import "tailwindcss";
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import Home from './components/Home';
 import MyNetworks from './components/MyNetworks';
+import UserDetail from './components/MyNetworks/userDetails';
 import Notifications from './components/Notifications';
 import MyProfile from './components/MyProfile';
 import LoginPage from './components/LoginPage';
@@ -51,6 +52,7 @@ function App() {
 
             
             <Route path="/myNetworks" element={<MyNetworks />} />
+            <Route path="/user/:userId" element={<UserDetail />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/myProfile" element={<MyProfile />} />
             <Route path="/fullDetails" element={<FullDetails />} />

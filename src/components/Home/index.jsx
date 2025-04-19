@@ -6,6 +6,7 @@ import { FiSearch, FiBriefcase, FiDollarSign, FiMapPin, FiClock, FiArrowRight } 
 import { Navigate  } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -55,6 +56,12 @@ class Home extends React.Component {
       scale: 1.05, // Slightly enlarge on hover
       transition: { duration: 0.3 } // Smooth transition
     };
+   const handleSearch = () => {
+      const keyword = this.keywordInput.value;
+      const location = this.locationInput.value;
+      // Example: filter jobs or log to console
+      console.log('Searching for:', keyword, location);
+    }
 
     return (
       // Main container with animation properties
@@ -85,12 +92,13 @@ class Home extends React.Component {
             
             {/* Search box with animation */}
             <motion.div variants={itemVariants} className="search-container">
-              <div className="search-box">
-                <FiSearch className="search-icon" />
-                <input type="text" placeholder="Job title, keywords, or company" />
+              <div className="search-box ">
+                
+                <input type="text" placeholder="Job title, or company" />
                 <input type="text" placeholder="Location" />
                 {/* Animated search button with hover effect */}
                 <motion.button 
+                onClick={handleSearch}
                   whileHover={hoverEffect}
                   className="search-button"
                 >
@@ -250,7 +258,7 @@ class Home extends React.Component {
               whileTap={{ scale: 0.95 }}
             >
               <Link to="/jobs" className="cta-button">
-                Browse Jobs <FiArrowRight />
+                Browse Jobs 
               </Link>
             </motion.div>
           </motion.div>
