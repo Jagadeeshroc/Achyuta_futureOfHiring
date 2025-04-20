@@ -39,7 +39,7 @@ const LoginForm = () => {
     event.preventDefault();
     setIsLoading(true);
     const userDetails = { username, password };
-    const url = 'https://backend-achyutanew.onrender.com/login';
+    const url = 'https://backend-achyutanew.onrender.com/auth/login';
     const options = {
       method: 'POST',
       headers: {
