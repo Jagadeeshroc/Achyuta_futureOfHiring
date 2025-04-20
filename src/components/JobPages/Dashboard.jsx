@@ -32,7 +32,7 @@ export default function Dashboard() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this job?')) {
       try {
-        await axios.delete(`http://localhost:5000/jobs/${id}`);
+        await axios.delete(`https://backend-achyutanew.onrender.com/jobs/${id}`);
         setJobs(jobs.filter(job => job.id !== id));
       } catch (err) {
         setError(err.message);

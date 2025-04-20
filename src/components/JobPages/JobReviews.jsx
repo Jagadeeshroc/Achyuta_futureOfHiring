@@ -19,7 +19,7 @@ const JobReviews = ({ jobId, user }) => {
     try {
       setFetching(true);
       setError('');
-      const res = await axios.get(`http://localhost:5000/jobs/${jobId}/reviews`, {
+      const res = await axios.get(`https://backend-achyutanew.onrender.com/jobs/${jobId}/reviews`, {
         headers: user?.token ? {
           Authorization: `Bearer ${user.token}`
         } : {}

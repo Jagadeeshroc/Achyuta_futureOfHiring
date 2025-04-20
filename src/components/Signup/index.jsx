@@ -64,7 +64,7 @@ class Registration extends React.Component {
         this.setState({ loading: true, error: null });
 
         try {
-            const response = await fetch('http://localhost:5000/register', {
+            const response = await fetch('https://backend-achyutanew.onrender.com/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

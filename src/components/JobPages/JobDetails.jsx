@@ -16,7 +16,7 @@ export default function JobDetails() {
     const fetchJob = async () => {
       try {
         setLoading(true);
-        const jobRes = await axios.get(`http://localhost:5000/jobs/${id}`);
+        const jobRes = await axios.get(`https://backend-achyutanew.onrender.com/jobs/${id}`);
         setJob(jobRes.data);
       } catch (err) {
         setError('Failed to load job details.');
