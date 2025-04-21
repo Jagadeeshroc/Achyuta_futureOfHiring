@@ -11,7 +11,7 @@ const JobEdit = () => {
     location: '',
     description: '',
     salary: '',
-    status: 'applied'
+   
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -127,20 +127,7 @@ const JobEdit = () => {
         </div>
         
 
-        <div className="form-group">
-          <label>Status</label>
-          <select
-            name="status"
-            value={job.status}
-            onChange={handleChange}
-          >
-            <option value="applied">Applied</option>
-            <option value="interview">Interview</option>
-            <option value="offer">Offer</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
-
+      
         <div className="form-actions">
           <button type="submit" className="btn btn-primary">
             Update Job
