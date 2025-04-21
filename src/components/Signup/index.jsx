@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios'; // Import axios
+
 import { FaUser, FaEnvelope, FaLock, FaFingerprint, FaRocket, FaPalette, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { GiSpiralShell, GiAbstract024 } from 'react-icons/gi';
 import { IoMdColorWand } from 'react-icons/io';
@@ -50,13 +52,13 @@ class Registration extends React.Component {
     handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Basic validation
+        // Validation
         if (this.state.password !== this.state.confirmPassword) {
             this.setState({ error: 'Passwords do not match' });
             return;
         }
 
-        if (this.state.password.length < 4) {
+        if (this.state.password.length < 8) { // Changed from 4 to 8 for better security
             this.setState({ error: 'Password must be at least 8 characters' });
             return;
         }
@@ -64,24 +66,20 @@ class Registration extends React.Component {
         this.setState({ loading: true, error: null });
 
         try {
-            const response = await fetch('https://backend-achyutanew.onrender.com/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
+            const response = await axios.post(
+                'https://backend-achyutanew.onrender.com/auth/register',
+                {
                     username: this.state.username,
-                    password: this.state.password,
-                    // Add other fields if needed
-                    email: this.state.email
-                }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Registration failed');
-            }
+                    email: this.state.email,
+                    password: this.state.password
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // You can add withCredentials: true if using cookies
+                }
+            );
 
             this.setState({ 
                 success: true,
@@ -92,12 +90,24 @@ class Registration extends React.Component {
                 confirmPassword: ''
             });
 
-            // Optionally redirect to login page
-            // this.props.history.push('/login');
+            // Optionally redirect after delay
+            setTimeout(() => {
+                this.props.history.push('/login');
+            }, 2000);
 
         } catch (error) {
+            let errorMessage = 'Registration failed';
+            
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                errorMessage = error.response.data.error || error.response.data.message || errorMessage;
+            } else if (error.request) {
+                // The request was made but no response was received
+                errorMessage = 'No response from server';
+            }
+            
             this.setState({ 
-                error: error.message,
+                error: errorMessage,
                 loading: false
             });
         }

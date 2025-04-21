@@ -41,7 +41,7 @@ export default function JobForm({ initialData = {}, onSuccess }) {
       if (initialData.id) {
         await axios.put(`https://backend-achyutanew.onrender.com/jobs/${initialData.id}`, payload);
       } else {
-        await axios.post('http://localhost:5000/jobs', payload);
+        await axios.post('https://backend-achyutanew.onrender.com/jobs', payload);
       }
       
       onSuccess();
