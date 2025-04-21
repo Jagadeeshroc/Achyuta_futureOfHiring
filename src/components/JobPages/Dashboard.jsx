@@ -12,7 +12,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/jobs');
+        const response = await axios.get('https://backend-achyutanew.onrender.com/jobs');
         // Ensure each job has a type property with a default value
         const jobsWithDefaults = response.data.map(job => ({
           ...job,
