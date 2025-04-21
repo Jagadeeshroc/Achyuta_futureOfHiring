@@ -39,7 +39,7 @@ const JobEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/jobs/${id}`, job);
+      await axios.put(`https://backend-achyutanew.onrender.com/jobs/${id}`, job);
       navigate('/jobs', { state: { message: 'Job updated successfully!' } });
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to update job');
@@ -49,7 +49,7 @@ const JobEdit = () => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this job?')) {
       try {
-        await axios.delete(`http://localhost:5000/jobs/${id}`);
+        await axios.delete(`https://backend-achyutanew.onrender.com/jobs/${id}`);
         navigate('/jobs', { state: { message: 'Job deleted successfully!' } });
       } catch (err) {
         setError(err.response?.data?.error || 'Failed to delete job');
