@@ -364,15 +364,37 @@
     color: var(--text-light);
   }
   
-  /* CTA Section */
   .cta-section {
-   background-image: url("https://media-hosting.imagekit.io/f61b62ab1cc848a2/Untitled%20design%20(2).png?Expires=1838050228&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=VSjdqZ2P4i~EmFxHt9tXiojmOIoxZqQcszdqGdJrp3VAGiQ7tNndOO80u7EWs2hppDNf5pdWyNh4jjC62fnnCWDIUrbeEWlAR8ylJRgd9TY4ILSCXfaNLdZALb5cQXLHAXgzsWicqBokNzxqEre6SLtPXjz7A9pg-ouwaW8Xsv2CGtn1OM7ltfOpvvHpgTnzhkauw9CWuU6S85El4BbiKa-rMZBG0DsnFcNTQksfHqzWUkUXAmZEv8XoLMlPvActj4jOOqdQyGjvnBen3fq2Spz1BoEAbuyn6b37RcaZKrG5ClCWbk6XLkdjWgNFD07KtBvsNV~qZX4Z7-2XZQEqWw__");
-    color: white;
-    text-align: center;
-    background-size: cover;
-    border-radius: var(--border-radius);
-    margin: 4rem 8%;
+  background-image: url("D:\P\P1\Achyuta_futureOfHiring\src\assets\images\Untitled design (2).png"); /* Use a relative path for web compatibility */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-align: center;
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin: 4rem auto;
+  max-width: 90%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .cta-section {
+    padding: 1.5rem;
+    font-size: 0.95rem;
   }
+}
+
+@media (max-width: 480px) {
+  .cta-section {
+    padding: 1rem;
+    font-size: 0.9rem;
+    margin: 2rem 5%;
+  }
+}
+
   .para{
     width: 600px;
   }

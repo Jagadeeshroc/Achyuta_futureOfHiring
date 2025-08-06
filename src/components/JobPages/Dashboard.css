@@ -221,3 +221,13 @@
     font-size: 0.85rem;
   }
 }
+
+.dashboard-load{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  background-color: var(--light-color);
+  position: relative;
+ 
+}

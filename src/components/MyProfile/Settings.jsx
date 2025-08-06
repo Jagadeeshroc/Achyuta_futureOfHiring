@@ -2,16 +2,18 @@ import { useState } from 'react';
 import { FiSettings, FiUser, FiBell, FiMoon, FiSun, FiLock, FiHelpCircle, FiMail, FiLogOut } from 'react-icons/fi';
 import './settings.css'
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [emailUpdates, setEmailUpdates] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
+    const navigate = useNavigate(); // Added this hook
 
-  const handleLogout = () => {
-   Cookies.remove('jwt_token');
-               window.location.href = '/';
+ const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login'); // Now properly using the navigate function
   };
 
   return (

@@ -139,8 +139,7 @@
 /* Testimonials */
 .testimonials-section {
   padding: 60px 20px;
-  background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
-                    url('https://media-hosting.imagekit.io/3f488a5398fd47c7/Untitled%20design%20(6).png');
+  background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9));
   background-size: cover;
   background-position: center;
   background-blend-mode: overlay;

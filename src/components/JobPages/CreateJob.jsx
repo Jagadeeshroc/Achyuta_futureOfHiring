@@ -6,7 +6,7 @@ export default function CreateJob() {
   const navigate = useNavigate()
 
   const handleSuccess = () => {
-    navigate('/')
+    navigate('/jobs')
   }
 
   return (

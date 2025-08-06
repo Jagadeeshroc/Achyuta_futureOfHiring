@@ -10,9 +10,9 @@ import Cookies from 'js-cookie';
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    const jwtToken = Cookies.get('jwt_token');
+    const token = localStorage.getItem('token');
     this.state = {
-      shouldRedirect: !jwtToken
+      shouldRedirect: !token
     };
   }
   
@@ -131,7 +131,7 @@ class Home extends React.Component {
             animate={{ x: 0, opacity: 1 }} // Slide to center and fade in
             transition={{ duration: 0.8 }} // Animation duration
           >
-            <img src="https://media-hosting.imagekit.io/14196cc8287d4df1/jagadeeshvanganooru@gmail.com.png?Expires=1838049941&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=Ae7ebNfQMfRY4ICr5A83SE-Qha8c3kjVBmX0gf7ZT5mwPfCUhQestCtDYVaNllisldtB0fs9OC4EGbboOo1O1DzxERIDLNxEci8x4F3PBBPUSgFuttyNC-M2wZWS5KRi3BEoaSLQ-c8XQfQApdx6SEAkdk9unZaxDjcbJX6j2zpNV5AkSfu5thmV3Ecdb8zRFHcksxLHLMg-6rVABCwWfCVKCe7GRDxIXmrk08qejB5h2NxRbohaZQLpXspNQn0paTwemJjcgCq0X5tElaxPReOAt-MWkqXIF1RXvbDvmkp7T0B114idPsjievp0nKTFbJtgFxFBJs8yR40ms3UngA__" alt="Happy professionals" />
+            <img src="src/assets/images/jagadeeshvanganooru@gmail.com.png" />
           </motion.div>
         </section>
 

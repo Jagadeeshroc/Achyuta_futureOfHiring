@@ -1,3 +1,11 @@
+import axios from 'axios'; // <-- Add this import
+
+const token = localStorage.getItem('token');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
+
+
 import './App.css';
 import "tailwindcss";
 import React from 'react';
@@ -11,7 +19,7 @@ import MyProfile from './components/MyProfile';
 import LoginPage from './components/LoginPage';
 import FullDetails from './components/FullDetails';
 import ProtectedRoute from './components/ProtectedRoute';
-import Signup from "./components/Signup";
+
 import Bookmarks from "./components/Bookmarks";
 import Messages from "./components/Messages";
 import Connections from "./components/Connections";
@@ -26,6 +34,7 @@ import Dashboard from './components/JobPages/Dashboard';
 import JobDetails from './components/JobPages/JobDetails';
 import CreateJob from './components/JobPages/CreateJob';
 import EditJob from './components/JobPages/EditJob';
+import RegisterForm from './components/RegisterForm/RegisterForm.jsx';
 
 
 function App() {
@@ -36,42 +45,38 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={<StartPage/>} />
-           {/* Catch-all Route for 404 Not Found */}
-        <Route path="*" element={<div>404 Not Found</div>} />
+          <Route path="/signup" element={<RegisterForm />} />
+          <Route path="/" element={<StartPage />} />
           
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
-            
             <Route path="/home" element={<Home />} />
             <Route path="/jobs" element={<Dashboard />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
             <Route path="/Hiring" element={<CreateJob />} />
-            <Route path="/jobs/:id/edit" element={<EditJob/>} />
+            <Route path="/jobs/:id/edit" element={<EditJob />} />
 
-            
             <Route path="/myNetworks" element={<MyNetworks />} />
             <Route path="/user/:userId" element={<UserDetail />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/myProfile" element={<MyProfile />} />
-            <Route path="/fullDetails" element={<FullDetails />} />
+           <Route path="/FullDetails/:userId" element={<FullDetails />} />
             <Route path="/bookmarks" element={<Bookmarks />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/connections" element={<Connections />} />
+            
+            {/* Nested profile routes */}
             <Route path="/settings" element={<Settings />} />
             <Route path="/goals" element={<Goals />} />
+            <Route path="/grow" element={<Grow />} />
+            <Route path="/reviews" element={<Reviews />} />
+            <Route path="/updates" element={<Updates />} />
+            <Route path="/feedback" element={<Feedback />} />
           </Route>
-          <Route path="/grow" element={<Grow />} />
-          <Route path="/reviews" element={<Reviews />} />
-          <Route path="/updates" element={<Updates />} />
-          <Route path="/feedback" element={<Feedback />} />
           
-
-          
-          
+          {/* Catch-all Route for 404 Not Found */}
+         
         </Routes>
-       
       </BrowserRouter>
     </div>
   );

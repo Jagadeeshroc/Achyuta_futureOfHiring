@@ -1,24 +1,119 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { FaCommentAlt, FaBullseye, FaChartLine, FaCog, FaBell, FaTimes } from "react-icons/fa";
-import "./index.css"
+import axios from "axios";
+import "./index.css";
 
 const MyProfile = () => {
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const openImagePopup = () => {
-    setIsImagePopupOpen(true);
-  };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
 
-  const closeImagePopup = () => {
-    setIsImagePopupOpen(false);
-  };
+        if (!token || !userId) throw new Error('Authentication data missing');
+
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          if (parsedUser._id === userId) {
+            setUser(parsedUser);
+            setLoading(false);
+            return;
+          }
+        }
+
+        const response = await axios.get('http://localhost:5000/api/users/', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!response.data || !Array.isArray(response.data)) throw new Error('Invalid user data received');
+
+        const currentUser = response.data.find(user => user._id === userId);
+        if (!currentUser) throw new Error('Current user not found in response');
+
+        const normalizedUser = {
+          _id: currentUser._id,
+          name: currentUser.name || 'ROCKY',
+          email: currentUser.email || 'jagadeeshvanganooru@gmail.com',
+          avatar: currentUser.avatar || '/Uploads/default-profile.png',
+          title: currentUser.title || 'Web Developer | React Enthusiast',
+          location: currentUser.location || 'Ananthapur, India',
+          about: currentUser.about || 'Passionate web developer with expertise in React, JavaScript, and modern web technologies.',
+          phone: currentUser.phone || '+91 994956577',
+          skills: currentUser.skills || ['React', 'JavaScript', 'HTML5', 'CSS3', 'Redux', 'Node.js']
+        };
+
+        localStorage.setItem('user', JSON.stringify(normalizedUser));
+        setUser(normalizedUser);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError(err.message);
+        if (err.response?.status === 401) {
+          localStorage.clear();
+          navigate('/login');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
+
+  const openImagePopup = () => setIsImagePopupOpen(true);
+  const closeImagePopup = () => setIsImagePopupOpen(false);
+
+  if (loading) {
+    return (
+      <div className="profile-container">
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
+          <p className="mt-4 text-gray-600">Loading your profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="profile-container">
+        <div className="flex flex-col items-center justify-center min-h-screen text-center">
+          <h3 className="text-red-600 text-xl font-semibold">Error loading profile</h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" onClick={() => window.location.reload()}>
+            Try Again
+          </button>
+          <p className="mt-2 text-sm">
+            Or <Link to="/login" className="text-blue-500 underline">login again</Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="profile-container">
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <h3 className="text-gray-800 text-xl">No profile data available</h3>
+          <Link to="/login" className="text-blue-500 underline mt-2">Please login</Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container">
       <div className="profile-header">
-        
       </div>
 
       <div className="profile-content">
@@ -53,44 +148,46 @@ const MyProfile = () => {
           <div className="profile-card">
             <div className="profile-info">
               <img
-                src="https://media-hosting.imagekit.io//b66601905e134787/AChyuta.png?Expires=1837053793&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=NUMYiJKUd6n5r0NFviaEYAEeSN2n5km7VB1~qQppAyi~zOJpDZDsOpLcdlBlaD6fskIsbn-rFdI3JPUJoR8lfggtUtum2bn~B2iwkU~YHmvCURnna34ZCRG8D7zv3LKIj7rzYvw4e7eo272AbZA198~k2qqgtxPE5HzGtiUibgKQSwqxm~-~DqHxLP1EcshWKnu0qUgPNh-1UPHKmm~whGoviFpBFRjjJLdKjYxNBTtdIrZmtHs-2J2KeM8Sffwy-JuDc6FUT7YW1Qo3wEja3gjzeb69GW89MeAt2ZNTRYYDeixb5kPgx~Hez-nPpSFKqDnquO6ebmQdbzMZ4xuzrA__"
+                src={`http://localhost:5000${user.avatar}`}
                 alt="Profile"
-                className="fullprofile-image"
+                className="fullProfile-image"
                 onClick={openImagePopup}
                 style={{ cursor: "pointer" }}
+                onError={(e) => (e.target.src = 'src/assets/images/default-profile.png')}
               />
               <div className="profile-text">
-                <h1>ROCKY</h1>
-                <p className="profile-title">Web Developer | React Enthusiast</p>
-                <p className="profile-location">Ananthapur, India</p>
+                <h1>{user.name}</h1>
+                <p className="profile-title">{user.title}</p>
+                <p className="profile-location">{user.location}</p>
               </div>
             </div>
 
             <div className="profile-details">
               <div className="detail-section">
                 <h3>About</h3>
-                <p>Passionate web developer with expertise in React, JavaScript, and modern web technologies.</p>
+                <p>{user.about}</p>
               </div>
 
               <div className="detail-section">
                 <h3>Contact</h3>
-                <p>jagadeeshvanganooru@gmail.com</p>
-                <p>+91 994956577</p>
+                <p>{user.email}</p>
+                <p>{user.phone}</p>
               </div>
 
               <div className="detail-section">
                 <h3>Skills</h3>
                 <div className="skills-container">
-                  <span className="skill-tag">React</span>
-                  <span className="skill-tag">JavaScript</span>
-                  <span className="skill-tag">HTML5</span>
-                  <span className="skill-tag">CSS3</span>
-                  <span className="skill-tag">Redux</span>
-                  <span className="skill-tag">Node.js</span>
+                  {Array.isArray(user.skills) && user.skills.length > 0 ? (
+                    user.skills.map((skill, index) => (
+                      <span key={index} className="skill-tag">{skill}</span>
+                    ))
+                  ) : (
+                    <p>No skills listed</p>
+                  )}
                 </div>
               </div>
 
-              <Link to="/FullDetails" className="view-more-btn">
+              <Link to={`/FullDetails/${user._id}`} className="view-more-btn">
                 View Full Profile
               </Link>
             </div>
@@ -98,7 +195,6 @@ const MyProfile = () => {
         </div>
       </div>
 
-      {/* Image Popup Modal */}
       {isImagePopupOpen && (
         <div className="image-popup-overlay" onClick={closeImagePopup}>
           <div className="image-popup-content" onClick={(e) => e.stopPropagation()}>
@@ -106,9 +202,10 @@ const MyProfile = () => {
               <FaTimes />
             </button>
             <img
-              src="https://media-hosting.imagekit.io//b66601905e134787/AChyuta.png?Expires=1837053793&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=NUMYiJKUd6n5r0NFviaEYAEeSN2n5km7VB1~qQppAyi~zOJpDZDsOpLcdlBlaD6fskIsbn-rFdI3JPUJoR8lfggtUtum2bn~B2iwkU~YHmvCURnna34ZCRG8D7zv3LKIj7rzYvw4e7eo272AbZA198~k2qqgtxPE5HzGtiUibgKQSwqxm~-~DqHxLP1EcshWKnu0qUgPNh-1UPHKmm~whGoviFpBFRjjJLdKjYxNBTtdIrZmtHs-2J2KeM8Sffwy-JuDc6FUT7YW1Qo3wEja3gjzeb69GW89MeAt2ZNTRYYDeixb5kPgx~Hez-nPpSFKqDnquO6ebmQdbzMZ4xuzrA__"
+              src={`http://localhost:5000${user.avatar}`}
               alt="Profile"
               className="popup-image"
+              onError={(e) => (e.target.src = 'src/assets/images/default-profile-large.png')}
             />
           </div>
         </div>

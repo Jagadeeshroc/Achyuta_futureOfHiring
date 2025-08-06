@@ -118,7 +118,9 @@ const Notifications = () => {
         <div className="sidebar-footer">
           <div className="menu-item">
             <FaCog className="menu-icon" />
-            <span>Settings</span>
+            <span>
+              <Link to='/settings'>Settings
+              </Link></span>
           </div>
         </div>
       </div>

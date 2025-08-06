@@ -1,58 +1,185 @@
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { FiSearch, FiX, FiClock, FiUser, FiBell, FiMessageSquare, FiMenu, FiHash } from 'react-icons/fi';
+import { FaHome, FaSuitcase, FaUserFriends, FaRegBuilding, FaRegComments } from 'react-icons/fa';
+import { TbCircleLetterF } from 'react-icons/tb';
+import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 
-function NavScrollExample() {
+export default function JobbyNavbar() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [recentSearches, setRecentSearches] = useState([]);
+  const [searchResults, setSearchResults] = useState({ users: [], jobs: [], topics: [], companies: [], groups: [] });
+  const [isLoading, setIsLoading] = useState(false);
+  const [notificationsCount, setNotificationsCount] = useState(3);
+  const [messagesCount, setMessagesCount] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const searchRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const navItems = [
+    { path: "/home", icon: <FaHome className="text-lime-950"/>, text: "Home" },
+    { path: "/jobs", icon: <FaSuitcase className="text-lime-950"  />, text: "Jobs" },
+    { path: "/myNetworks", icon: <FaUserFriends className="text-lime-950" />, text: "Network" },
+    { path: "/freelance", icon: <TbCircleLetterF className="text-lime-950" />, text: "Freelance" },
+  ];
+
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const fetchSearchResults = useCallback(async (query) => {
+    if (!query.trim()) {
+      setSearchResults({ users: [], jobs: [], topics: [], companies: [], groups: [] });
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const response = await axios.get('/api/search', { params: { q: query } });
+      setSearchResults(response.data);
+    } catch (error) {
+      console.error('Search error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const debouncedFetch = useCallback(debounce((query) => fetchSearchResults(query), 300), [fetchSearchResults]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useLayoutEffect(() => {
+    const updateUser = () => {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        setCurrentUser({ ...parsedUser, _id: parsedUser._id || parsedUser.id });
+      } else {
+        setCurrentUser(null);
+      }
+    };
+    updateUser();
+    window.addEventListener('storage', updateUser);
+    return () => window.removeEventListener('storage', updateUser);
+  }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      const updatedSearches = [searchTerm, ...recentSearches.filter(item => item !== searchTerm).slice(0, 4)];
+      setRecentSearches(updatedSearches);
+      localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+      performSearch(searchTerm);
+    }
+  };
+
+  const performSearch = (term) => {
+    setShowSuggestions(false);
+    navigate(`/search?q=${encodeURIComponent(term)}`);
+  };
+
+  const handleSuggestionClick = (item, type) => {
+    setSearchTerm(item.name || item.title || item);
+    setShowSuggestions(false);
+    if (type && item.id) {
+      switch (type) {
+        case 'user': navigate(`/profile/${item.id}`); break;
+        case 'job': navigate(`/jobs/${item.id}`); break;
+        case 'topic': navigate(`/topics/${item.slug}`); break;
+        default: navigate(`/search?q=${encodeURIComponent(item.name || item.title || item)}`);
+      }
+    } else {
+      performSearch(item.name || item.title || item);
+    }
+  };
+
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      navigate('/login');
+    }
+  };
+
   return (
-    <Navbar expand="lg" className="bg-body-tertiary p-3">
-      <Container fluid>
-      <Navbar.Brand href="/home" className="text-2xl font-bold rounded-full">
-  <img src= 'https://media-hosting.imagekit.io/065a5250e9394c77/WhatsApp%20Image%202025-04-18%20at%2014.55.50_2812de02.jpg?Expires=1839581475&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=3RBDwbfokykNLe0e4LQyeLoLgbKZ4qIFc29NVkb46qAYn1vUWrarkaIMrGlOlP4A~gXv5HmL~TwaPtFLKnyHNSSeEOsXonuJwTFFaB~UUNmy0f5ZwdYWdO7Z3YTzKKQ5Lo9tvq~v5BI6QMEyBHVifR3vBXSZ~NRCnV8e1X2CG4wahQbSE5EVAuaEnX149HuOU3X9tiglJjgKU8aB-4UjtwITTxgparhpoJA3jYFHmUaiziqJR8xBzVZsX1TWMmr5xYwy2zmBHILWW6WDeW9vyEkQVphlyaDY-R5EU6wyofHiUpEaopzyM-dyRpbChrgobqwA5P~oKrgnJhgjsSbcsg__'
-   className= 'rounded-full object-cover h-15'
-   />
-</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0 ml-5"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
+    <nav className="bg-white shadow-sm sticky top-0 z-50 w-full">
+      <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
+        <Link to="/home" className="flex items-center space-x-2">
+          <img src="/images/WhatsApp Image 2025-04-18 at 14.56.02_34b122d5.jpg" alt="Logo" className="w-14 h-14 rounded-full hover:scale-120" />
+          <span className="hidden lg:block font-semibold text-lg">Achyuta</span>
+        </Link>
+
+        <div className="flex items-center gap-4">
+          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+            <FiMenu size={24} />
+          </button>
+
+          <Link to="/messages" className="relative">
+            <FiMessageSquare size={20} />
+            {messagesCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">{messagesCount}</span>
+            )}
+          </Link>
+
+          <Link to="/notifications" className="relative">
+            <FiBell size={20} />
+            {notificationsCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">{notificationsCount}</span>
+            )}
+          </Link>
+
+          <div className="relative group">
+            <img src={ currentUser?.avatar ? currentUser.avatar.startsWith('http') ? currentUser.avatar : `http://localhost:5000${currentUser.avatar.replace(/^\/Uploads/, '/uploads')}` : "images/pexels-njeromin-12149149.jpg" } alt="User" className="rounded-full h-12 w-12" onError={e => { e.target.onerror = null; e.target.src = "images/pexels-njeromin-12149149.jpg"; }} />
+
+            <div className="hidden group-hover:flex flex-col absolute top-full right-0 bg-white shadow-md rounded-md mt-2 py-2 w-40 z-50">
+              <Link to="/myProfile" className="px-4 py-2 hover:bg-gray-100">My Profile</Link>
+              <Link to="/settings" className="px-4 py-2 hover:bg-gray-100">Settings</Link>
+              <Link to="/premium" className="px-4 py-2 text-yellow-500 hover:bg-gray-100">Go Premium</Link>
+              <button onClick={handleLogout} className="px-4 py-2 text-left hover:bg-gray-100">Logout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {menuOpen && (
+        <div className="md:hidden px-4 pb-2">
+          {navItems.map((item, i) => (
+            <Link key={i} to={item.path} className="block py-2 text-sm">
+              {item.text}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      <div className="hidden md:flex justify-center gap-6 py-2 border-t">
+        {navItems.map((item, i) => (
+          <Link
+            key={i}
+            to={item.path}
+            className={`relative flex flex-col items-center group px-3 py-2 text-sm ${location.pathname === item.path ? 'text-blue-600 font-semibold' : 'text-gray-600'}`}
           >
-            
-            <Nav.Link className=" ml-5 text-black font-bold" href="/Home">Home</Nav.Link>
-            <Nav.Link className=" ml-5 text-black font-bold" href="/Jobs">Jobs</Nav.Link >
-            <Nav.Link className=" ml-5 text-black font-bold"  href="/MyNetworks">
-              My Networks
-            </Nav.Link>
-            <NavDropdown className=" ml-5 text-black font-bold" title="Notifications" id="navbarScrollingDropdown">
-              <NavDropdown.Item  href="/messages">Messages</NavDropdown.Item>
-              
-              <NavDropdown.Item href="/Notifications">
-                Notifications
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item className=" ml-5 text-black font-bold"  href="/MyProfile">
-                Profile
-              </NavDropdown.Item>
-            </NavDropdown>
-            
-          </Nav>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2 text-green-500 font-bold"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-          </Form>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+            <div className="text-2xl">{item.icon}</div>
+            <span className="absolute bottom-[-1.5rem] scale-0 group-hover:scale-100 transition-transform bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+              {item.text}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </nav>
   );
 }
-
-export default NavScrollExample;

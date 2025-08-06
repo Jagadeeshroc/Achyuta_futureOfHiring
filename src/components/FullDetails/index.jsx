@@ -1,198 +1,266 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaCode, FaGraduationCap, FaBriefcase, FaTools } from "react-icons/fa";
-import "./index.css"; 
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { 
+  FaEnvelope, 
+  FaPhone, 
+  FaLinkedin, 
+  FaGithub, 
+  FaCode, 
+  FaGraduationCap, 
+  FaBriefcase, 
+  FaTools,
+  FaGlobe,
+  FaStackOverflow,
+  FaMapMarkerAlt,
+  FaUserTie,
+  FaSchool,
+  FaBuilding,
+  FaFilePdf
+} from "react-icons/fa";
+import axios from "axios";
 
 const FullDetails = () => {
-  return (
-    <div className="full-profile-container">
-      <div className="full-profile-header">
-        <Link to="/myprofile" className="back-button">
-          &larr; Back to Profile
-        </Link>
-        <h1>Full Profile Details</h1>
-      </div>
+  const { userId } = useParams();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-      <div className="full-profile-content">
-        <div className="profile-intro">
-          <div className="intro-left">
-            <img
-              src="https://media-hosting.imagekit.io//b66601905e134787/AChyuta.png?Expires=1837053793&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=NUMYiJKUd6n5r0NFviaEYAEeSN2n5km7VB1~qQppAyi~zOJpDZDsOpLcdlBlaD6fskIsbn-rFdI3JPUJoR8lfggtUtum2bn~B2iwkU~YHmvCURnna34ZCRG8D7zv3LKIj7rzYvw4e7eo272AbZA198~k2qqgtxPE5HzGtiUibgKQSwqxm~-~DqHxLP1EcshWKnu0qUgPNh-1UPHKmm~whGoviFpBFRjjJLdKjYxNBTtdIrZmtHs-2J2KeM8Sffwy-JuDc6FUT7YW1Qo3wEja3gjzeb69GW89MeAt2ZNTRYYDeixb5kPgx~Hez-nPpSFKqDnquO6ebmQdbzMZ4xuzrA__"
-              alt="Profile"
-              className="full-profile-image"
-            />
-          </div>
-          <div className="intro-right">
-            <h1>ROCKY</h1>
-            <p className="profile-title">Web Developer | React Enthusiast</p>
-            <p className="profile-location">Ananthapur, India</p>
-            
-            <div className="contact-info">
-              <p><FaEnvelope className="contact-icon" /> jagadeeshvanganooru@gmail.com</p>
-              <p><FaPhone className="contact-icon" /> +91 9949565677</p>
-              <div className="social-links">
-                <a href="https://linkedin.com/in/jagadeesh-vanganooru-117872336" target="_blank" rel="noopener noreferrer">
-                  <FaLinkedin className="social-icon" />
-                </a>
-                <a href="https://github.com/Jagadeeshroc" target="_blank" rel="noopener noreferrer">
-                  <FaGithub className="social-icon" />
-                </a>
-              </div>
-            </div>
-          </div>
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserDetails();
+  }, [userId]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold text-gray-800">User not found</h2>
+          <Link 
+            to="/myprofile" 
+            className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Back to Profile
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const fullAvatarUrl = user.avatar?.startsWith("http")
+    ? user.avatar
+    : `http://localhost:5000${user.avatar}`;
+
+  const fullResumeUrl = user.resume?.startsWith("http")
+    ? user.resume
+    : `http://localhost:5000${user.resume}`;
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <Link 
+            to="/myprofile" 
+            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Profile
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900">Full Profile Details</h1>
+          <div className="w-24"></div> {/* Spacer for alignment */}
         </div>
 
-        <div className="profile-sections">
-          <section className="profile-section">
-            <h2><FaCode className="section-icon" /> Professional Summary</h2>
-            <p>
-              Passionate web developer with 3+ years of experience in building responsive and 
-              user-friendly web applications. Specialized in React.js, JavaScript, and modern 
-              frontend technologies. Strong problem-solving skills and a commitment to writing 
-              clean, maintainable code.
-            </p>
-          </section>
-
-          <section className="profile-section">
-            <h2><FaGraduationCap className="section-icon" /> Education</h2>
-            <div className="timeline">
-              <div className="timeline-item">
-                <h3>Bachelor of Technology in Computer Science</h3>
-                <p className="timeline-meta">JNTU University • 2015 - 2019</p>
-                <p>Graduated with honors, specialized in Web Technologies</p>
-              </div>
-              <div className="timeline-item">
-                <h3>Advanced Certification in Full Stack Development</h3>
-                <p className="timeline-meta">ABC Institute • 2020</p>
-                <p>Completed with distinction</p>
-              </div>
-              <div className="timeline-item">
-                <h3>Advanced Certification in Full Stack Development</h3>
-                <p className="timeline-meta">ABC Institute • 2020</p>
-                <p>Completed with distinction</p>
-              </div>
-            </div>
-          </section>
-
-          <section className="profile-section">
-            <h2><FaBriefcase className="section-icon" /> Work Experience</h2>
-            <div className="timeline">
-              <div className="timeline-item">
-                <h3>Senior Frontend Developer</h3>
-                <p className="timeline-meta">Tech Solutions Inc. • 2021 - Present</p>
-                <ul>
-                  <li>Lead the development of customer-facing React applications</li>
-                  <li>Improved application performance by 40% through code optimization</li>
-                  <li>Mentored junior developers and conducted code reviews</li>
-                </ul>
-              </div>
-              <div className="timeline-item">
-                <h3>Web Developer</h3>
-                <p className="timeline-meta">Digital Creations • 2019 - 2021</p>
-                <ul>
-                  <li>Developed and maintained company websites and web applications</li>
-                  <li>Implemented responsive designs for mobile compatibility</li>
-                  <li>Collaborated with designers to create intuitive user interfaces</li>
-                </ul>
-                <div className="timeline-item">
-                <h3>Web Developer</h3>
-                <p className="timeline-meta">Digital Creations • 2019 - 2021</p>
-                <ul>
-                  <li>Developed and maintained company websites and web applications</li>
-                  <li>Implemented responsive designs for mobile compatibility</li>
-                  <li>Collaborated with designers to create intuitive user interfaces</li>
-                </ul>
-              </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="profile-section">
-            <h2><FaTools className="section-icon" /> Skills & Expertise</h2>
-            <div className="skills-container">
-              <div className="skill-category">
-                <h3>Frontend</h3>
-                <div className="skill-tags">
-                  <span className="skill-tag">React</span>
-                  <span className="skill-tag">JavaScript (ES6+)</span>
-                  <span className="skill-tag">HTML5</span>
-                  <span className="skill-tag">CSS3</span>
-                  <span className="skill-tag">Tailwindcss</span>
-                  <span className="skill-tag">Redux</span>
-                  <span className="skill-tag">TypeScript</span>
-                </div>
+        {/* Profile Content */}
+        <div className="bg-white rounded-xl shadow-md overflow-hidden p-2">
+          {/* Intro Section */}
+          <div className="md:flex">
+            {/* Left Side - Avatar */}
+            <div className="md:w-1/3 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 flex flex-col items-center">
+              <div className="relative mb-6">
+                <img
+                  src={fullAvatarUrl}
+                  alt="Profile"
+                  className="w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/default-profile.png";
+                  }}
+                />
               </div>
               
-              <div className="skill-category">
-                <h3>Backend</h3>
-                <div className="skill-tags">
-                  <span className="skill-tag">Node.js</span>
-                  <span className="skill-tag">Express</span>
-                  <span className="skill-tag">REST APIs</span>
-                  <span className="skill-tag">MongoDB</span>
-                </div>
-              </div>
-              
-              <div className="skill-category">
-                <h3>Tools & Other</h3>
-                <div className="skill-tags">
-                  <span className="skill-tag">Git</span>
-                  <span className="skill-tag">Webpack</span>
-                  <span className="skill-tag">Jest</span>
-                  <span className="skill-tag">Figma</span>
-                  <span className="skill-tag">Agile Methodologies</span>
-                </div>
-              </div>
-            </div>
-          </section>
+              {fullResumeUrl && (
+                <a 
+                  href={fullResumeUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md w-full max-w-xs"
+                >
+                  <FaFilePdf className="mr-2" /> View Resume
+                </a>
+              )}
 
-          <section className="profile-section">
-          <h2>Projects</h2>
-          <div className="projects-grid">
-            <div className="project-card">
-            <h3>Achyuta</h3>
-            
-              <p> Future Of Hiring..Full-featured online JobbyApplication with React frontend and Node.js backend</p>
-              <button 
-                className="project-link"
-                onClick={() => {}}
-              >
-                View Project
-              </button>
+              {/* Contact Info */}
+              <div className="mt-8 w-full max-w-xs">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Contact Information</h3>
+                <div className="space-y-3">
+                  <p className="flex items-center text-gray-700">
+                    <FaEnvelope className="text-blue-500 mr-2" /> {user.email}
+                  </p>
+                  <p className="flex items-center text-gray-700">
+                    <FaPhone className="text-blue-500 mr-2" /> {user.phone}
+                  </p>
+                  {user.portfolio && (
+                    <p className="flex items-center text-gray-700">
+                      <FaGlobe className="text-blue-500 mr-2" /> 
+                      <a href={user.portfolio} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                        Portfolio
+                      </a>
+                    </p>
+                  )}
+                  <div className="flex space-x-4 pt-2">
+                    {user.socialLinks?.linkedin && (
+                      <a href={user.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+                        <FaLinkedin className="text-2xl" />
+                      </a>
+                    )}
+                    {user.socialLinks?.github && (
+                      <a href={user.socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-black">
+                        <FaGithub className="text-2xl" />
+                      </a>
+                    )}
+                    {user.socialLinks?.stackoverflow && (
+                      <a href={user.socialLinks.stackoverflow} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-orange-700">
+                        <FaStackOverflow className="text-2xl" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="project-card">
-              <h3>Protfolio</h3>
-              <p>Full-featured online store with React frontend and Node.js backend</p>
-              <button 
-                className="project-link"
-                onClick={() => {}}
-              >
-                View Project
-              </button>
+
+            {/* Right Side - Details */}
+            <div className="md:w-2/3 p-8">
+              <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
+                <p className="text-xl text-blue-600 font-medium mt-1">{user.headline}</p>
+                <p className="flex items-center text-gray-600 mt-2">
+                  <FaMapMarkerAlt className="mr-1" /> {user.location}
+                </p>
+              </div>
+
+              {/* About Section */}
+              <div className="mb-8">
+                <div className="flex items-center mb-4">
+                  <FaUserTie className="text-blue-500 mr-2 text-xl" />
+                  <h2 className="text-2xl font-semibold text-gray-800">About</h2>
+                </div>
+                <p className="text-gray-700 leading-relaxed">{user.about}</p>
+              </div>
+
+              {/* Skills Section */}
+              <div className="mb-8">
+                <div className="flex items-center mb-4">
+                  <FaCode className="text-blue-500 mr-2 text-xl" />
+                  <h2 className="text-2xl font-semibold text-gray-800">Skills & Expertise</h2>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Array.isArray(user.skills) ? (
+                    user.skills.map((skill, index) => (
+                      <span 
+                        key={index} 
+                        className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                      >
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-gray-500">No skills listed</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Experience Section */}
+              {user.experience && user.experience.length > 0 && (
+                <div className="mb-8">
+                  <div className="flex items-center mb-4">
+                    <FaBriefcase className="text-blue-500 mr-2 text-xl" />
+                    <h2 className="text-2xl font-semibold text-gray-800">Work Experience</h2>
+                  </div>
+                  <div className="space-y-6">
+                    {user.experience.map((exp, index) => (
+                      <div key={index} className="border-l-2 border-blue-300 pl-5 relative">
+                        <div className="absolute -left-2.5 top-3 h-5 w-5 rounded-full bg-blue-500 border-4 border-white"></div>
+                        <h3 className="text-xl font-semibold text-gray-800">{exp.title}</h3>
+                        <div className="flex flex-wrap items-center text-gray-600 mt-1 gap-x-4 gap-y-1">
+                          <span className="flex items-center">
+                            <FaBuilding className="mr-1" /> {exp.company}
+                          </span>
+                          <span className="flex items-center">
+                            <FaMapMarkerAlt className="mr-1" /> {exp.location}
+                          </span>
+                          <span>
+                            {new Date(exp.from).toLocaleDateString()} - {exp.current ? "Present" : new Date(exp.to).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-gray-700 leading-relaxed">{exp.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Education Section */}
+              {user.education && user.education.length > 0 && (
+                <div className="mb-8">
+                  <div className="flex items-center mb-4">
+                    <FaGraduationCap className="text-blue-500 mr-2 text-xl" />
+                    <h2 className="text-2xl font-semibold text-gray-800">Education</h2>
+                  </div>
+                  <div className="space-y-6">
+                    {user.education.map((edu, index) => (
+                      <div key={index} className="border-l-2 border-blue-300 pl-5 relative">
+                        <div className="absolute -left-2.5 top-3 h-5 w-5 rounded-full bg-blue-500 border-4 border-white"></div>
+                        <h3 className="text-xl font-semibold text-gray-800">{edu.degree} in {edu.field}</h3>
+                        <div className="flex flex-wrap items-center text-gray-600 mt-1 gap-x-4 gap-y-1">
+                          <span className="flex items-center">
+                            <FaSchool className="mr-1" /> {edu.school}
+                          </span>
+                          <span>
+                            {new Date(edu.from).toLocaleDateString()} - {new Date(edu.to).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-gray-700 leading-relaxed">{edu.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="project-card">
-              <h3>E-commerce Platform</h3>
-              <p>Full-featured online store with React frontend and Node.js backend</p>
-              <button 
-                className="project-link"
-                onClick={() => {}}
-              >
-                View Project
-              </button>
-            </div>
-            <div className="project-card">
-              <h3>Social Media Platform</h3>
-              <p>Full-featured online store with React frontend and Node.js backend</p>
-              <button 
-                className="project-link"
-                onClick={() => {}}
-              >
-                View Project
-              </button>
-            </div>
-            {/* Repeat for other project cards */}
           </div>
-        </section>
         </div>
       </div>
     </div>

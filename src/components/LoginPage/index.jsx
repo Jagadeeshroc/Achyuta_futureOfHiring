@@ -1,191 +1,132 @@
-import React, { useState } from 'react';
-import Cookies from 'js-cookie';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { FaEye, FaEyeSlash, FaUser, FaLock } from 'react-icons/fa';
-import './index.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import axios from 'axios';
+import AuthLayout from '../LoginPage/AuthLayout';
+import GlassCard from '../LoginPage/GlassCard';
+import FormInput from '../LoginPage/FormInput';
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 
-const LoginForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showSubmitError, setShowSubmitError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+const Login = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const onChangeUsername = (event) => {
-    setUsername(event.target.value);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const onChangePassword = (event) => {
-    setPassword(event.target.value);
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-  const onSubmitSuccess = (jwtToken) => {
-    Cookies.set('jwt_token', jwtToken, {
-      expires: 30,
-      path: '/',
-    });
-    navigate('/Home', { replace: true });
-  };
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/login', formData);
 
-  const onSubmitFailure = (msg) => {
-    setShowSubmitError(true);
-    setErrorMsg(msg);
-    setIsLoading(false);
-  };
+    console.log('Full login response:', response.data);
 
-  const submitForm = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-    const userDetails = { username, password };
-    const url = 'https://backend-achyutanew.onrender.com/auth/login';
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userDetails),
+    const { token, user } = response.data;
+     const normalizedUser = {
+      ...user,
+      _id: user._id || user.id, 
+      id: user.id || user._id,
     };
-    
-    try {
-      const response = await fetch(url, options);
-      const data = await response.json();
-      if (response.ok) {
-        onSubmitSuccess(data.jwt_token);
-      } else {
-        onSubmitFailure(data.error_msg || 'Invalid username or password');
-      }
-    } catch (error) {
-      onSubmitFailure('Network error. Please try again.');
-    }
-  };
 
-  const renderPasswordField = () => (
-    <div className="input-field password-field">
-      <div className="input-icon">
-        <FaLock />
-      </div>
-      <input
-        type={showPassword ? 'text' : 'password'}
-        id="password"
-        placeholder="Enter your password"
-        value={password}
-        onChange={onChangePassword}
-      />
-      <div 
-        className="password-toggle"
-        onClick={() => setShowPassword(!showPassword)}
-      >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
-      </div>
-    </div>
-  );
+    console.log('Normalized user:', normalizedUser);
+    console.log('Normalized user._id:', normalizedUser._id);
 
-  const renderUsernameField = () => (
-    <div className="input-field">
-      <div className="input-icon">
-        <FaUser />
-      </div>
-      <input
-        type="text"
-        id="username"
-        placeholder="Enter your username"
-        value={username}
-        onChange={onChangeUsername}
-        className='userInput'
-      />
-    </div>
-  );
+    localStorage.setItem('token', token);
+  localStorage.setItem('user', JSON.stringify(normalizedUser));
+localStorage.setItem('userId', normalizedUser._id || normalizedUser.id); // Optional chaining for safety
+// Trigger an event to notify other components of the user change
+    window.dispatchEvent(new Event('storage')); // Force localStorage update detection
 
-  const jwtToken = Cookies.get('jwt_token');
-  if (jwtToken) {
-    return <Navigate to="/Home" />;
+    // Redirect to home or the intended page
+    navigate('/home' , { state: { user: normalizedUser } });
+  } catch (err) {
+    setError(err.response?.data?.error || 'Login failed');
+    // Clear any existing tokens on error
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userId');
+  } finally {
+    setLoading(false);
   }
+};
+
 
   return (
-    <div className="login-container">
-      {/* Left side - Image */}
-      <div className="login-image-container">
-        <div className="image-wrapper">
-          <img
-            src="https://media-hosting.imagekit.io/c5e76a3044894d12/Monochrome%20Brutalist%20Music%20Event%20Poster%20(1).png?Expires=1838045435&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=CZELZkjN9OcbiNzLQvQc18o3OtbbAtNpbn2agVclFcWiYVJYEt2KV9PAYrMOCRvVZAFYFyShnZ80fAf2qQYUQLbJz3fF8qYiwDNGz6KPQi-9e~JtSKVZRTJ22zeRYP4TB7XkZ3r2GVkJkkxJQbpWvw0OPghSF7RLzTC4ds1qvtt2y0fyCuekd9-LbAX98TFMXOcjbLxm0H~Bjr546N4cNBQAYaIPz7maMs7MLNh1~G4XnUT4ajPgADCpk6eKbXmeiRm06DLy6ng0sg4yudpLngG2v-j3GjqnEFH5C03Fq~uasLWUZboLDWeyLsdqQI~AkXJhPsNhkY3ofT0o5uhZiQ__"
-            alt="website login"
+    <AuthLayout>
+      <GlassCard>
+        <motion.h2
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="text-center mb-8 text-white text-2xl font-medium m-4"
+        >
+          Welcome Back
+        </motion.h2>
+
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-red-400 mb-4 text-center text-sm"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 m-4">
+          <FormInput
+            icon={<EnvelopeIcon className="h-5 w-5" />}
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            required
           />
-        </div>
-      </div>
+          <FormInput
+            icon={<LockClosedIcon className="h-5 w-5" />}
+            type="password"
+            name="password"
+             autoComplete="current-password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
 
-      {/* Right side - Login Form */}
-      <div className="login-form-container">
-        <div className="form-wrapper">
-          <div className="form-header">
-           <h1 className='name'>ACHYUTA</h1>
-            <h2 className='name1'>Welcome Back</h2>
-            <div >
-            <p  >Sign in to your account</p>
-            </div>
-           
+          <div className="text-right mb-2">
+            <motion.span
+              className="text-primary-400 cursor-pointer text-xs"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/forgot-password')}
+            >
+              Forgot Password?
+            </motion.span>
           </div>
 
-          <form onSubmit={submitForm}>
-            {renderUsernameField()}
-            {renderPasswordField()}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full py-3 px-6 text-white font-semibold shadow-lg shadow-primary-400/40 hover:from-primary-500 hover:to-secondary-500 transition-all disabled:opacity-70"
+          >
+            {loading ? 'Logging In...' : 'Login'}
+          </button>
+        </form>
 
-            <div className="form-options">
-              <div className="remember-me">
-                <input
-                  id="remember-me"
-                  type="checkbox"
-                />
-                <label htmlFor="remember-me">Remember me</label>
-              </div>
-              <a href="#" className="forgot-password">Forgot password?</a>
-            </div>
-
-            <button
-              type="submit"
-              className={`submit-button ${isLoading ? 'loading' : ''}`}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <span className="loading-spinner">
-                  <svg className="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="spinner-circle" cx="12" cy="12" r="10" strokeWidth="4"></circle>
-                    <path className="spinner-path" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Signing In
-                </span>
-              ) : 'Sign in'}
-            </button>
-
-            <button
-              type="button"
-              className="create-account-button"
-              onClick={() => navigate('/SignUp')}
-            >
-              Create an account
-            </button>
-
-            {showSubmitError && (
-              <div className="error-message">
-                {errorMsg}
-              </div>
-            )}
-          </form>
-
-          <div className="form-footer">
-            <p>
-              By signing in, you agree to our{' '}
-              <a href="#">Terms of Service</a>{' '}
-              and{' '}
-              <a href="#">Privacy Policy</a>
-              .
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+      </GlassCard>
+    </AuthLayout>
   );
 };
 
-export default LoginForm;
+export default Login;

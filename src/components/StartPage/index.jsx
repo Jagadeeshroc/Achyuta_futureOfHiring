@@ -17,7 +17,7 @@ const Page = () => {
         </div>
         
         <div className="hero-image">
-          <img src="https://media-hosting.imagekit.io/e6d5c60e96cf49ca/Untitled%20design%20(7).png?Expires=1838115632&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=UMVSMdHPmGHljrcmrIw0pfMybehS3anPp1hVDm64ZSTv1kOT3TLBAsOA8kGu4wRK8dhp7h1wKHc8gJtB0Ov5IRhlwK6oU9GoezWlghLrQKAXtbvBteSeJBgaGMRLPzxh~kwhhOCS1ThzmRX47sJ4tV40tJV7anjzntGWlzC74V2gr3~hhG54CJlW1iCN~ZxSnI9MvVph-tOXwtXbKSwoj9~3mp23aXhDTh1lGCM8bWKQgWnM7fVUcQglUcX~tT3sX6d09WzHnqBWd4hZQsBJyBgqLgDthI02hmyLtZFsq8Z9EM3vzHy7yJRw2wIIwvKgU2vBTQDxVYxirDoGxnQtjQ__" 
+          <img src="\src\assets\images\Monochrome Brutalist Music Event Poster (1).png" 
                alt="Happy professionals at work" />
         </div>
       </section>
