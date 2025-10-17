@@ -8,15 +8,17 @@ const connectDB = async () => {
     console.log('Using existing MongoDB connection');
     return;
   }
+
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/AchyutaJobportal');
+    const conn = await mongoose.connect(process.env.MONGO_URI);
     isConnected = true;
-    console.log('MongoDB Connected:', process.env.MONGO_URI || 'mongodb://localhost:27017/AchyutaJobportal');
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+
     const collections = await mongoose.connection.db.listCollections().toArray();
-    console.log('Available collections:', collections.map(c => c.name));
+    console.log('📚 Collections:', collections.map(c => c.name));
   } catch (err) {
-    console.error('MongoDB connection error:', err);
-    throw err;
+    console.error('❌ MongoDB connection error:', err.message);
+    process.exit(1);
   }
 };
 
