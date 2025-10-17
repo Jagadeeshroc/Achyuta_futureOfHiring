@@ -1,78 +1,105 @@
 const express = require('express');
 const router = express.Router();
-const Message = require('../models/Message');
 const Conversation = require('../models/Conversation');
-const protect = require('../middleware/authMiddleware');
+const Message = require('../models/Message');
+const User = require('../models/User');
 
-// Get messages for a conversation
-router.get('/:conversationId', protect, async (req, res) => {
+// Get all conversations
+router.get('/', async (req, res) => {
   try {
-    const messages = await Message.find({ 
-      conversation: req.params.conversationId 
+    const conversations = await Conversation.find({
+      participants: req.user.id
     })
-    .sort({ createdAt: 1 })
-    .populate('sender', 'name avatar');
+    .populate('participants', 'name avatar')
+    .populate('lastMessage')
+    .sort('-updatedAt');
     
-    res.json(messages);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.json(conversations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-// Send a new message
-router.post('/', protect, async (req, res) => {
+// Get messages in a conversation
+router.get('/:conversationId', async (req, res) => {
   try {
-    const { conversationId, content } = req.body;
+    const messages = await Message.find({
+      conversation: req.params.conversationId
+    }).sort('createdAt');
     
-    // Create new message
-    const newMessage = new Message({
-      conversation: conversationId,
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Create new conversation or get existing one
+router.post('/', async (req, res) => {
+  try {
+    const { participantId } = req.body;
+    
+    // Check if conversation already exists
+    let conversation = await Conversation.findOne({
+      participants: { $all: [req.user.id, participantId] }
+    });
+    
+    if (!conversation) {
+      conversation = new Conversation({
+        participants: [req.user.id, participantId]
+      });
+      await conversation.save();
+    }
+    
+    res.json(conversation);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Send message
+router.post('/:conversationId', async (req, res) => {
+  try {
+    const { content } = req.body;
+    
+    const message = new Message({
+      conversation: req.params.conversationId,
       sender: req.user.id,
       content
     });
-
-    // Save the message
-    const savedMessage = await newMessage.save();
     
-    // Populate sender info
-    const populatedMessage = await Message.findById(savedMessage._id)
-      .populate('sender', 'name avatar');
-
-    // Update conversation's last message
-    await Conversation.findByIdAndUpdate(conversationId, {
-      lastMessage: savedMessage._id,
+    await message.save();
+    
+    // Update conversation last message
+    await Conversation.findByIdAndUpdate(req.params.conversationId, {
+      lastMessage: message._id,
       updatedAt: Date.now()
     });
-
-    res.status(201).json(populatedMessage);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    
+    // Emit socket event
+    const populatedMessage = await Message.findById(message._id).populate('sender', 'name avatar');
+    req.io.to(req.params.conversationId).emit('newMessage', populatedMessage);
+    
+    res.status(201).json(message);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
 // Mark messages as read
-router.put('/:conversationId/read', protect, async (req, res) => {
+router.put('/:conversationId/read', async (req, res) => {
   try {
-    await Message.updateMany(
-      { 
-        conversation: req.params.conversationId,
-        sender: { $ne: req.user.id },
-        readBy: { $ne: req.user.id }
-      },
-      { 
-        $addToSet: { readBy: req.user.id },
-        $set: { read: true }
-      }
-    );
-
+    await Message.updateMany({
+      conversation: req.params.conversationId,
+      sender: { $ne: req.user.id },
+      read: false
+    }, {
+      $set: { read: true }
+    });
+    
     res.json({ success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
-
 
 module.exports = router;

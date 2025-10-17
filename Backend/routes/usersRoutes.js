@@ -1,8 +1,10 @@
+// Updated usersRoutes.js - Add missing auth import
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-
+const auth = require('../middleware/auth'); // Add this line
+const { followUser, unfollowUser, getFollowers, getFollowing, getUserFollowing } = require('../controllers/users');
 // ✅ GET all users
 router.get("/", async (req, res) => {
   try {
@@ -13,17 +15,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // ✅ Search users by name
 router.get('/search', async (req, res) => {
   try {
-    const name = req.query.name?.trim();
-    if (!name) {
-      return res.status(400).json({ error: 'Name query param is required' });
-    }
+    const q = req.query.q?.trim();
+    console.log('Search request:', req.query);
+    if (!q) return res.status(400).json({ error: 'Search term (q) is required' });
+    if (q.length < 1) return res.status(400).json({ error: 'Search term too short' });
 
-    // 👇 MATCHES names that START with the search term
     const users = await User.find({
-      name: { $regex: `^${name}`, $options: 'i' }
+      name: { $regex: `^${q}`, $options: 'i' }
     })
     .select('-password')
     .limit(10)
@@ -33,18 +44,6 @@ router.get('/search', async (req, res) => {
   } catch (err) {
     console.error('Search error:', err);
     res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-
-// ✅ GET user by ID - must come AFTER /search
-router.get("/:id", async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).select("-password");
-    if (!user) return res.status(404).json({ error: "User not found" });
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(500).json({ error: "Server Error" });
   }
 });
 
@@ -96,6 +95,7 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: "Server Error" });
   }
 });
+
 router.get('/recommended', async (req, res) => {
   try {
     const users = await User.find().limit(5);
@@ -106,7 +106,12 @@ router.get('/recommended', async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+router.get('/me/following', auth, getUserFollowing);
 
+router.post('/:userId/follow', auth, followUser);
+router.delete('/:userId/follow', auth, unfollowUser);
+router.get('/:userId/followers', auth, getFollowers);
+router.get('/:userId/following', auth, getFollowing);
 
 
 module.exports = router;

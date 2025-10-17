@@ -1,0 +1,284 @@
+/* General reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Body */
+body {
+  background: #f7f7f7;
+  color: #333;
+  font-size: 16px;
+}
+
+/* Profile container */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a3a1a1, #e7b1f3);
+  padding: 20px;
+  color: #fff;
+}
+
+/* Header */
+.profile-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: rgba(144, 108, 243, 0.1);
+  padding: 10px 20px;
+  border-radius: 50px;
+  width: 80%;
+  max-width: 500px;
+}
+
+.search-bar input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  width: 100%;
+  font-size: 16px;
+  padding: 8px;
+  outline: none;
+}
+
+.search-icon {
+  color: #fff;
+  margin-left: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Profile content layout */
+.profile-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 20px;
+}
+
+/* Sidebar */
+.profile-sidebar {
+  width: 250px;
+  background: #282828;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  color: #bbb;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-decoration: none;
+
+}
+
+.sidebar-item:hover {
+
+  color: #fff;
+}
+
+.sidebar-icon {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+/* Profile main area */
+.profile-main {
+  flex-grow: 1;
+  padding: 20px;
+  margin-left: 20px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.profile-card {
+  background: #333;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(181, 173, 173, 0.3);
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.fullProfile-image {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 20px;
+  border: 3px solid #fff;
+}
+
+.profile-text {
+  color: #ddd;
+}
+
+.profile-text h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.profile-title {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.profile-location {
+  font-size: 14px;
+  color: #aaa!;
+}
+
+/* Profile details section */
+.profile-details {
+  margin-top: 20px;
+}
+
+.detail-section {
+  margin-bottom: 20px;
+}
+
+.detail-section h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.detail-section p {
+  color: #bbb;
+  font-size: 14px;
+}
+
+/* Skills tags */
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skill-tag {
+  background-color: #444;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin: 5px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.skill-tag:hover {
+  background-color: #f9ddf8;
+  color: #1e1e1e;
+}
+
+/* Button: View Full Profile */
+.view-more-btn {
+  display: inline-block;
+  padding: 10px 30px;
+  background-color: #1a73e8;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 50px;
+  margin-top: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.view-more-btn:hover {
+  background-color: #4d89f0;
+  transform: scale(1.05);
+
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profile-content {
+    flex-direction: column;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .profile-main {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-header .search-bar {
+    width: 100%;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+  }
+}
+/* Image Popup Styles */
+.image-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color:transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.image-popup-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.popup-image {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.close-popup-btn {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.close-popup-btn:hover {
+  color: #ccc;
+}

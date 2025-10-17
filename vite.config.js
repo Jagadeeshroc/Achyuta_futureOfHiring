@@ -14,6 +14,9 @@ export default defineConfig({
       }
     }
   },
+  optimizeDeps: {
+    force: true, // Add this
+  },
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
@@ -48,6 +51,7 @@ export default defineConfig({
  
   plugins: [
     react(),tailwindcss(),],
+   define: {'process.env': 'import.meta.env', global: 'globalThis', },
     build: {
       rollupOptions: {
         output: {
@@ -60,5 +64,15 @@ export default defineConfig({
         }
       },
       chunkSizeWarningLimit: 1000 // adjust as needed
+    },
+   
+    
+  hmr: {
+      overlay: false
+    },
+  resolve: {
+    alias: {
+      '@': '/src',  // Optional but helpful alias
     }
+  }
 })
