@@ -1,19 +1,19 @@
-// Updated server.js - Removed duplicate static serve, added better error handling
+// Backend Server: server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');     // for file system operation
 const http = require('http');
 const { Server } = require('socket.io');
-const path = require('path');
-const fs = require('fs');
+
 const multer = require('multer');
 const connectDB = require('./config/db');
-
-// Import routes
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/auth');
+const postRoutes = require('./routes/posts');
+// Placeholder for missing routes (add these files as needed)
 const usersRoutes = require('./routes/usersRoutes');
 const jobRoutes = require('./routes/jobs');
-const postRoutes = require('./routes/posts');
 const reviewRoutes = require('./routes/reviews');
 const connectionRoutes = require('./routes/connections');
 const notificationRoutes = require('./routes/notifications');
@@ -27,9 +27,8 @@ const io = new Server(server, {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   },
-  debug: true, // Enable debug logging
-  transports: ['websocket', 'polling'], // Explicitly allow both transports
-  pingTimeout: 60000, // Increase timeout to prevent premature disconnections
+  transports: ['websocket', 'polling'],
+  pingTimeout: 60000,
   pingInterval: 25000
 });
 
@@ -39,13 +38,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// Ensure Uploads directory exists
+// Multer configuration (for reference, used in routes)
 const uploadDir = path.join(__dirname, 'Uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Multer configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => {
@@ -56,10 +54,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: {
-    fileSize: 20 * 1024 * 1024, // 20MB
-    fieldSize: 50 * 1024 * 1024
-  },
+  limits: { fileSize: 20 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const validTypes = [
       'image/jpeg', 'image/png', 'image/gif', 'image/webp',
@@ -80,15 +75,13 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use('/Uploads', express.static(uploadDir));
 
 // Connect to MongoDB
 connectDB();
 
 // API Routes
-app.use('/api/auth', upload.fields([
-  { name: 'avatar', maxCount: 1 },
-  { name: 'resume', maxCount: 1 }
-]), authRoutes);
+app.use('/api/auth', authRoutes); // No upload here; handled in auth.js
 app.use('/api/users', usersRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/posts', postRoutes);
@@ -96,9 +89,6 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/connections', connectionRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/conversations', conversationRoutes);
-
-// Serve uploaded files (avatars etc.)
-app.use('/uploads', express.static(uploadDir));
 
 // Socket.IO
 io.on('connection', (socket) => {
@@ -136,10 +126,6 @@ app.use((err, req, res, next) => {
     url: req?.url,
     method: req?.method
   });
-  if (!res || typeof res.status !== 'function' || res.headersSent) {
-    console.error('Invalid response object:', { url: req?.url, method: req?.method });
-    return next(err);
-  }
   if (err instanceof multer.MulterError) {
     return res.status(400).json({ error: `Upload error: ${err.message}` });
   }

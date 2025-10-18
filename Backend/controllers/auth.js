@@ -1,9 +1,7 @@
-// controllers/auth.js
+// Backend Controller: controllers/auth.js
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
-
 
 exports.register = async (req, res) => {
   try {
@@ -30,7 +28,6 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'Invalid JSON format in skills, socialLinks, experience, or education' });
     }
 
-    // Replace optional chaining with explicit checks
     const avatar = req.files && req.files.avatar && req.files.avatar[0] ? `/Uploads/${req.files.avatar[0].filename}` : null;
     const resume = req.files && req.files.resume && req.files.resume[0] ? `/Uploads/${req.files.resume[0].filename}` : null;
     console.log('Avatar path:', avatar);
@@ -96,13 +93,11 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    // ✅ Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: user._id, name: user.name }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '7d' });
 
-    // ✅ Return token and user data
     res.status(200).json({
       message: 'Login successful',
-      token, // ✅ send this to the frontend
+      token,
       user: {
         id: user._id,
         email: user.email,

@@ -1,26 +1,37 @@
-// Backend: controllers/posts.js
+// Backend Controller: controllers/posts.js
 const Post = require('../models/Post');
 const User = require('../models/User');
+const Application = require('../models/Application');
 const mongoose = require('mongoose');
 
 const createPost = async (req, res) => {
   try {
-    const { content } = req.body;
+    const { content, type, price, isPremium } = req.body;
     const userId = req.user.id;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    const image = req.file ? `/Uploads/${req.file.filename}` : null;
 
-    if (!content.trim()) {
+    if (!content?.trim()) {
       return res.status(400).json({ error: 'Content is required' });
+    }
+    if (!type || !['jobs', 'private-works', 'services'].includes(type)) {
+      return res.status(400).json({ error: 'Valid type is required (jobs, private-works, services)' });
     }
 
     const post = new Post({
       user: userId,
-      content,
-      image
+      content: content.trim(),
+      image,
+      type,
+      price: price ? parseFloat(price) : null,
+      isPremium: isPremium === 'true' || isPremium === true
     });
 
     await post.save();
     await post.populate('user', 'name email avatar headline');
+
+    if (req.io) {
+      req.io.to(userId).emit('new-post', post);
+    }
 
     res.status(201).json(post);
   } catch (err) {
@@ -31,7 +42,11 @@ const createPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find()
+    const query = {};
+    if (req.query.type) query.type = req.query.type;
+    if (req.query.isPremium !== undefined) query.isPremium = req.query.isPremium === 'true';
+
+    const posts = await Post.find(query)
       .populate('user', 'name email avatar headline')
       .populate('likes', 'name email avatar headline')
       .populate('comments.user', 'name email avatar headline')
@@ -67,6 +82,14 @@ const likePost = async (req, res) => {
     await post.populate('likes', 'name email avatar headline');
     await post.populate('comments.user', 'name email avatar headline');
 
+    if (req.io) {
+      req.io.to(post.user._id.toString()).emit('new-like', { 
+        postId: post._id, 
+        likes: post.likes.length 
+      });
+      req.io.emit('update-post', post);
+    }
+
     res.json(post);
   } catch (err) {
     console.error('Error liking post:', err.message);
@@ -80,6 +103,10 @@ const addComment = async (req, res) => {
     const { comment } = req.body;
     const userId = req.user.id;
 
+    if (!comment?.trim()) {
+      return res.status(400).json({ error: 'Comment is required' });
+    }
+
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
@@ -87,7 +114,7 @@ const addComment = async (req, res) => {
 
     post.comments.push({
       user: userId,
-      content: comment
+      content: comment.trim()
     });
 
     await post.save();
@@ -95,10 +122,58 @@ const addComment = async (req, res) => {
     await post.populate('likes', 'name email avatar headline');
     await post.populate('comments.user', 'name email avatar headline');
 
+    if (req.io) {
+      const newComment = post.comments[post.comments.length - 1];
+      req.io.to(post.user._id.toString()).emit('new-comment', { 
+        postId: post._id, 
+        comment: newComment 
+      });
+      req.io.emit('update-post', post);
+    }
+
     res.json(post);
   } catch (err) {
     console.error('Error adding comment:', err.message);
     res.status(500).json({ error: 'Server error while adding comment' });
+  }
+};
+
+const applyToPost = async (req, res) => {
+  try {
+    const { postId, message } = req.body;
+    const userId = req.user.id;
+
+    const post = await Post.findById(postId).populate('user', 'name');
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const existingApplication = await Application.findOne({ post: postId, applicant: userId });
+    if (existingApplication) {
+      return res.status(400).json({ error: 'Already applied to this post' });
+    }
+
+    const application = new Application({
+      post: postId,
+      applicant: userId,
+      message: message?.trim() || ''
+    });
+    await application.save();
+    await application.populate('applicant', 'name');
+
+    if (req.io) {
+      req.io.to(post.user._id.toString()).emit('new-application', {
+        postId: post._id,
+        postTitle: post.content.substring(0, 50) + '...',
+        applicantId: userId,
+        applicantName: req.user.name || 'Freelancer'
+      });
+    }
+
+    res.status(201).json(application);
+  } catch (err) {
+    console.error('Error applying to post:', err.message);
+    res.status(500).json({ error: 'Server error while applying to post' });
   }
 };
 
@@ -111,9 +186,11 @@ const getFollowingPosts = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
     
-    const followingIds = currentUser.following.map(f => f._id);
-    
-    const posts = await Post.find({ user: { $in: followingIds } })
+    const followingIds = currentUser.following;
+    const query = { user: { $in: followingIds } };
+    if (req.query.type) query.type = req.query.type;
+
+    const posts = await Post.find(query)
       .populate('user', 'name email avatar headline')
       .populate('likes', 'name email avatar headline')
       .populate('comments.user', 'name email avatar headline')
@@ -129,12 +206,15 @@ const getFollowingPosts = async (req, res) => {
 
 const getDiscoverPosts = async (req, res) => {
   try {
-    const posts = await Post.find()
+    const query = {};
+    if (req.query.type) query.type = req.query.type;
+
+    const posts = await Post.find(query)
       .populate('user', 'name email avatar headline')
       .populate('likes', 'name email avatar headline')
       .populate('comments.user', 'name email avatar headline')
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(100);
     res.json(posts);
   } catch (err) {
     console.error('Error fetching discover posts:', err.message);
@@ -158,7 +238,6 @@ const getPostById = async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    console.log('Post user:', post?.user); // Debug log
     res.json(post);
   } catch (err) {
     console.error('Error fetching post:', err.message);
@@ -167,10 +246,11 @@ const getPostById = async (req, res) => {
 };
 
 module.exports = {
-  createPost, // Now defined
+  createPost,
   getPosts,
   likePost,
   addComment,
+  applyToPost,
   getFollowingPosts,
   getDiscoverPosts,
   getPostById

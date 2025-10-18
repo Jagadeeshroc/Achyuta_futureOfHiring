@@ -1,4 +1,4 @@
-// Backend: models/Post.js
+// Backend Model: models/Post.js
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
@@ -30,8 +30,21 @@ const postSchema = new mongoose.Schema({
     trim: true
   },
   image: {
-    type: String, // Full URL like '/uploads/filename.jpg'
+    type: String,
     default: null
+  },
+  type: {
+    type: String,
+    enum: ['jobs', 'private-works', 'services'],
+    required: true
+  },
+  price: {
+    type: Number,
+    default: null
+  },
+  isPremium: {
+    type: Boolean,
+    default: false
   },
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -42,8 +55,6 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-}, {
-  timestamps: true
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Post', postSchema);
