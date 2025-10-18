@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from "react";
 
 import FreelancingForm from "./FreelancingForm";
-import FreelancingList from "./FreelancingList";
+
 import { useSocket } from "../context/SocketContext";
 import { motion } from "framer-motion";
 import { FaLaptopCode, FaTools, FaBriefcase } from "react-icons/fa";
 import axiosInstance from "../../utils/axiosInstance";
+import FreelancingCard from "./FreelancingCard";
 
 const FreelancePage = () => {
   const [activeTab, setActiveTab] = useState("jobs");
@@ -131,14 +132,14 @@ const FreelancePage = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <FreelancingCard post={post} />
+                {/* <FreelancingCard post={post} /> */}
               </motion.div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Posts List */}
+      {/* Posts Grid */}
       <div className="max-w-6xl mx-auto mt-16 mb-20">
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
           🧰 Latest {activeTab.replace("-", " ")} Posts
@@ -151,7 +152,7 @@ const FreelancePage = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <FreelancingCard post={post} />
+                {/* <FreelancingCard post={post} /> */}
               </motion.div>
             ))}
           </div>

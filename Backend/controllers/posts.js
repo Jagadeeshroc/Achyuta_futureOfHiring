@@ -6,32 +6,22 @@ const mongoose = require('mongoose');
 
 const createPost = async (req, res) => {
   try {
-    const { content, type, price, isPremium } = req.body;
+    const { content } = req.body;
     const userId = req.user.id;
-    const image = req.file ? `/Uploads/${req.file.filename}` : null;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!content?.trim()) {
+    if (!content.trim()) {
       return res.status(400).json({ error: 'Content is required' });
-    }
-    if (!type || !['jobs', 'private-works', 'services'].includes(type)) {
-      return res.status(400).json({ error: 'Valid type is required (jobs, private-works, services)' });
     }
 
     const post = new Post({
       user: userId,
-      content: content.trim(),
-      image,
-      type,
-      price: price ? parseFloat(price) : null,
-      isPremium: isPremium === 'true' || isPremium === true
+      content,
+      image
     });
 
     await post.save();
     await post.populate('user', 'name email avatar headline');
-
-    if (req.io) {
-      req.io.to(userId).emit('new-post', post);
-    }
 
     res.status(201).json(post);
   } catch (err) {
@@ -39,6 +29,7 @@ const createPost = async (req, res) => {
     res.status(500).json({ error: 'Server error while creating post' });
   }
 };
+
 
 const getPosts = async (req, res) => {
   try {
