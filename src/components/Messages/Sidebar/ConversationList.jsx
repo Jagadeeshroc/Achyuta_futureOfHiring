@@ -1,3 +1,4 @@
+// src/components/messages/Sidebar/ConversationList.jsx
 import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -28,20 +29,19 @@ const ConversationList = ({
         const lastMessage = conv.lastMessage;
 
         const previewText = lastMessage
-          ? (lastMessage.senderId === currentUserId ? 'You: ' : '') + 
+          ? (lastMessage.senderId === currentUserId ? 'You: ' : '') +
             (lastMessage.content || 'Media message')
           : 'No messages yet';
-        
+
         const timeAgo = lastMessage
           ? formatDistanceToNow(new Date(lastMessage.createdAt), { addSuffix: true })
           : '';
 
-        // Avatar URL resolution
         const avatarUrl = otherUser?.avatar
           ? otherUser.avatar.startsWith('http')
             ? otherUser.avatar
             : `${API_BASE_URL.replace(/\/$/, '')}${otherUser.avatar.startsWith('/') ? '' : '/'}${otherUser.avatar}`
-          : '/default-avatar.png'; // fallback
+          : '/default-avatar.png';
 
         return (
           <div
@@ -51,11 +51,10 @@ const ConversationList = ({
               isActive ? 'bg-indigo-50 border-l-4 border-indigo-600' : ''
             }`}
           >
-            {/* Avatar */}
             <div className="relative mr-3">
               <img
                 src={avatarUrl}
-                alt={otherUser?.name || 'User'}
+                alt={otherUser?.name || otherUser?.email || 'Unknown User'}
                 className="w-12 h-12 rounded-full object-cover"
                 onError={(e) => {
                   e.target.onerror = null;
@@ -66,12 +65,10 @@ const ConversationList = ({
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
               )}
             </div>
-
-            {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-baseline">
                 <p className={`font-semibold text-gray-900 truncate ${unread > 0 ? 'font-bold' : ''}`}>
-                  {otherUser?.name || 'Unknown User'}
+                  {otherUser?.name || otherUser?.email || 'Unknown User'}
                 </p>
                 {timeAgo && <p className="text-xs text-gray-500 ml-2">{timeAgo}</p>}
               </div>
@@ -79,8 +76,6 @@ const ConversationList = ({
                 {previewText}
               </p>
             </div>
-
-            {/* Unread Badge */}
             {unread > 0 && (
               <div className="ml-3 flex-shrink-0">
                 <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full animate-pulse">

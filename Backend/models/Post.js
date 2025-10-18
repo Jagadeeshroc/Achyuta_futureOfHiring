@@ -1,4 +1,4 @@
-// Backend: models/Post.js (Updated with subdocument comments for better structure)
+// Backend: models/Post.js
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
@@ -44,13 +44,6 @@ const postSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true
-});
-
-postSchema.pre('find', function() {
-  this.populate({
-    path: 'comments.user',
-    select: 'first_name last_name avatar'
-  });
 });
 
 module.exports = mongoose.model('Post', postSchema);

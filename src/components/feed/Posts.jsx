@@ -1,11 +1,10 @@
+// src/components/Posts.jsx
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaUserCircle, FaThumbsUp, FaComment, FaShare, FaPaperPlane, FaImage, FaTimes, FaSpinner, FaUsers, FaCompass, FaEye } from 'react-icons/fa';
+import { FaUserCircle, FaThumbsUp, FaComment, FaShare, FaPaperPlane, FaImage, FaTimes, FaSpinner, FaUsers, FaCompass } from 'react-icons/fa';
 
-axios.defaults.baseURL = "http://localhost:5000";
-
-const Posts = () => {
+const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
   const navigate = useNavigate();
   const [followingPosts, setFollowingPosts] = useState([]);
   const [discoverPosts, setDiscoverPosts] = useState([]);
@@ -19,9 +18,10 @@ const Posts = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    axios.defaults.baseURL = apiBaseUrl;
     fetchFollowing();
     fetchPosts();
-  }, []);
+  }, [apiBaseUrl]);
 
   useLayoutEffect(() => {
     const updateUser = () => {
@@ -31,22 +31,33 @@ const Posts = () => {
         setCurrentUser({ ...parsedUser, _id: parsedUser._id || parsedUser.id });
       } else {
         setCurrentUser(null);
+        setError('Please log in to view posts.');
+        navigate('/login');
       }
     };
     updateUser();
     window.addEventListener('storage', updateUser);
     return () => window.removeEventListener('storage', updateUser);
-  }, []);
+  }, [navigate]);
 
   const fetchFollowing = async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
       const res = await axios.get('/api/users/me/following', {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setFollowing(res.data.map(u => u._id));
+      setFollowing(res.data.map((u) => u._id));
     } catch (err) {
       console.error('Error fetching following:', err);
+      if (err.response?.status === 401) {
+        setError('Unauthorized access. Please log in again.');
+        navigate('/login');
+      } else {
+        setError('Failed to load following list.');
+      }
     }
   };
 
@@ -54,16 +65,24 @@ const Posts = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
       const headers = { Authorization: `Bearer ${token}` };
       const [followingRes, discoverRes] = await Promise.all([
         axios.get('/api/posts/following', { headers }),
-        axios.get('/api/posts/discover', { headers })
+        axios.get('/api/posts/discover', { headers }),
       ]);
       setFollowingPosts(followingRes.data);
       setDiscoverPosts(discoverRes.data);
     } catch (err) {
       console.error('Error fetching posts:', err);
-      setError('Failed to load posts');
+      if (err.response?.status === 401) {
+        setError('Unauthorized access. Please log in again.');
+        navigate('/login');
+      } else {
+        setError('Failed to load posts.');
+      }
     } finally {
       setLoading(false);
     }
@@ -82,11 +101,14 @@ const Posts = () => {
     try {
       setSubmitting(true);
       const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
       const res = await axios.post('/api/posts', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
       setFollowingPosts([res.data, ...followingPosts]);
       setNewPost('');
@@ -94,7 +116,12 @@ const Posts = () => {
       setSelectedImage(null);
     } catch (err) {
       console.error('Error creating post:', err);
-      setError('Failed to create post');
+      if (err.response?.status === 401) {
+        setError('Unauthorized access. Please log in again.');
+        navigate('/login');
+      } else {
+        setError('Failed to create post.');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -116,17 +143,23 @@ const Posts = () => {
   const handleLike = async (postId, column) => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
       const res = await axios.post(`/api/posts/${postId}/like`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      
       if (column === 'following') {
-        setFollowingPosts(followingPosts.map(p => p._id === postId ? res.data : p));
+        setFollowingPosts(followingPosts.map((p) => (p._id === postId ? res.data : p)));
       } else {
-        setDiscoverPosts(discoverPosts.map(p => p._id === postId ? res.data : p));
+        setDiscoverPosts(discoverPosts.map((p) => (p._id === postId ? res.data : p)));
       }
     } catch (err) {
       console.error('Error liking post:', err);
+      if (err.response?.status === 401) {
+        setError('Unauthorized access. Please log in again.');
+        navigate('/login');
+      }
     }
   };
 
@@ -134,17 +167,23 @@ const Posts = () => {
     if (!comment.trim()) return;
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
       const res = await axios.post(`/api/posts/${postId}/comment`, { comment }, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      
       if (column === 'following') {
-        setFollowingPosts(followingPosts.map(p => p._id === postId ? res.data : p));
+        setFollowingPosts(followingPosts.map((p) => (p._id === postId ? res.data : p)));
       } else {
-        setDiscoverPosts(discoverPosts.map(p => p._id === postId ? res.data : p));
+        setDiscoverPosts(discoverPosts.map((p) => (p._id === postId ? res.data : p)));
       }
     } catch (err) {
       console.error('Error adding comment:', err);
+      if (err.response?.status === 401) {
+        setError('Unauthorized access. Please log in again.');
+        navigate('/login');
+      }
     }
   };
 
@@ -153,20 +192,26 @@ const Posts = () => {
   const handleFollow = async (userId) => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
       const method = isFollowing(userId) ? 'delete' : 'post';
       const url = `/api/users/${userId}/follow`;
       await axios[method](url, {}, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      
       if (isFollowing(userId)) {
-        setFollowing(following.filter(id => id !== userId));
+        setFollowing(following.filter((id) => id !== userId));
       } else {
         setFollowing([...following, userId]);
       }
       fetchPosts();
     } catch (err) {
       console.error('Error handling follow:', err);
+      if (err.response?.status === 401) {
+        setError('Unauthorized access. Please log in again.');
+        navigate('/login');
+      }
     }
   };
 
@@ -175,8 +220,8 @@ const Posts = () => {
   };
 
   const renderPostCard = (post, column) => (
-    <div 
-      key={post._id} 
+    <div
+      key={post._id}
       className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6 cursor-pointer hover:shadow-xl transition-shadow"
       onClick={() => handlePostClick(post._id)}
     >
@@ -185,13 +230,17 @@ const Posts = () => {
           <div className="flex items-start space-x-4 flex-1">
             <img
               src={post.user.avatar ? `${axios.defaults.baseURL}${post.user.avatar}` : '/default-avatar.png'}
-              alt={post.user.name}
+              alt={post.user.name || post.user.email || 'Unknown User'}
               className="w-12 h-12 rounded-full"
-              onError={(e) => { e.target.src = '/default-avatar.png'; }}
+              onError={(e) => {
+                e.target.src = '/default-avatar.png';
+              }}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 truncate">{post.user.name}</h3>
-              <p className="text-sm text-gray-500">{post.user.title}</p>
+              <h3 className="font-semibold text-gray-900 truncate">
+                {post.user.name || post.user.email || 'Unknown User'}
+              </h3>
+              <p className="text-sm text-gray-500">{post.user.headline || 'No headline'}</p>
               <p className="text-xs text-gray-400 mt-1">
                 {new Date(post.createdAt).toLocaleString()}
               </p>
@@ -232,7 +281,7 @@ const Posts = () => {
       </div>
 
       <div className="flex justify-around border-t border-gray-100 p-4 bg-gray-50">
-        <button 
+        <button
           onClick={(e) => {
             e.stopPropagation();
             handleLike(post._id, column);
@@ -242,7 +291,7 @@ const Posts = () => {
           <FaThumbsUp size={16} />
           <span className="text-sm">{post.likes.length}</span>
         </button>
-        <button 
+        <button
           onClick={(e) => {
             e.stopPropagation();
             handlePostClick(post._id);
@@ -252,7 +301,7 @@ const Posts = () => {
           <FaComment size={16} />
           <span className="text-sm">{post.comments.length}</span>
         </button>
-        <button 
+        <button
           onClick={(e) => {
             e.stopPropagation();
           }}
@@ -274,7 +323,7 @@ const Posts = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className={`min-h-screen bg-gray-50 py-8 px-4 ${className}`}>
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -289,16 +338,24 @@ const Posts = () => {
           </div>
         )}
 
-        <div className=" sticky top-1 bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-2xl mx-auto ">
+        <div className="sticky top-1 bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-2xl mx-auto">
           <form onSubmit={handlePostSubmit} className="space-y-4">
-            <div className="flex items-start space-x-4 ">
+            <div className="flex items-start space-x-4">
               <img
-                src={currentUser?.avatar ? currentUser.avatar.startsWith('http') ? currentUser.avatar : `http://localhost:5000${currentUser.avatar.replace(/^\/Uploads/, '/uploads')}` : "/default-avatar.png"}
-                alt="Your Avatar"
+                src={
+                  currentUser?.avatar
+                    ? currentUser.avatar.startsWith('http')
+                      ? currentUser.avatar
+                      : `${apiBaseUrl}${currentUser.avatar.replace(/^\/Uploads/, '/uploads')}`
+                    : '/default-avatar.png'
+                }
+                alt={currentUser?.name || currentUser?.email || 'Unknown User'}
                 className="w-12 h-12 rounded-full"
-                onError={(e) => { e.target.src = '/default-avatar.png'; }}
+                onError={(e) => {
+                  e.target.src = '/default-avatar.png';
+                }}
               />
-              <input
+              <textarea
                 value={newPost}
                 onChange={(e) => setNewPost(e.target.value)}
                 placeholder="What's on your mind? Share an update, article, or idea..."

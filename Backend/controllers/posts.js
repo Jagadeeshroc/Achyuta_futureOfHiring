@@ -1,7 +1,7 @@
-// Backend: controllers/posts.js (Remove getUserFollowing - add mongoose import, fix populate)
+// Backend: controllers/posts.js
 const Post = require('../models/Post');
 const User = require('../models/User');
-const mongoose = require('mongoose'); // Add this
+const mongoose = require('mongoose');
 
 const createPost = async (req, res) => {
   try {
@@ -20,7 +20,7 @@ const createPost = async (req, res) => {
     });
 
     await post.save();
-    await post.populate('user', 'first_name last_name avatar title');
+    await post.populate('user', 'name email avatar headline');
 
     res.status(201).json(post);
   } catch (err) {
@@ -32,9 +32,9 @@ const createPost = async (req, res) => {
 const getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate('user', 'first_name last_name avatar title')
-      .populate('likes', 'first_name')
-      .populate('comments.user', 'first_name last_name avatar') // Add if subdocs
+      .populate('user', 'name email avatar headline')
+      .populate('likes', 'name email avatar headline')
+      .populate('comments.user', 'name email avatar headline')
       .sort({ createdAt: -1 })
       .limit(20);
 
@@ -63,8 +63,9 @@ const likePost = async (req, res) => {
     }
 
     await post.save();
-    await post.populate('user', 'first_name last_name avatar title');
-    await post.populate('likes', 'first_name last_name avatar');
+    await post.populate('user', 'name email avatar headline');
+    await post.populate('likes', 'name email avatar headline');
+    await post.populate('comments.user', 'name email avatar headline');
 
     res.json(post);
   } catch (err) {
@@ -90,8 +91,9 @@ const addComment = async (req, res) => {
     });
 
     await post.save();
-    await post.populate('user', 'first_name last_name avatar title');
-    await post.populate('comments.user', 'first_name last_name avatar');
+    await post.populate('user', 'name email avatar headline');
+    await post.populate('likes', 'name email avatar headline');
+    await post.populate('comments.user', 'name email avatar headline');
 
     res.json(post);
   } catch (err) {
@@ -112,9 +114,9 @@ const getFollowingPosts = async (req, res) => {
     const followingIds = currentUser.following.map(f => f._id);
     
     const posts = await Post.find({ user: { $in: followingIds } })
-      .populate('user', 'first_name last_name avatar title')
-      .populate('likes', 'first_name last_name avatar')
-      .populate('comments.user', 'first_name last_name avatar')
+      .populate('user', 'name email avatar headline')
+      .populate('likes', 'name email avatar headline')
+      .populate('comments.user', 'name email avatar headline')
       .sort({ createdAt: -1 })
       .limit(10);
     
@@ -128,9 +130,9 @@ const getFollowingPosts = async (req, res) => {
 const getDiscoverPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate('user', 'first_name last_name avatar title')
-      .populate('likes', 'first_name last_name avatar')
-      .populate('comments.user', 'first_name last_name avatar')
+      .populate('user', 'name email avatar headline')
+      .populate('likes', 'name email avatar headline')
+      .populate('comments.user', 'name email avatar headline')
       .sort({ createdAt: -1 })
       .limit(10);
     res.json(posts);
@@ -148,14 +150,15 @@ const getPostById = async (req, res) => {
     }
 
     const post = await Post.findById(id)
-      .populate('user', 'first_name last_name avatar title')
-      .populate('likes', 'first_name last_name avatar')
-      .populate('comments.user', 'first_name last_name avatar');
+      .populate('user', 'name email avatar headline')
+      .populate('likes', 'name email avatar headline')
+      .populate('comments.user', 'name email avatar headline');
 
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
 
+    console.log('Post user:', post?.user); // Debug log
     res.json(post);
   } catch (err) {
     console.error('Error fetching post:', err.message);
@@ -164,7 +167,7 @@ const getPostById = async (req, res) => {
 };
 
 module.exports = {
-  createPost,
+  createPost, // Now defined
   getPosts,
   likePost,
   addComment,

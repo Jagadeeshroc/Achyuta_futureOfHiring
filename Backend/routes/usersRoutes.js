@@ -15,6 +15,35 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Search users by name or email
+router.get('/search', auth, async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) {
+      return res.status(400).json({ error: 'Query parameter is required' });
+    }
+
+    console.log('Authenticated user ID:', req.user.id);
+    console.log('Search query:', query);
+
+    const sanitizedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const users = await User.find({
+      $or: [
+        { name: { $regex: sanitizedQuery, $options: 'i' } },
+        { email: { $regex: sanitizedQuery, $options: 'i' } },
+      ],
+    })
+      .select('name email avatar headline')
+      .limit(10);
+
+    console.log('Found users:', users);
+    res.json(users);
+  } catch (err) {
+    console.error('Error searching users:', err.message, err.stack);
+    res.status(500).json({ error: 'Server error while searching users', details: err.message });
+  }
+});
+
 router.get('/:id', auth, async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
@@ -25,27 +54,7 @@ router.get('/:id', auth, async (req, res) => {
   }
 });
 
-// ✅ Search users by name
-router.get('/search', async (req, res) => {
-  try {
-    const q = req.query.q?.trim();
-    console.log('Search request:', req.query);
-    if (!q) return res.status(400).json({ error: 'Search term (q) is required' });
-    if (q.length < 1) return res.status(400).json({ error: 'Search term too short' });
 
-    const users = await User.find({
-      name: { $regex: `^${q}`, $options: 'i' }
-    })
-    .select('-password')
-    .limit(10)
-    .sort({ name: 1 });
-
-    res.json(users);
-  } catch (err) {
-    console.error('Search error:', err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 // ✅ CREATE a new user
 router.post("/", async (req, res) => {

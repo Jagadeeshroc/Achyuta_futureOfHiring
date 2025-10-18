@@ -3,14 +3,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar/Sidebar';
 import ChatArea from './Chat/ChatArea';
+
 import { useAuth } from '../../hooks/useAuth';
 import { useConversations } from '../../hooks/useConversations';
 import { useMessages } from '../../hooks/useMessages';
-
 import axios from 'axios';
 import { useNotifications } from '../context/NotificationContext';
 
-const MessageComponent = () => {
+const MessageComponent = ({ apiBaseUrl = 'http://localhost:5000' }) => {
   const navigate = useNavigate();
   const { userId: currentUserId } = useAuth();
 
@@ -20,39 +20,52 @@ const MessageComponent = () => {
   const [newMessage, setNewMessage] = useState('');
 
   const { conversations, loading, error } = useConversations();
-  const { messages, typing, sendMessage, emitTyping, messagesEndRef } = useMessages(
-    activeConversation?._id, currentUserId
+  const { messages, typing, sendMessage, emitTyping } = useMessages(
+    activeConversation?._id,
+    currentUserId
   );
-
-  // New: Notification context
   const { unreadCounts, markConversationAsRead } = useNotifications();
 
-  // Mobile resize effect
   useEffect(() => {
+    axios.defaults.baseURL = apiBaseUrl;
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [apiBaseUrl]);
 
   const getOtherUser = useCallback(
-    (conv) => conv?.participants?.find(p => p._id !== currentUserId),
+    (conv) => conv?.participants?.find((p) => p._id !== currentUserId),
     [currentUserId]
   );
 
-  // Fixed: Only one declaration
   const selectConversation = (conv) => {
     setActiveConversation(conv);
-    markConversationAsRead(conv._id); // Reset unread on open
+    markConversationAsRead(conv._id);
     if (isMobile) setShowChat(true);
   };
 
   const startConversation = async (userId) => {
-    const { data } = await axios.post('/api/conversations', { participantId: userId });
-    setActiveConversation(data);
-    if (isMobile) setShowChat(true);
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+      const { data } = await axios.post(
+        '/api/conversations',
+        { participantId: userId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setActiveConversation(data);
+      if (isMobile) setShowChat(true);
+    } catch (err) {
+      console.error('Error starting conversation:', err);
+      if (err.response?.status === 401) {
+        navigate('/login');
+      }
+    }
   };
 
-  // Render logic
   const sidebarVisible = !isMobile || !showChat;
   const chatVisible = !isMobile || showChat;
 
@@ -69,7 +82,8 @@ const MessageComponent = () => {
             onConversationSelect={selectConversation}
             startConversation={startConversation}
             getOtherUser={getOtherUser}
-            unreadCounts={unreadCounts} // Pass to Sidebar
+            unreadCounts={unreadCounts}
+            apiBaseUrl={apiBaseUrl}
           />
         </div>
       )}
