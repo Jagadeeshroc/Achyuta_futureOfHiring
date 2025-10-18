@@ -70,10 +70,19 @@ export default function JobbyNavbar() {
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50 w-full">
       <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
-        <Link to="/home" className="flex items-center space-x-2">
+        {/* <Link to="/home" className="flex items-center space-x-2">
           <img src="/images/WhatsApp Image 2025-04-18 at 14.56.02_34b122d5.jpg" alt="Logo" className="w-14 h-14 rounded-full hover:scale-120" />
           <span className="hidden lg:block no-underline!">Achyuta</span>
-        </Link>
+        </Link> */}
+
+        <Link 
+  to={localStorage.getItem('token') ? "/home" : "/"} 
+  className="flex items-center space-x-2"
+>
+  <img src="/images/WhatsApp Image 2025-04-18 at 14.56.02_34b122d5.jpg" alt="Logo" className="w-14 h-14 rounded-full hover:scale-120" />
+  <span className="hidden lg:block no-underline!">Achyuta</span>
+</Link>
+
 
         <div className="flex items-center gap-4">
           <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>

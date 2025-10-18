@@ -40,6 +40,7 @@ import MyProfile from './components/ProfileIcon/MyProfile/index';
 import Dashboard from './components/JobPages/Dashboard';
 import Posts from './components/feed/Posts';
 import PostDetails from './components/feed/PostDetails';
+import FreelancePage from './components/freelancePage/FreelancePage.jsx';
 
 
 // Simple 404 Component
@@ -88,9 +89,10 @@ function App() {
           <Header /> {/* Assuming Header is global; move inside Routes if needed */}
           <Routes>
             {/* Public routes */}
+              <Route path="/" element={<StartPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<RegisterForm />} />
-            <Route path="/" element={<StartPage />} />
+          
             <Route path="/feeds" element={<Posts/>} />
             <Route path="/posts/:id" element={<PostDetails />} />
 
@@ -118,6 +120,7 @@ function App() {
               <Route path="/reviews" element={<Reviews />} />
               <Route path="/updates" element={<Updates />} />
               <Route path="/feedback" element={<Feedback />} />
+               <Route path="/freelance" element={<FreelancePage />} />
             </Route>
 
             {/* Catch-all for 404 */}

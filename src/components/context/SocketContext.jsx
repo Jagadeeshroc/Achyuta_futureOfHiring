@@ -1,4 +1,4 @@
-// src/components/context/SocketContext.jsx
+// Updated Frontend: src/contexts/SocketContext.js (Your provided code looks good, minor updates for consistency)
 import React, { createContext, useEffect, useState, useMemo } from 'react';
 import { io } from 'socket.io-client';
 
@@ -19,8 +19,15 @@ export const SocketProvider = ({ children }) => {
       setSocket(null);
       return;
     }
-    const newSocket = io('http://localhost:5000', { withCredentials: true, transports: ['websocket'] });
-    newSocket.on('connect', () => newSocket.emit('joinUser', userId));
+    const newSocket = io('http://localhost:5000', { 
+      withCredentials: true, 
+      transports: ['websocket'],
+      query: { userId } // Optional, but emit join inside
+    });
+    newSocket.on('connect', () => {
+      console.log('Socket connected');
+      newSocket.emit('joinUser', userId);
+    });
     setSocket(newSocket);
     return () => {
       newSocket.disconnect();
