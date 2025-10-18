@@ -106,16 +106,18 @@ const CommentSection = ({ comments, onComment, currentUser, className = '' }) =>
           onChange={(e) => setCommentText(e.target.value)}
           className="flex-1 p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              onComment(commentText);
+            if (e.key === 'Enter' && commentText.trim()) {
+              onComment(commentText.trim());
               setCommentText('');
             }
           }}
         />
         <button
           onClick={() => {
-            onComment(commentText);
-            setCommentText('');
+            if (commentText.trim()) {
+              onComment(commentText.trim());
+              setCommentText('');
+            }
           }}
           className="text-blue-600 font-semibold hover:text-blue-700 m-2"
         >
@@ -176,32 +178,30 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    // Set axios base URL
     axios.defaults.baseURL = apiBaseUrl;
 
-    // Fetch current user from localStorage
     const userData = localStorage.getItem('user');
     if (userData) {
       const parsedUser = JSON.parse(userData);
       setCurrentUser({ ...parsedUser, _id: parsedUser._id || parsedUser.id });
     }
 
-    // Fetch post data
     fetchPost();
   }, [id, apiBaseUrl]);
 
   const fetchPost = async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) throw new Error('User not authenticated');
+
       const res = await axios.get(`/api/posts/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log('Post data:', res.data); // Debug log
       setPost(res.data);
       setLikedUsers(res.data.likes || []);
     } catch (err) {
       console.error('Error fetching post:', err);
-      setError('Failed to load post');
+      setError(err.message || 'Failed to load post');
     } finally {
       setLoading(false);
     }
@@ -210,6 +210,8 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
   const handleLike = async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) return alert('You must be logged in to like a post');
+
       const res = await axios.post(`/api/posts/${id}/like`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -217,6 +219,7 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
       setLikedUsers(res.data.likes || []);
     } catch (err) {
       console.error('Error liking post:', err);
+      alert('Failed to like the post. Please try again.');
     }
   };
 
@@ -224,18 +227,19 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
     if (!comment.trim()) return;
     try {
       const token = localStorage.getItem('token');
+      if (!token) return alert('You must be logged in to comment');
+
       const res = await axios.post(`/api/posts/${id}/comment`, { comment }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPost(res.data);
     } catch (err) {
       console.error('Error adding comment:', err);
+      alert('Failed to add comment. Please try again.');
     }
   };
 
-  const handleImageClick = (imageUrl) => {
-    setImagePreview(imageUrl);
-  };
+  const handleImageClick = (imageUrl) => setImagePreview(imageUrl);
 
   const downloadImage = (imageUrl, filename = 'post-image.jpg') => {
     const a = document.createElement('a');
@@ -270,7 +274,6 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
 
   return (
     <div className={`min-h-screen bg-gray-50 py-8 px-4 ${className}`}>
-      {/* Header */}
       <div className="max-w-4xl mx-auto mb-8">
         <button
           onClick={() => navigate(-1)}

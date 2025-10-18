@@ -18,43 +18,20 @@ const commentSchema = new mongoose.Schema({
   }
 });
 
+// models/Post.js
 const postSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  content: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  image: {
-    type: String,
-    default: null
-  },
-  type: {
-    type: String,
-    enum: ['jobs', 'private-works', 'services'],
-    required: true
-  },
-  price: {
-    type: Number,
-    default: null
-  },
-  isPremium: {
-    type: Boolean,
-    default: false
-  },
-  likes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  content: { type: String, required: true },
+  image: String,
+  type: { type: String, enum: ['jobs', 'private-works', 'services'], required: true, default: 'jobs' }, // <-- default
+  price: Number,
+  isPremium: { type: Boolean, default: false },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  comments: [{
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    content: String,
+    createdAt: { type: Date, default: Date.now }
   }],
-  comments: [commentSchema],
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Post', postSchema);

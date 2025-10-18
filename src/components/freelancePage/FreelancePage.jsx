@@ -1,296 +1,167 @@
-// Frontend Code: src/pages/FreelancePage.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // For API calls
-import { toast, ToastContainer } from 'react-toastify'; // For notifications
-import 'react-toastify/dist/ReactToastify.css';
-import { useSocket } from '../context/SocketContext';
-import { useNavigate } from 'react-router-dom'; // For redirecting to login
-import FreelancingDetailsModal from './FreelancingDetailsModal';
-import FreelancingForm from './FreelancingForm';
-import FreelancingList from './FreelancingList';
-import { FaBriefcase, FaLock, FaTools, FaSearch, FaStar, FaUserTie, FaSpinner } from 'react-icons/fa';
+// src/pages/FreelancePage.jsx
+import React, { useState, useEffect } from "react";
 
-// Axios Interceptor for Authentication
-axios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('authToken'); // Replace with your token storage method
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+import FreelancingForm from "./FreelancingForm";
+import FreelancingList from "./FreelancingList";
+import { useSocket } from "../context/SocketContext";
+import { motion } from "framer-motion";
+import { FaLaptopCode, FaTools, FaBriefcase } from "react-icons/fa";
+import axiosInstance from "../../utils/axiosInstance";
 
 const FreelancePage = () => {
-  const [activeSection, setActiveSection] = useState('jobs');
+  const [activeTab, setActiveTab] = useState("jobs");
   const [posts, setPosts] = useState([]);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [featuredPosts, setFeaturedPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Added loading state
-  const [error, setError] = useState(null); // Added error state
+  const [featured, setFeatured] = useState([]);
   const socket = useSocket();
-  const navigate = useNavigate(); // For redirecting to login
 
-  useEffect(() => {
-    fetchPosts(activeSection, searchTerm);
-    fetchFeaturedPosts();
-    if (socket) {
-      socket.on('new-post', (newPost) => {
-        if (newPost.type === activeSection) {
-          setPosts([newPost, ...posts]);
-          toast.info(`New post added: ${newPost.title}`);
-        }
-      });
-      socket.on('new-application', (data) => {
-        toast.info(`New application on your post: ${data.postTitle}`);
-      });
-      socket.on('new-like', (data) => {
-        updatePostInList(data.postId, { likes: data.likes });
-      });
-      socket.on('new-comment', (data) => {
-        updatePostInList(data.postId, { comments: data.comments });
-      });
-    }
-    return () => {
-      if (socket) {
-        socket.off('new-post');
-        socket.off('new-application');
-        socket.off('new-like');
-        socket.off('new-comment');
-      }
-    };
-  }, [activeSection, socket]);
-
-  const fetchPosts = async (section, search = '') => {
-    setIsLoading(true);
-    setError(null);
+  // ✅ Fetch Posts
+  const fetchPosts = async () => {
     try {
-      const res = await axios.get(`/api/posts?type=${section}&search=${encodeURIComponent(search)}`);
+      const res = await axiosInstance.get(`/api/posts?type=${activeTab}`);
       setPosts(res.data);
     } catch (err) {
-      handleApiError(err, 'Failed to fetch posts');
-    } finally {
-      setIsLoading(false);
+      console.error("Error fetching posts:", err);
     }
   };
 
-  const fetchFeaturedPosts = async () => {
-    setIsLoading(true);
-    setError(null);
+  // ✅ Fetch Featured
+  const fetchFeatured = async () => {
     try {
-      const res = await axios.get('/api/posts/featured');
-      setFeaturedPosts(res.data);
+      const res = await axiosInstance.get("/api/posts/featured");
+      setFeatured(res.data);
     } catch (err) {
-      handleApiError(err, 'Failed to fetch featured posts');
-    } finally {
-      setIsLoading(false);
+      console.error("Error fetching featured posts:", err);
     }
   };
 
-  const handleApiError = (err, defaultMessage) => {
-    if (err.response?.status === 401) {
-      toast.error('Please log in to access this content');
-      navigate('/login'); // Redirect to login page
-    } else if (err.response?.status === 400) {
-      toast.error('Invalid request. Please check your input.');
-    } else {
-      toast.error(defaultMessage);
-    }
-    console.error(err);
-    setError(defaultMessage);
-  };
-
-  const handlePostSubmit = async (postData) => {
-    setIsLoading(true);
+  // ✅ Create Post
+  const handlePost = async (formData) => {
     try {
-      const res = await axios.post('/api/posts', postData);
-      setPosts([res.data, ...posts]);
-      socket.emit('new-post', res.data);
-      toast.success('Post created successfully!');
+      const res = await axiosInstance.post("/api/posts", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setPosts((prev) => [res.data, ...prev]);
     } catch (err) {
-      handleApiError(err, 'Failed to create post');
-    } finally {
-      setIsLoading(false);
+      console.error("Error creating post:", err);
     }
   };
 
-  const handleApply = async (postId) => {
-    try {
-      const res = await axios.post(`/api/applications`, { postId });
-      toast.success('Applied successfully!');
-      socket.emit('apply', { postId, userId: 'currentUserId' }); // Replace with actual user ID
-    } catch (err) {
-      handleApiError(err, 'Failed to apply');
-    }
-  };
+  useEffect(() => {
+    fetchPosts();
+    fetchFeatured();
+  }, [activeTab]);
 
-  const handleLike = async (postId) => {
-    try {
-      const res = await axios.post(`/api/posts/${postId}/like`);
-      updatePostInList(postId, { likes: res.data.likes });
-      socket.emit('like', { postId });
-    } catch (err) {
-      handleApiError(err, 'Failed to like post');
-    }
-  };
+  // ✅ Real-time updates
+  useEffect(() => {
+    socket?.on("newPost", (post) => {
+      if (post.type === activeTab) setPosts((prev) => [post, ...prev]);
+    });
+    return () => socket?.off("newPost");
+  }, [socket, activeTab]);
 
-  const handleComment = async (postId, comment) => {
-    try {
-      const res = await axios.post(`/api/posts/${postId}/comment`, { text: comment });
-      updatePostInList(postId, { comments: res.data.comments });
-      socket.emit('comment', { postId });
-    } catch (err) {
-      handleApiError(err, 'Failed to add comment');
-    }
-  };
-
-  const handleShare = (postId) => {
-    const link = `${window.location.origin}/posts/${postId}`;
-    navigator.clipboard.writeText(link);
-    toast.success('Link copied to clipboard!');
-  };
-
-  const updatePostInList = (postId, updates) => {
-    setPosts(posts.map(post => post._id === postId ? { ...post, ...updates } : post));
-  };
-
-  const openPostDetails = (post) => {
-    setSelectedPost(post);
-    setShowModal(true);
-  };
-
-  const handleSearch = () => {
-    fetchPosts(activeSection, searchTerm);
-  };
+  const tabItems = [
+    { key: "jobs", label: "Jobs", icon: <FaBriefcase /> },
+    { key: "private-works", label: "Private Works", icon: <FaTools /> },
+    { key: "services", label: "Services", icon: <FaLaptopCode /> },
+  ];
 
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8 font-sans">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-extrabold text-indigo-800 mb-4 tracking-wide animate-fade-in">Freelance Hub</h1>
-          <p className="text-xl text-gray-600 mb-6">Connect with top freelancers, discover opportunities, and grow your career seamlessly.</p>
-          <button className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-lg hover:bg-indigo-700 transition-all duration-300">
-            <FaUserTie className="inline mr-2" /> Get Started as a Freelancer
-          </button>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
+      {/* Hero Banner */}
+      <div
+        className="relative bg-cover bg-center h-64 flex flex-col justify-center items-center text-white"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1531497865144-0464ef8fb9a6?auto=format&fit=crop&w=1600&q=80')",
+        }}
+      >
+        <div className="absolute inset-0 bg-black/50"></div>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative text-4xl font-bold z-10"
+        >
+          Freelance Marketplace
+        </motion.h1>
+        <p className="relative text-lg mt-2 text-gray-200 z-10">
+          Find jobs, post your work, and grow your network
+        </p>
+      </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex justify-center mb-8">
-          <button
-            onClick={() => setActiveSection('jobs')}
-            className={`px-6 py-3 mx-2 rounded-lg transition-all duration-300 flex items-center ${activeSection === 'jobs' ? 'bg-indigo-600 text-white shadow-lg' : 'bg-white text-indigo-600 hover:bg-indigo-100'}`}
-          >
-            <FaBriefcase className="mr-2" /> Freelance Jobs
-          </button>
-          <button
-            onClick={() => setActiveSection('private-works')}
-            className={`px-6 py-3 mx-2 rounded-lg transition-all duration-300 flex items-center ${activeSection === 'private-works' ? 'bg-indigo-600 text-white shadow-lg' : 'bg-white text-indigo-600 hover:bg-indigo-100'}`}
-          >
-            <FaLock className="mr-2" /> Private Works
-          </button>
-          <button
-            onClick={() => setActiveSection('services')}
-            className={`px-6 py-3 mx-2 rounded-lg transition-all duration-300 flex items-center ${activeSection === 'services' ? 'bg-indigo-600 text-white shadow-lg' : 'bg-white text-indigo-600 hover:bg-indigo-100'}`}
-          >
-            <FaTools className="mr-2" /> Services
-          </button>
-        </div>
-
-        {/* Sticky Post Input Bar */}
-        <div className="sticky top-0 z-10 bg-white shadow-md p-4 mb-8 rounded-lg">
-          <FreelancingForm onSubmit={handlePostSubmit} section={activeSection} />
-        </div>
-
-        {/* Search Bar */}
-        <div className="mb-8 flex justify-center">
-          <div className="relative w-full max-w-md">
-            <input
-              type="text"
-              placeholder="Search posts by title, skills, or description..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-indigo-300 focus:outline-none focus:border-indigo-600 transition-all duration-300"
-            />
+      {/* Tabs */}
+      <div className="flex justify-center mt-8">
+        <div className="flex bg-white shadow-md rounded-full overflow-hidden">
+          {tabItems.map(({ key, label, icon }) => (
             <button
-              onClick={handleSearch}
-              className="absolute right-0 top-0 h-full px-4 bg-indigo-600 text-white rounded-r-lg hover:bg-indigo-700 transition-all duration-300"
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`flex items-center gap-2 px-6 py-3 font-medium transition-all ${
+                activeTab === key
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-600 hover:bg-blue-100"
+              }`}
             >
-              <FaSearch />
+              {icon}
+              {label}
             </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Upload Form */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="max-w-3xl mx-auto mt-10 bg-white shadow-lg rounded-2xl p-6"
+      >
+        <FreelancingForm onSubmit={handlePost} section={activeTab} />
+      </motion.div>
+
+      {/* Featured Freelancers */}
+      {featured.length > 0 && (
+        <div className="max-w-6xl mx-auto mt-16">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+            🌟 Featured Freelancers
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featured.map((post) => (
+              <motion.div
+                key={post._id}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <FreelancingCard post={post} />
+              </motion.div>
+            ))}
           </div>
         </div>
+      )}
 
-        {/* Loading and Error States */}
-        {isLoading && (
-          <div className="text-center mb-8">
-            <FaSpinner className="animate-spin text-indigo-600 text-3xl" />
-            <p className="text-gray-600 mt-2">Loading posts...</p>
+      {/* Posts List */}
+      <div className="max-w-6xl mx-auto mt-16 mb-20">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+          🧰 Latest {activeTab.replace("-", " ")} Posts
+        </h2>
+        {posts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((post) => (
+              <motion.div
+                key={post._id}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <FreelancingCard post={post} />
+              </motion.div>
+            ))}
           </div>
-        )}
-        {error && (
-          <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-8 text-center">
-            {error}
-          </div>
-        )}
-
-        {/* Featured Posts Section */}
-        {!isLoading && featuredPosts.length > 0 && (
-          <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-            <h2 className="text-2xl font-semibold text-indigo-700 mb-4 flex items-center">
-              <FaStar className="mr-2 text-yellow-500" /> Featured Posts
-            </h2>
-            <FreelancingList posts={featuredPosts} onPostClick={openPostDetails} onApply={handleApply} isFeatured />
-          </div>
-        )}
-
-        {/* Helpful Features Section */}
-        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <h2 className="text-2xl font-semibold text-indigo-700 mb-4">Helpful Features for Freelancers</h2>
-          <ul className="list-disc pl-6 space-y-2 text-gray-700">
-            <li>Post jobs, works, or services and get real-time applications.</li>
-            <li>Pay for premium features like boosted visibility or priority listings.</li>
-            <li>Receive notifications for applications, likes, and comments.</li>
-            <li>Engage with posts via likes, comments, and shares.</li>
-            <li>Private messaging for negotiations (coming soon).</li>
-            <li>Portfolio integration to showcase your work.</li>
-            <li>Payment gateway for secure transactions (integrate Stripe or similar).</li>
-            <li>Ratings and reviews system to build trust.</li>
-            <li>Skill matching algorithm for better job recommendations.</li>
-            <li>Analytics dashboard to track post performance and earnings.</li>
-            <li>Community forums for tips and networking (coming soon).</li>
-          </ul>
-          <div className="mt-4 text-center">
-            <button className="px-6 py-3 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300">
-              Upgrade to Premium for More Features
-            </button>
-          </div>
-        </div>
-
-        {/* Posts List */}
-        {!isLoading && posts.length === 0 && !error && (
-          <div className="text-center text-gray-600 mb-8">No posts found. Try a different search or create a new post!</div>
-        )}
-        {!isLoading && posts.length > 0 && (
-          <FreelancingList posts={posts} onPostClick={openPostDetails} onApply={handleApply} />
-        )}
-
-        {/* Post Details Modal */}
-        {showModal && selectedPost && (
-          <FreelancingDetailsModal
-            post={selectedPost}
-            onClose={() => setShowModal(false)}
-            onLike={handleLike}
-            onComment={handleComment}
-            onShare={handleShare}
-          />
+        ) : (
+          <p className="text-center text-gray-500">
+            No posts found in this category yet.
+          </p>
         )}
       </div>
-      <ToastContainer position="top-right" autoClose={3000} />
-    </>
+    </div>
   );
 };
 
