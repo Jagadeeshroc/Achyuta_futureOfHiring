@@ -8,10 +8,7 @@ import FormInput from '../LoginPage/FormInput';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -22,94 +19,80 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
-
-  try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', formData);
-
-    console.log('Full login response:', response.data);
-
-    const { token, user } = response.data;
-     const normalizedUser = {
-      ...user,
-      _id: user._id || user.id, 
-      id: user.id || user._id,
-    };
-
-    console.log('Normalized user:', normalizedUser);
-    console.log('Normalized user._id:', normalizedUser._id);
-
-    localStorage.setItem('token', token);
-  localStorage.setItem('user', JSON.stringify(normalizedUser));
-localStorage.setItem('userId', normalizedUser._id || normalizedUser.id); // Optional chaining for safety
-// Trigger an event to notify other components of the user change
-    window.dispatchEvent(new Event('storage')); // Force localStorage update detection
-
-    // Redirect to home or the intended page
-    navigate('/home' , { state: { user: normalizedUser } });
-  } catch (err) {
-    setError(err.response?.data?.error || 'Login failed');
-    // Clear any existing tokens on error
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('userId');
-  } finally {
-    setLoading(false);
-  }
-};
-
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/login',
+        formData
+      );
+      const { token, user } = response.data;
+      const normalizedUser = { ...user, _id: user._id || user.id };
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+      window.dispatchEvent(new Event('storage'));
+      navigate('/home', { state: { user: normalizedUser } });
+    } catch (err) {
+      setError(err.response?.data?.error || 'Login failed');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <AuthLayout>
-      <GlassCard>
+      <GlassCard className="max-w-md w-full p-8 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl">
         <motion.h2
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="text-center mb-8 text-white text-2xl font-medium m-4"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center text-3xl md:text-4xl font-bold text-white mb-6 tracking-wide"
         >
           Welcome Back
         </motion.h2>
 
         {error && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-red-400 mb-4 text-center text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-red-500/20 text-red-100 text-center rounded-lg py-2 mb-4"
           >
             {error}
           </motion.div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 m-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <FormInput
-            icon={<EnvelopeIcon className="h-5 w-5" />}
+            icon={<EnvelopeIcon className="h-5 w-5 text-white/80" />}
             type="email"
             name="email"
             placeholder="Email Address"
             value={formData.email}
             onChange={handleChange}
             required
+            className="bg-white/20 text-white placeholder-white/70 focus:bg-white/30"
           />
           <FormInput
-            icon={<LockClosedIcon className="h-5 w-5" />}
+            icon={<LockClosedIcon className="h-5 w-5 text-white/80" />}
             type="password"
             name="password"
-             autoComplete="current-password"
             placeholder="Password"
+            autoComplete="current-password"
             value={formData.password}
             onChange={handleChange}
             required
+            className="bg-white/20 text-white placeholder-white/70 focus:bg-white/30"
           />
 
-          <div className="text-right mb-2">
+          <div className="text-right">
             <motion.span
-              className="text-primary-400 cursor-pointer text-xs"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/forgot-password')}
+              className="text-white/80 text-sm cursor-pointer hover:text-white transition"
             >
               Forgot Password?
             </motion.span>
@@ -118,12 +101,21 @@ localStorage.setItem('userId', normalizedUser._id || normalizedUser.id); // Opti
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full py-3 px-6 text-white font-semibold shadow-lg shadow-primary-400/40 hover:from-primary-500 hover:to-secondary-500 transition-all disabled:opacity-70"
+            className="w-full py-3 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-white font-semibold shadow-lg shadow-amber-400/40 hover:scale-105 transition-all disabled:opacity-70"
           >
             {loading ? 'Logging In...' : 'Login'}
           </button>
         </form>
 
+        <p className="text-center text-white/70 text-sm mt-6">
+          Don’t have an account?{' '}
+          <span
+            onClick={() => navigate('/register')}
+            className="text-amber-300 cursor-pointer hover:text-amber-400 transition"
+          >
+            Sign Up
+          </span>
+        </p>
       </GlassCard>
     </AuthLayout>
   );

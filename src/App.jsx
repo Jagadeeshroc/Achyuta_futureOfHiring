@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import axios from 'axios'; // For global headers
-import './App.css'; // Assuming this includes Tailwind directives or imports
+import './App.css';
+import './index.css'
+ // Assuming this includes Tailwind directives or imports
 // If you have a separate CSS for Tailwind:
 // import './index.css'; // With @tailwind base; @tailwind components; @tailwind utilities;
 

@@ -58,9 +58,10 @@ const AuthLayout = ({ children }) => {
                 >
                   <span className="text-purple-600 font-bold text-xl ">⚡</span>
                 </motion.div>
-                <h1 className="text-white text-2xl font=[Bungee_Tint] m-3" >
-                  ACHYUTA
-                </h1>
+                <h1 className="text-3xl font-shadows! font-bold bg-gradient-to-r from-amber-500 via-orange-400 to-amber-600 text-white bg-clip-text m-3">
+  ACHYUTA
+</h1>
+
               </Link>
             </motion.div>
 
