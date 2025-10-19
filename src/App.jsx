@@ -40,7 +40,10 @@ import MyProfile from './components/ProfileIcon/MyProfile/index';
 import Dashboard from './components/JobPages/Dashboard';
 import Posts from './components/feed/Posts';
 import PostDetails from './components/feed/PostDetails';
-import FreelancePage from './components/freelancePage/FreelancePage.jsx';
+
+import FreelanceCreatePage from './components/freelancePage/FreelanceCreatePage.jsx';
+import FreelanceLandingPage from './components/freelancePage/FreelanceLandingPage.jsx';
+import FreelancePostDetails from './components/freelancePage/FreelancePostDetails.jsx';
 
 
 // Simple 404 Component
@@ -120,7 +123,10 @@ function App() {
               <Route path="/reviews" element={<Reviews />} />
               <Route path="/updates" element={<Updates />} />
               <Route path="/feedback" element={<Feedback />} />
-               <Route path="/freelance" element={<FreelancePage />} />
+              <Route path="/freelance" element={<FreelanceLandingPage />} />
+              <Route path="/freelance/create" element={<FreelanceCreatePage />} />
+              // In your App.jsx or routing file
+<Route path="/freelance/post/:id" element={<FreelancePostDetails />} />
             </Route>
 
             {/* Catch-all for 404 */}

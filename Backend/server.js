@@ -14,10 +14,13 @@ const postRoutes = require('./routes/posts');
 // Placeholder for missing routes (add these files as needed)
 const usersRoutes = require('./routes/usersRoutes');
 const jobRoutes = require('./routes/jobs');
-const reviewRoutes = require('./routes/reviews');
+const jobReviewRoutes = require('./routes/jobReviews');
+// const reviewRoutes = require('./routes/reviews');
 const connectionRoutes = require('./routes/connections');
 const notificationRoutes = require('./routes/notifications');
 const conversationRoutes = require('./routes/conversations');
+const freelanceRoutes = require('./routes/freelanceRoutes');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -75,6 +78,7 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/Uploads', express.static(uploadDir));
 
 // Connect to MongoDB
@@ -84,11 +88,128 @@ connectDB();
 app.use('/api/auth', authRoutes); // No upload here; handled in auth.js
 app.use('/api/users', usersRoutes);
 app.use('/api/jobs', jobRoutes);
+app.use('/api/job-reviews', jobReviewRoutes);
 app.use('/api/posts', postRoutes);
-app.use('/api/reviews', reviewRoutes);
+// app.use('/api/reviews', reviewRoutes);
 app.use('/api/connections', connectionRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/conversations', conversationRoutes);
+app.use('/api/freelance', freelanceRoutes);
+
+app.get('/api/debug-uploads', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  
+  const uploadDir = path.join(__dirname, 'uploads', 'freelance');
+  
+  try {
+    if (!fs.existsSync(uploadDir)) {
+      return res.json({ 
+        error: 'Upload directory does not exist', 
+        path: uploadDir,
+        currentDir: __dirname
+      });
+    }
+    
+    const files = fs.readdirSync(uploadDir);
+    const fileStats = files.map(filename => {
+      const filePath = path.join(uploadDir, filename);
+      const stats = fs.statSync(filePath);
+      return {
+        filename,
+        size: stats.size,
+        created: stats.birthtime,
+        path: filePath,
+        exists: true
+      };
+    });
+    
+    // Check for the specific missing files
+    const missingFiles = [
+      '1760861211727-875217476.jpeg',
+      '1760861010022-504103758.jpeg', 
+      '1760860608100-337938019.jpg'
+    ].map(filename => {
+      const filePath = path.join(uploadDir, filename);
+      return {
+        filename,
+        exists: fs.existsSync(filePath),
+        path: filePath
+      };
+    });
+    
+    res.json({
+      uploadDir,
+      totalFiles: files.length,
+      existingFiles: fileStats,
+      missingFiles: missingFiles.filter(f => !f.exists),
+      allFiles: files
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Add this cleanup route to server.js (before error handling)
+app.delete('/api/cleanup-missing-posts', async (req, res) => {
+  try {
+    const FreelancePost = require('./models/FreelancePost'); // Adjust path as needed
+    const posts = await FreelancePost.find({});
+    const fs = require('fs');
+    const path = require('path');
+    
+    const uploadDir = path.join(__dirname, 'uploads', 'freelance');
+    let deletedCount = 0;
+    let postsToDelete = [];
+    
+    for (let post of posts) {
+      if (post.attachments && post.attachments.length > 0) {
+        const hasMissingFiles = post.attachments.some(attachment => {
+          const filename = attachment.split('/').pop() || attachment.split('\\').pop() || attachment;
+          const filePath = path.join(uploadDir, filename);
+          const exists = fs.existsSync(filePath);
+          if (!exists) {
+            console.log(`❌ Missing file: ${filename} for post ${post._id}`);
+          }
+          return !exists;
+        });
+        
+        if (hasMissingFiles) {
+          postsToDelete.push(post._id);
+          deletedCount++;
+        }
+      }
+    }
+    
+    // Delete all posts with missing files
+    if (postsToDelete.length > 0) {
+      await FreelancePost.deleteMany({ _id: { $in: postsToDelete } });
+    }
+    
+    res.json({ 
+      deleted: deletedCount, 
+      message: `Deleted ${deletedCount} posts with missing files`,
+      deletedPosts: postsToDelete
+    });
+  } catch (error) {
+    console.error('Cleanup error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Error Handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', {
+    message: err?.message,
+    stack: err?.stack,
+    url: req?.url,
+    method: req?.method
+  });
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ error: `Upload error: ${err.message}` });
+  }
+  res.status(500).json({ error: err.message || 'Internal server error' });
+});
 
 // Socket.IO
 io.on('connection', (socket) => {
@@ -118,19 +239,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// Error Handling
-app.use((err, req, res, next) => {
-  console.error('Server error:', {
-    message: err?.message,
-    stack: err?.stack,
-    url: req?.url,
-    method: req?.method
-  });
-  if (err instanceof multer.MulterError) {
-    return res.status(400).json({ error: `Upload error: ${err.message}` });
-  }
-  res.status(500).json({ error: err.message || 'Internal server error' });
-});
+
 
 // Start Server
 const PORT = process.env.PORT || 5000;
