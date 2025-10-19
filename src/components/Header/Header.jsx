@@ -68,7 +68,7 @@ export default function JobbyNavbar() {
   };
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50 w-full">
+    <nav className="bg-white shadow-sm sticky top-0 z-50 w-full p-3">
       <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
         {/* <Link to="/home" className="flex items-center space-x-2">
           <img src="/images/WhatsApp Image 2025-04-18 at 14.56.02_34b122d5.jpg" alt="Logo" className="w-14 h-14 rounded-full hover:scale-120" />
@@ -76,12 +76,12 @@ export default function JobbyNavbar() {
         </Link> */}
 
         <Link 
-  to={localStorage.getItem('token') ? "/home" : "/"} 
-  className="flex items-center space-x-2"
->
-  <img src="/images/WhatsApp Image 2025-04-18 at 14.56.02_34b122d5.jpg" alt="Logo" className="w-14 h-14 rounded-full hover:scale-120" />
-  <span className="hidden lg:block no-underline!">Achyuta</span>
-</Link>
+                to={localStorage.getItem('token') ? "/home" : "/"} 
+                className="flex items-center space-x-2"
+              >
+                <img src="/images/WhatsApp Image 2025-04-18 at 14.56.02_34b122d5.jpg" alt="Logo" className="w-14 h-14 rounded-full hover:scale-120" />
+                <span className="hidden lg:block no-underline!">Achyuta</span>
+        </Link>
 
 
         <div className="flex items-center gap-4">
@@ -106,11 +106,8 @@ export default function JobbyNavbar() {
           </span>
         )}
       </Link>
-
-         
-
-          <div className="relative group">
-            <img src={ currentUser?.avatar ? currentUser.avatar.startsWith('http') ? currentUser.avatar : `http://localhost:5000${currentUser.avatar.replace(/^\/Uploads/, '/uploads')}` : "images/pexels-njeromin-12149149.jpg" } alt="User" className="rounded-full h-12 w-12" onError={e => { e.target.onerror = null; e.target.src = "images/pexels-njeromin-12149149.jpg"; }} />
+          <div className="relative group cursor-pointer ">
+            <img src={ currentUser?.avatar ? currentUser.avatar.startsWith('http') ? currentUser.avatar : `http://localhost:5000${currentUser.avatar.replace(/^\/Uploads/, '/uploads')}` : "/images/WhatsApp Image 2025-04-18 at 14.56.02_34b122d5.jpg" } alt="User" className="rounded-full h-12 w-12" onError={e => { e.target.onerror = null; e.target.src = "/images/WhatsApp Image 2025-04-18 at 14.56.02_34b122d5.jpg"; }} />
 
             <div className="hidden group-hover:flex flex-col absolute top-full right-0 bg-white shadow-md rounded-md mt-2 py-2 w-40 z-50">
               <Link to="/myProfile" className="px-4 py-2 hover:bg-gray-100 no-underline!">My Profile</Link>
