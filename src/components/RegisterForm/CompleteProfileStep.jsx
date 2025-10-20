@@ -98,13 +98,13 @@ const CompleteProfileStep = ({ formData, setFormData, prevStep, isLoading, setEr
   };
 
   return (
-    <motion.div className="space-y-6 p-3">
+    <motion.div className="space-y-6 p-3!">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Complete Your Profile</h2>
       {localError && <p className="text-red-500 text-sm mb-4">{localError}</p>}
-      <div className="space-y-6">
+      <div className="space-y-6 p-3!">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label>
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-6 p-2!">
             <div className="shrink-0">
               {avatarPreview ? (
                 <img className="h-16 w-16 object-cover rounded-full" src={avatarPreview} alt="Profile" />
@@ -115,7 +115,7 @@ const CompleteProfileStep = ({ formData, setFormData, prevStep, isLoading, setEr
               )}
             </div>
             <label className="block">
-              <span className="sr-only">Choose profile photo</span>
+              <span className="sr-only ">Choose profile photo</span>
               <input 
                 type="file" 
                 onChange={handleAvatarChange}
@@ -130,12 +130,12 @@ const CompleteProfileStep = ({ formData, setFormData, prevStep, isLoading, setEr
           <textarea
             value={formData.about || ''}
             onChange={(e) => setFormData(prev => ({ ...prev, about: e.target.value }))}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-32"
+            className="w-full p-2! border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-32"
             placeholder="Tell us about yourself..."
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+          <label className="block text-sm font-medium text-gray-700 mb-!">Location</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               
@@ -144,16 +144,16 @@ const CompleteProfileStep = ({ formData, setFormData, prevStep, isLoading, setEr
               type="text"
               value={formData.location || ''}
               onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-              className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              className="w-full p-2! border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               placeholder="City, Country"
             />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Upload Resume</label>
-          <div className="flex items-center space-x-4">
+          <label className="block text-sm font-medium text-gray-700 mt-2!">Upload Resume</label>
+          <div className="flex items-center space-x-4 m-2!">
             {formData.resume ? (
-              <div className="flex items-center bg-gray-100 px-4 py-2 rounded-lg">
+              <div className="flex items-center bg-gray-100 p-2! rounded-lg">
                 <FiFileText className="text-gray-600 mr-2" />
                 <span className="text-gray-700">{formData.resume.name}</span>
                 <button
@@ -177,7 +177,7 @@ const CompleteProfileStep = ({ formData, setFormData, prevStep, isLoading, setEr
           </div>
         </div>
         {formData.role === 'user' && (
-          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+          <div className="border border-gray-200 rounded-lg p-3! bg-gray-50">
             <h3 className="font-medium text-gray-700 mb-2">Profile Strength</h3>
             <div className="w-full bg-gray-200 rounded-full h-2.5 mb-3">
               <div 
@@ -197,14 +197,14 @@ const CompleteProfileStep = ({ formData, setFormData, prevStep, isLoading, setEr
         <motion.button
           type="button"
           onClick={prevStep}
-          className="p-2 m-2 bg-gray-200 text-gray-700 rounded-md! hover:bg-gray-300 transition-colors"
+          className="p-2! m-2! bg-gray-200 text-gray-700 rounded-md! hover:bg-gray-300 transition-colors"
         >
           Back
         </motion.button>
         <motion.button
           type="submit"
           disabled={isLoading}
-          className="p-1 m-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-md! flex items-center justify-center hover:from-blue-700 hover:to-purple-700 transition-colors disabled:opacity-70"
+          className="p-1! m-2! bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-md! flex items-center justify-center hover:from-blue-700 hover:to-purple-700 transition-colors disabled:opacity-70"
         >
           {isLoading ? 'Creating Account...' : (
             <>

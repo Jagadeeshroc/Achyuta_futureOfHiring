@@ -190,20 +190,20 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
   const renderPostCard = (post, column) => (
     <div
       key={post._id}
-      className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6 cursor-pointer hover:shadow-xl transition-shadow"
+      className="bg-gray-50 rounded-lg! shadow-lg overflow-hidden mb-3! cursor-pointer hover:shadow-xl transition-shadow p-1!"
       onClick={() => handlePostClick(post._id)}
     >
-      <div className="p-6 border-b border-gray-100">
+      <div className="p-3! border-b border-gray-100">
         <div className="flex items-start justify-between">
-          <div className="flex items-start space-x-4 flex-1">
+          <div className="  flex items-start space-x-4 flex-1">
             <img
               src={post.user.avatar ? `${axios.defaults.baseURL}${post.user.avatar}` : '/default-avatar.png'}
               alt={post.user.name || post.user.email || 'Unknown User'}
-              className="w-12 h-12 rounded-full"
+              className="w-12 h-12 rounded-full m-2!"
               onError={(e) => (e.target.src = '/default-avatar.png')}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 truncate">
+              <h3 className="font-semibold text-gray-900 truncate m-1!">
                 {post.user.name || post.user.email || 'Unknown User'}
               </h3>
               <p className="text-sm text-gray-500">{post.user.headline || 'No headline'}</p>
@@ -216,7 +216,7 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
                 e.stopPropagation();
                 handleFollow(post.user._id);
               }}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+              className={` p-2! rounded-full text-sm font-semibold transition-colors ${
                 isFollowing(post.user._id)
                   ? 'bg-red-100 text-red-700 hover:bg-red-200'
                   : 'bg-blue-600 text-white hover:bg-blue-700'
@@ -228,8 +228,8 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
         </div>
       </div>
 
-      <div className="p-6">
-        <p className="text-gray-800 mb-4 whitespace-pre-wrap">{post.content}</p>
+      <div className="p-3! bg-gray-200">
+        <p className="text-gray-800 m-2! whitespace-pre-wrap">{post.content}</p>
         {post.image && (
           <img
             src={post.image.startsWith('http') ? post.image : `${axios.defaults.baseURL}${post.image}`}
@@ -240,16 +240,16 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
         )}
       </div>
 
-      <div className="flex justify-around border-t border-gray-100 p-4 bg-gray-50">
-        <div className="flex items-center space-x-2 text-gray-500 p-2">
+      <div className="flex justify-around border-t border-gray-100 p-2! m-2! bg-gray-50">
+        <div className="flex items-center space-x-2 text-gray-500 p-2!">
           <FaThumbsUp size={16} />
           <span className="text-sm">{post.likes.length}</span>
         </div>
-        <div className="flex items-center space-x-2 text-gray-500 p-2">
+        <div className="flex items-center space-x-2 text-gray-500 p-2!">
           <FaComment size={16} />
           <span className="text-sm">{post.comments.length}</span>
         </div>
-        <div className="flex items-center space-x-2 text-gray-500 p-2">
+        <div className="flex items-center space-x-2 text-gray-500 p-2!">
           <FaShare size={16} />
           <span className="text-sm">Share</span>
         </div>
@@ -266,22 +266,15 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 py-8 px-4 ${className}`}>
+    <div className={`sticky top-0 min-h-screen bg-gray-50 py-8 px-4 ${className}`}>
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Your Feed
-          </h1>
-          <p className="text-gray-600">
-            Connect, share, and grow with your professional network.
-          </p>
-        </div>
+     
 
         {/* Post form only for logged-in users */}
         {currentUser ? (
-          <div className="sticky top-1 bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-2xl mx-auto">
+          <div className=" sticky top-0 z-5 bg-white rounded-2xl shadow-lg p-2! w-full! mb-8! mx-auto!">
             <form onSubmit={handlePostSubmit} className="space-y-4">
-              <div className="flex items-start space-x-4">
+              <div className="flex items-start space-x-4 p-2!">
                 <img
                   src={
                     currentUser?.avatar
@@ -291,43 +284,43 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
                       : '/default-avatar.png'
                   }
                   alt={currentUser?.name || currentUser?.email || 'Unknown User'}
-                  className="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full m-2!"
                 />
                 <textarea
                   value={newPost}
                   onChange={(e) => setNewPost(e.target.value)}
-                  placeholder="What's on your mind?"
-                  className="flex-1 p-3 border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows={3}
+                  placeholder="    What's on your mind?"
+                  className="flex-1 p-3! m-2! border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={2}
                 />
               </div>
 
               {imagePreview && (
-                <div className="relative bg-gray-100 rounded-xl overflow-hidden">
+                <div className="relative bg-gray-100 rounded-xl overflow-hidden p-2!">
                   <img src={imagePreview} alt="Preview" className="w-full h-64 object-cover" />
                   <button
                     type="button"
                     onClick={removeImage}
-                    className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full"
+                    className="absolute top-2 right-2 bg-red-500 text-white p-2! rounded-full"
                   >
                     <FaTimes size={16} />
                   </button>
                 </div>
               )}
 
-              <div className="flex items-center justify-between border-t pt-4">
+              <div className="flex items-center justify-between  pt-3!">
                 <label className="flex items-center space-x-2 cursor-pointer text-gray-500 hover:text-blue-500">
-                  <FaImage size={20} />
-                  <span className="text-sm">Add Photo</span>
+                  <FaImage size={20} className='m-2!'/>
+                  <span className="text-sm m-2!">Add Photo</span>
                   <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                 </label>
                 <button
                   type="submit"
                   disabled={submitting || !newPost.trim()}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 disabled:opacity-50 flex items-center space-x-2"
+                  className="bg-blue-600 text-white p-1! rounded-md! font-semibold hover:bg-blue-700 disabled:opacity-50 flex items-center space-x-2"
                 >
-                  {submitting ? <FaSpinner className="animate-spin" /> : <FaPaperPlane />}
-                  <span>{submitting ? 'Posting...' : 'Post'}</span>
+                  {submitting ? <FaSpinner className="animate-spin m-1!" /> : <FaPaperPlane />}
+                  <span className='m-1!'>{submitting ? 'Posting...' : 'Post'}</span>
                 </button>
               </div>
             </form>
@@ -347,7 +340,7 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
         <div className="grid md:grid-cols-2 gap-8">
           {currentUser && (
             <div className="space-y-6">
-              <div className="flex items-center space-x-2 mb-4">
+              <div className="flex items-center space-x-2 mb-4! p-2!">
                 <FaUsers className="text-blue-600" size={24} />
                 <h2 className="text-xl font-bold text-gray-900">Following</h2>
               </div>
@@ -362,8 +355,8 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
             </div>
           )}
 
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 mb-4">
+          <div className="space-y-6 ">
+            <div className="flex items-center space-x-2 mb-4! p-2!">
               <FaCompass className="text-purple-600" size={24} />
               <h2 className="text-xl font-bold text-gray-900">Discover</h2>
             </div>

@@ -3,17 +3,17 @@ import { FiUser, FiMail, FiLock, FiArrowRight } from 'react-icons/fi';
 
 const BasicInfoStep = ({ formData, handleChange, nextStep }) => {
   return (
-    <motion.div className="space-y-6 p-4">
-      <h2 className="text-2xl font-bold  text-gray-800 mb-6">Basic Information</h2>
+    <motion.div className="space-y-6 p-4!">
+      <h2 className="text-2xl font-bold  text-gray-800 mb-6!">Basic Information</h2>
       
       <div className="space-y-6">
         <FormInput 
-          placeholder="jagadeesh"
-          label="Full Name"
+          placeholder="  jagadeesh"
+          label=" Full Name"
           name="name"
           value={formData.name}
           onChange={handleChange}
-          className='px-1'
+            className="block w-full p-1!  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
           
         />
@@ -26,7 +26,7 @@ const BasicInfoStep = ({ formData, handleChange, nextStep }) => {
           value={formData.email}
           onChange={handleChange}
           placeholder="jagadeesh@example.com"
-          className='px-1'
+           className="block w-full p-1!  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
         />
         <FormInput 
@@ -35,7 +35,7 @@ const BasicInfoStep = ({ formData, handleChange, nextStep }) => {
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          className='px-1'
+           className="block w-full p-1!  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
           
         />
@@ -45,7 +45,7 @@ const BasicInfoStep = ({ formData, handleChange, nextStep }) => {
           name="headline"
           value={formData.headline}
           onChange={handleChange}
-          className='px-1'
+            className="block w-full p-1!  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
           
         />
@@ -55,7 +55,7 @@ const BasicInfoStep = ({ formData, handleChange, nextStep }) => {
           name="portfolio"
           value={formData.portfolio}
           onChange={handleChange}
-          className='px-1'
+            className="block w-full p-1!  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
           
         />
@@ -68,7 +68,7 @@ const BasicInfoStep = ({ formData, handleChange, nextStep }) => {
           value={formData.password}
           onChange={handleChange}
           placeholder="••••••••"
-          className='px-1'
+            className="block w-full p-1!  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
           required
           minLength={6}
         />
@@ -76,11 +76,11 @@ const BasicInfoStep = ({ formData, handleChange, nextStep }) => {
         {/* Other basic fields */}
       </div>
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-end mt-3!">
         <motion.button
           type="button"
           onClick={nextStep}
-          className=" bg-blue-600 rounded-md! text-white  flex items-center justify-center space-x-2 hover:bg-blue-700 transition-colors p-2 "
+          className=" bg-blue-600 rounded-md! text-white  flex items-center justify-center space-x-2 hover:bg-blue-700 transition-colors p-2! "
         >
           <span>Next</span>
           <FiArrowRight />

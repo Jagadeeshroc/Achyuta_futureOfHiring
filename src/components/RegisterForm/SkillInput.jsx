@@ -24,7 +24,7 @@ const SkillInput = ({ skills, setSkills }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative m-2!">
       <label className="block text-sm font-medium text-gray-700 mb-1">Skills</label>
       <div className="relative">
         <input
@@ -33,7 +33,7 @@ const SkillInput = ({ skills, setSkills }) => {
           onChange={(e) => setCurrentSkill(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          className="w-full m-2! p-2! border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           placeholder="Add your skills"
         />
         <button
@@ -59,9 +59,8 @@ const SkillInput = ({ skills, setSkills }) => {
                   key={skill}
                   type="button"
                   onClick={() => handleSkillAdd(skill)}
-                  className="text-left text-sm rounded hover:bg-blue-50 transition-colors"
-                >
-                  {skill}
+                  className=" text-sm p-2! rounded-md! hover:bg-blue-50 transition-colors"
+                ><span className='p-2!'>{skill}</span>
                 </motion.button> 
               ))}
             </div>
@@ -69,19 +68,19 @@ const SkillInput = ({ skills, setSkills }) => {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-wrap gap-2 min-h-12 mt-2">
+      <div className="flex flex-wrap gap-2 min-h-12 m-2!">
         {skills.map(skill => (
           <motion.div
             key={skill}
             className="flex items-center bg-blue-100 px-2 py-1 rounded-md"
           >
-            <span className="text-sm font-medium text-blue-900 p-1">{skill}</span>
+            <span className="text-sm font-medium text-blue-900 p-1!">{skill}</span>
             <button
               type="button"
               onClick={() => handleSkillRemove(skill)}
               className="text-blue-500 hover:text-blue-700 transition-colors"
             >
-              <FiX size={14} />
+              <FiX size={14} className='m-2!' />
             </button>
           </motion.div>
         ))}

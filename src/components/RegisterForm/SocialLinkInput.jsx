@@ -31,13 +31,13 @@ const SocialLinkInput = ({ socialLinks, setSocialLinks }) => {
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">Social Links</label>
+      <label className="block text-sm font-medium text-gray-700 mb-1!">Social Links</label>
       <div className="space-y-3">
         <div className="flex space-x-2">
           <select
             value={currentSocialLink.platform}
             onChange={(e) => setCurrentSocialLink(prev => ({ ...prev, platform: e.target.value }))}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            className="flex-1 p-2! border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           >
             <option value="">Select platform</option>
             {socialPlatforms.map(platform => (
@@ -51,7 +51,7 @@ const SocialLinkInput = ({ socialLinks, setSocialLinks }) => {
             value={currentSocialLink.url}
             onChange={(e) => setCurrentSocialLink(prev => ({ ...prev, url: e.target.value }))}
             placeholder="Profile URL"
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            className="flex-1 p-2! border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           />
           <button
             type="button"

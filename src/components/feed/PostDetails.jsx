@@ -9,18 +9,18 @@ axios.defaults.baseURL = "http://localhost:5000";
 
 // Reusable PostHeader subcomponent
 const PostHeader = ({ user, createdAt, className = '', renderName }) => (
-  <div className={`p-3 border-b border-gray-100 ${className}`}>
-    <div className="flex items-start space-x-4">
+  <div className={`p-3! border-b border-gray-100 ${className}`}>
+    <div className="flex items-start space-x-4 m-2! p-2!">
       <Avatar
         user={{
           avatar: user?.avatar,
           name: renderName ? renderName(user) : (user?.name || user?.email || 'Unknown User'),
         }}
         size={48}
-        className="flex-shrink-0"
+        className="flex-shrink-0 m-1!"
       />
       <div className="flex-1">
-        <h3 className="font-semibold text-gray-900">
+        <h3 className="font-semibold m-1! text-gray-900">
           {renderName ? renderName(user) : (user?.name || user?.email || 'Unknown User')}
         </h3>
         <p className="text-sm text-gray-500">{user?.headline || 'No headline'}</p>
@@ -32,8 +32,8 @@ const PostHeader = ({ user, createdAt, className = '', renderName }) => (
 
 // Reusable PostContent subcomponent
 const PostContent = ({ content, image, onImageClick, onDownload, className = '' }) => (
-  <div className={`p-6 ${className}`}>
-    <p className="text-gray-800 m-2 whitespace-pre-wrap text-lg">{content}</p>
+  <div className={`p-2! ${className}`}>
+    <p className="text-gray-800 m-2! whitespace-pre-wrap text-lg">{content}</p>
     {image && (
       <div className="relative h-50 p-2">
         <img
@@ -51,7 +51,7 @@ const PostContent = ({ content, image, onImageClick, onDownload, className = '' 
             e.stopPropagation();
             onDownload(image, 'post-image.jpg');
           }}
-          className="absolute top-2 right-2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
+          className="absolute top-2 right-2 bg-blue-600 text-white p-2! rounded-full hover:bg-blue-700"
         >
           <FaDownload />
         </button>
@@ -65,9 +65,9 @@ const CommentSection = ({ comments, onComment, currentUser, className = '' }) =>
   const [commentText, setCommentText] = useState('');
 
   return (
-    <div className={`p-3 border-t border-gray-100 ${className}`}>
+    <div className={`p-3! border-t border-gray-100 ${className}`}>
       <h4 className="font-semibold text-gray-900 mb-4">Comments ({comments.length})</h4>
-      <div className="space-y-4 mb-6">
+      <div className="space-y-4 mb-3!">
         {comments.map((comment) => (
           <div key={comment._id} className="flex space-x-3">
             <Avatar
@@ -76,16 +76,16 @@ const CommentSection = ({ comments, onComment, currentUser, className = '' }) =>
                 name: comment.user?.name || comment.user?.email || 'Unknown User',
               }}
               size={32}
-              className="flex-shrink-0"
+              className="flex-shrink-0 m-1!"
             />
             <div className="flex-1">
               <div className="flex items-baseline space-x-1">
-                <span className="font-medium text-gray-900 text-sm">
+                <span className="font-medium text-gray-900 text-sm m-1!">
                   {comment.user?.name || comment.user?.email || 'Unknown User'}
                 </span>
                 <span className="text-xs text-gray-500">· {new Date(comment.createdAt).toLocaleDateString()}</span>
               </div>
-              <p className="text-gray-800 text-sm">{comment.content}</p>
+              <p className="text-gray-800 text-sm m-1!">{comment.content}</p>
             </div>
           </div>
         ))}
@@ -97,14 +97,14 @@ const CommentSection = ({ comments, onComment, currentUser, className = '' }) =>
             name: currentUser?.name || currentUser?.email || 'Unknown User',
           }}
           size={32}
-          className="flex-shrink-0"
+          className="flex-shrink-0 m-1!"
         />
         <input
           type="text"
           placeholder="Write a comment..."
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
-          className="flex-1 p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 p-2! border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           onKeyPress={(e) => {
             if (e.key === 'Enter' && commentText.trim()) {
               onComment(commentText.trim());
@@ -119,7 +119,7 @@ const CommentSection = ({ comments, onComment, currentUser, className = '' }) =>
               setCommentText('');
             }
           }}
-          className="text-blue-600 font-semibold hover:text-blue-700 m-2"
+          className="text-blue-600 font-semibold hover:text-blue-700 m-2! p-2!"
         >
           Post
         </button>
@@ -146,17 +146,17 @@ const LikedUsersModal = ({ likedUsers, onClose, className = '' }) => (
               size={40}
             />
             <div>
-              <p className="font-semibold text-gray-900">{user.name || user.email || 'Unknown User'}</p>
+              <p className="font-semibold text-gray-900 m-1!">{user.name || user.email || 'Unknown User'}</p>
               <p className="text-sm text-gray-500">{user.headline || 'User'}</p>
             </div>
           </div>
         ))}
         {likedUsers.length === 0 && <p className="text-gray-500 text-center py-4">No likes yet</p>}
       </div>
-      <div className="p-3 border-t flex justify-end">
+      <div className="p-1! border-t flex justify-end">
         <button
           onClick={onClose}
-          className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+          className="bg-gray-200 text-gray-800  p-2! rounded-lg hover:bg-gray-300"
         >
           Close
         </button>
@@ -262,9 +262,9 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <FaUserCircle className="text-6xl text-gray-300 mx-auto mb-4" />
+          <FaUserCircle className="text-6xl text-gray-300 mx-auto mb-4!" />
           <p className="text-gray-500">{error || 'Post not found'}</p>
-          <button onClick={() => navigate(-1)} className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-full">
+          <button onClick={() => navigate(-1)} className="m-2! bg-blue-600 text-white p-2! rounded-md hover:bg-blue-700">
             Go Back
           </button>
         </div>
@@ -277,10 +277,10 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
       <div className="max-w-4xl mx-auto mb-8">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 mb-6"
+          className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 m-3! p-2!"
         >
-          <FaArrowLeft />
-          <span>Back to Feed</span>
+          <FaArrowLeft  className='m-1!'/>
+          <span className='m-1!'>Back to Feed</span>
         </button>
       </div>
 
@@ -292,20 +292,20 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
           onImageClick={handleImageClick}
           onDownload={downloadImage}
         />
-        <div className="flex justify-around border-t border-gray-100 p-2 bg-gray-50">
+        <div className="flex justify-around border-t border-gray-100 p-2! bg-gray-50">
           <button
             onClick={handleLike}
             className="flex items-center space-x-2 text-gray-500 hover:text-blue-600 transition-colors rounded-lg"
           >
-            <FaThumbsUp size={16} />
-            <span className="text-sm">{post.likes.length} likes</span>
+            <FaThumbsUp size={16} className='m-1!' />
+            <span className="text-sm m-1!">{post.likes.length} likes</span>
           </button>
           <button
             onClick={() => setShowLikedModal(true)}
             className="flex items-center space-x-2 text-gray-500 hover:text-blue-600 transition-colors rounded-lg cursor-pointer"
           >
-            <FaThumbsUp size={16} />
-            <span className="text-sm">See who liked</span>
+            <FaThumbsUp size={16}  className='m-1!'/>
+            <span className="text-sm m-1!">See who liked</span>
           </button>
           {actions.map((action, index) => (
             <button
@@ -326,7 +326,7 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
       )}
 
       {imagePreview && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-2! z-50">
           <div className="relative max-w-4xl w-full max-h-[90vh]">
             <img
               src={imagePreview}

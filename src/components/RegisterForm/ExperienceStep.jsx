@@ -91,13 +91,13 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
   };
 
   return (
-    <motion.div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 p-1">Experience & Education</h2>
+    <motion.div className="space-y-6 p-2!">
+      <h2 className="text-2xl font-bold text-gray-800 mb-3! ">Experience & Education</h2>
       
       {/* Experience Section */}
       <div>
         
-        <div className="space-y-4 border-l-2 border-blue-200 pl-6">
+        <div className="space-y-4 border-l-2 border-blue-200 p-3!">
           {formData.experience.map((exp, index) => (
             <ExperienceItem
               key={index}
@@ -106,8 +106,8 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
             />
           ))}
 
-          <div className="bg-white p-4 rounded-lg border border-dashed border-gray-300">
-            <h4 className="font-medium mb-3">Add New Experience</h4>
+          <div className="bg-white p-4! rounded-lg border border-dashed border-gray-300">
+            <h4 className="font-medium mb-3!">Add New Experience</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
@@ -117,7 +117,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
                   value={currentExperience.title}
                   onChange={handleExperienceChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Software Engineer"
+                  placeholder="  Software Engineer"
                 />
               </div>
               <div>
@@ -128,7 +128,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
                   value={currentExperience.company}
                   onChange={handleExperienceChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Tech Corp Inc."
+                  placeholder="  Tech Corp Inc."
                 />
               </div>
               <div>
@@ -139,7 +139,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
                   value={currentExperience.location}
                   onChange={handleExperienceChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="New York, NY"
+                  placeholder="  New York, NY"
                 />
               </div>
               <div>
@@ -171,20 +171,20 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
                     onChange={handleExperienceChange}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <label htmlFor="currentJob" className="ml-2 block text-sm text-gray-700">
+                  <label htmlFor="currentJob" className="m-2! block text-sm text-gray-700">
                     I currently work here
                   </label>
                 </div>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1!">Description</label>
                 <textarea
                   name="description"
                   value={currentExperience.description}
                   onChange={handleExperienceChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   rows="3"
-                  placeholder="Describe your responsibilities and achievements..."
+                  placeholder="   Describe your responsibilities and achievements..."
                 ></textarea>
               </div>
             </div>
@@ -192,7 +192,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
               <button
                 type="button"
                 onClick={handleExperienceAdd}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+                className="p-2! bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
               >
                 <FiPlus className="mr-1" />
                 Add Experience
@@ -204,11 +204,10 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
 
       {/* Education Section */}
       <div>
-        <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
-          <MdSchool className="mx-2 my-3 text-blue-600" />
+        <h3 className="text-2xl font-bold text-gray-800 mb-3!">
           Education
         </h3>
-        <div className="space-y-4 border-l-2 border-blue-200 pl-6">
+        <div className="space-y-4 border-l-2 border-blue-200 p-3!">
           {formData.education.map((edu, index) => (
             <EducationItem
               key={index}
@@ -217,9 +216,9 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
             />
           ))}
 
-          <div className="bg-white p-4 rounded-lg border border-dashed border-gray-300">
-            <h4 className="font-medium mb-3">Add Education</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white p-3! rounded-lg border border-dashed border-gray-300">
+            <h4 className="font-medium m!-3">Add Education</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-3!">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">School</label>
                 <input
@@ -228,7 +227,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
                   value={currentEducation.school}
                   onChange={handleEducationChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="University Name"
+                  placeholder="  University Name"
                 />
               </div>
               <div>
@@ -239,7 +238,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
                   value={currentEducation.degree}
                   onChange={handleEducationChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Bachelor's Degree"
+                  placeholder="  Bachelor's Degree"
                 />
               </div>
               <div>
@@ -250,7 +249,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
                   value={currentEducation.field}
                   onChange={handleEducationChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Computer Science"
+                  placeholder="  Computer Science"
                 />
               </div>
               <div>
@@ -280,7 +279,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
                   onChange={handleEducationChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   rows="3"
-                  placeholder="Notable achievements, courses, etc..."
+                  placeholder="  Notable achievements, courses, etc..."
                 ></textarea>
               </div>
             </div>
@@ -288,7 +287,7 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
               <button
                 type="button"
                 onClick={handleEducationAdd}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+                className="p-2! bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
               >
                 <FiPlus className="mr-1" />
                 Add Education
@@ -298,17 +297,17 @@ const ExperienceStep = ({ formData, setFormData, prevStep, nextStep }) => {
         </div>
       </div>
 
-      <div className="flex justify-between pt-4">
+      <div className="flex justify-between p-3!">
         <button 
           onClick={prevStep} 
-          className="m-3 p-2 bg-gray-200 text-gray-700 rounded-md! hover:bg-gray-300 transition-colors"
+          className="m-3 p-2! bg-gray-200 text-gray-700 rounded-md! hover:bg-gray-300 transition-colors"
         >
           
           Back
         </button>
         <button 
           onClick={nextStep} 
-          className="m-3 p-2 bg-blue-600 text-white rounded-md! hover:bg-blue-700 transition-colors flex items-center"
+          className="m-3 p-2! bg-blue-600 text-white rounded-md! hover:bg-blue-700 transition-colors flex items-center"
         >
           Next
           <FiArrowRight className="ml-1" />

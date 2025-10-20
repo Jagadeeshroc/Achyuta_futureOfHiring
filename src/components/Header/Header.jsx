@@ -93,8 +93,8 @@ export default function JobbyNavbar() {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-white via-amber-100 to-white shadow-sm sticky top-0 z-50">
-      <div className="flex justify-between items-center bg-gradient-to-r from-white via-amber-100 to-white p-2! ">
+    <nav className="bg-gradient-to-r from-white via-purple-100 to-white shadow-sm sticky top-0 z-50">
+      <div className="flex justify-between items-center bg-gradient-to-r from-white via-purple-400 to-white p-2! ">
         <Link
           to={localStorage.getItem("token") ? "/home" : "/"}
           className="flex items-center space-x-2"
@@ -104,7 +104,9 @@ export default function JobbyNavbar() {
             alt="Logo"
             className="w-14 h-14 rounded-full hover:scale-120 "
           />
-          <span className="hidden lg:block no-underline! font-bold text-lg text-blue-950! hover:text-amber-400!">Achyuta</span>
+          <span className=" m-2! hidden lg:block no-underline! font-bold text-lg text-gray-900! hover:text-amber-400!"
+           style={{ fontFamily: '"Rubik Glitch Pop", cursive' }}
+          >Achyuta</span>
         </Link>
 
 

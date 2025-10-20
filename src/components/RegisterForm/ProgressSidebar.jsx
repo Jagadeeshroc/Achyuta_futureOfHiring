@@ -10,9 +10,11 @@ const ProgressSidebar = ({ step }) => {
   ];
 
   return (
-    <div className="bg-gradient-to-b from-blue-600 to-purple-600 p-6 text-white md:w-1/3 flex flex-col justify-between p-3">
+    <div className="bg-gradient-to-b from-blue-600 to-purple-600 p-6 text-white md:w-1/3 flex flex-col justify-between p-3!">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Join Our Community</h1>
+        <h1 className="text-3xl text-white!  mb-2!"
+          style={{ fontFamily: '"Climate Crisis", cursive' }}
+        >Join Our Community</h1>
         <p className="opacity-90">Create your complete profile in just a few steps</p>
       </div>
 
@@ -41,7 +43,7 @@ const ProgressSidebar = ({ step }) => {
             <FiStar className="text-yellow-300 text-xl" />
           </div>
           <div>
-            <h4 className="font-medium">Complete Profile Benefits</h4>
+            <h4 className="font-medium m-2!">Complete Profile Benefits</h4>
             <p className="text-sm opacity-80">Get 5x more visibility to employers</p>
           </div>
         </div>
