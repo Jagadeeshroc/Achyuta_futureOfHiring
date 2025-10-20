@@ -62,8 +62,8 @@ export default function JobReviews({ jobId }) {
   if (loading) return <div>Loading reviews...</div>;
 
   return (
-    <div className="job-reviews">
-      <h3>Reviews</h3>
+    <div className=" flex flex-col justify-center bg-gray-50  m-2!">
+      <h3 className='text-2xl font-bold'>Reviews</h3>
       
       {reviews.length > 0 ? (
         <ul>
@@ -83,14 +83,18 @@ export default function JobReviews({ jobId }) {
           <textarea
             value={newReview}
             onChange={(e) => setNewReview(e.target.value)}
-            placeholder="Write your review..."
+            className='p-2! border  border-gray-50'
+            placeholder=  "Write your review..."
             required
           />
-          <button type="submit">Submit Review</button>
+        
         </form>
+          
       ) : (
         <p>Please log in to post a review.</p>
       )}
+
+      <button type="submit" className='p-2! bg-blue-400'>Submit Review</button>
     </div>
   );
 }

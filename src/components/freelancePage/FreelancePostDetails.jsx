@@ -290,11 +290,11 @@ const FreelancePostDetails = () => {
 
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 py-4">
+        <div className="max-w-6xl mx-auto p-2!">
           <div className="flex items-center justify-between">
             <button
               onClick={() => navigate("/freelance")}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-800 p-2!"
             >
               <FaArrowLeft />
               Back to Marketplace
@@ -320,7 +320,7 @@ const FreelancePostDetails = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="p-2!">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Post Content */}
           <div className="lg:col-span-2">
@@ -329,7 +329,7 @@ const FreelancePostDetails = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6"
+                className="mb-6!"
               >
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                   <img
@@ -366,9 +366,9 @@ const FreelancePostDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-xl shadow-lg p-6 mb-6"
+              className="bg-white rounded-xl shadow-lg p-3! m-2!"
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex items-start justify-between mb-2! p-2!">
                 <h1 className="text-3xl font-bold text-gray-900">{post.title}</h1>
                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                   post.type === 'job' ? 'bg-blue-100 text-blue-800' :
@@ -380,19 +380,19 @@ const FreelancePostDetails = () => {
                 </span>
               </div>
 
-              <p className="text-gray-700 text-lg mb-6 leading-relaxed">
+              <p className="text-gray-700 text-lg mb-2! p-2! leading-relaxed">
                 {post.description}
               </p>
 
               {/* Skills */}
               {post.skills && post.skills.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-3">Skills Required</h3>
+                <div className="mb- p-2!">
+                  <h3 className="text-lg font-semibold mb-1!">Skills Required</h3>
                   <div className="flex flex-wrap gap-2">
                     {post.skills.map((skill, index) => (
                       <span
                         key={index}
-                        className="px-3 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-medium"
+                        className="p-2! bg-indigo-50 text-indigo-700 rounded-lg text-sm font-medium"
                       >
                         {skill}
                       </span>
@@ -416,7 +416,7 @@ const FreelancePostDetails = () => {
                 )}
 
                 {post.location && (
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3! bg-gray-50 rounded-lg">
                     <FaMapMarkerAlt className="text-red-600 text-xl" />
                     <div>
                       <p className="text-sm text-gray-600">Location</p>
@@ -452,25 +452,25 @@ const FreelancePostDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-xl shadow-lg p-6"
+              className="bg-white rounded-xl shadow-lg p-3!"
             >
-              <h3 className="text-2xl font-bold mb-6">Reviews & Feedback</h3>
+              <h3 className="text-2xl font-bold mb-3!">Reviews & Feedback</h3>
               
               {/* Add Review Form */}
-              <form onSubmit={handleReviewSubmit} className="mb-8 p-4 bg-gray-50 rounded-lg">
-                <h4 className="text-lg font-semibold mb-4">
+              <form onSubmit={handleReviewSubmit} className="mb-8 p-3! bg-gray-50 rounded-lg">
+                <h4 className="text-lg font-semibold mb-2!">
                   {userReview ? '✏️ Update Your Review' : '⭐ Add Your Review'}
                 </h4>
                 
                 {userReview && (
-                  <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-sm text-blue-700 font-medium">
+                  <div className="mb-3 p-2! bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-sm text-blue-700 font-medium ">
                       📝 You've already reviewed this post. Submitting will update your existing review.
                     </p>
                   </div>
                 )}
                 
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-2!">
                   <span className="text-sm text-gray-600">Rating:</span>
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -488,7 +488,7 @@ const FreelancePostDetails = () => {
                 <textarea
                   value={newReview.comment}
                   onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-                  placeholder={userReview ? "Update your review..." : "Share your experience with this post..."}
+                  placeholder={userReview ?  "  Update your review..." : "  Share your experience with this post..."}
                   className="w-full p-3 border border-gray-300 rounded-lg mb-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   rows="3"
                   required
@@ -496,14 +496,14 @@ const FreelancePostDetails = () => {
                 
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center gap-2 font-semibold"
+                  className="p-2! bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center gap-2 font-semibold"
                 >
                   {userReview ? '🔄 Update Review' : '📤 Submit Review'}
                 </button>
               </form>
 
               {/* Reviews List */}
-              <div className="space-y-4">
+              <div className="space-y-4 p-3! m-2!">
                 {reviews.length > 0 ? (
                   reviews.map((review) => (
                     <div key={review._id} className="border-b border-gray-200 pb-4 last:border-b-0">
@@ -552,10 +552,10 @@ const FreelancePostDetails = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white rounded-xl shadow-lg p-6 mb-6 sticky top-6"
+              className="bg-white rounded-xl shadow-lg p-3! mb-6 sticky top-6"
             >
               <h3 className="text-xl font-bold mb-4">Posted By</h3>
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-4 mb-2!">
                 {post.user?.avatar ? (
                   <img
                     src={getImageUrl(post.user.avatar)}
@@ -576,20 +576,20 @@ const FreelancePostDetails = () => {
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-3 p-2!">
                 <button 
                   onClick={handleContactPoster}
-                  className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-indigo-600 text-white p-2! m-1! rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <FaEnvelope />
                   Contact Poster
                 </button>
-                <button className="w-full border border-indigo-600 text-indigo-600 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors">
+                <button className="w-full border border-indigo-600 text-indigo-600 p-2! m-1! rounded-lg font-semibold hover:bg-indigo-50 transition-colors">
                   Save Post
                 </button>
                 <button 
                   onClick={handleViewProfile}
-                  className="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full border border-gray-300 text-gray-700 p-2! m-1! rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
                 >
                   <FaExternalLinkAlt />
                   View Profile
@@ -602,9 +602,9 @@ const FreelancePostDetails = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-white rounded-xl shadow-lg p-6"
+              className="bg-white rounded-xl shadow-lg p-3! m-2!"
             >
-              <h3 className="text-xl font-bold mb-4">Similar Posts</h3>
+              <h3 className="text-xl font-bold mb-4!">Similar Posts</h3>
               <p className="text-gray-500 text-sm">Feature coming soon...</p>
             </motion.div>
           </div>

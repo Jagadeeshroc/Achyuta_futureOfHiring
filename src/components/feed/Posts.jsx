@@ -266,8 +266,8 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
   }
 
   return (
-    <div className={`sticky top-0 min-h-screen bg-gray-50 py-8 px-4 ${className}`}>
-      <div className="max-w-6xl mx-auto">
+    <div className={`sticky top-0  bg-gray-50 p-4! ${className}`}>
+      <div className="">
      
 
         {/* Post form only for logged-in users */}

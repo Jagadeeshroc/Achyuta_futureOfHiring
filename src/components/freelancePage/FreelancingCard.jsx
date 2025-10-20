@@ -98,11 +98,11 @@ const FreelancingCard = ({ post }) => {
 
   return (
     <div 
-      className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 cursor-pointer"
+      className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 cursor-pointer  p-3!"
       onClick={handleCardClick}
     >
       {/* Image Section with Smart Fallback */}
-      <div className="relative h-48 bg-gray-100 overflow-hidden">
+      <div className="relative h-48 bg-gray-100 overflow-hidden p-1!">
         {post.attachments && post.attachments.length > 0 && !imageError ? (
           <>
             <img
@@ -139,17 +139,17 @@ const FreelancingCard = ({ post }) => {
       </div>
       
       {/* Content Section */}
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-3">
-          <h3 className="text-xl font-bold text-gray-900 line-clamp-2 flex-1">
+      <div className="">
+        <div className="flex items-start justify-between m-2!">
+          <h3 className="text-xl font-bold text-gray-900 line-clamp-2 flex-1 m-1!">
             {post.title}
           </h3>
-          <div className="ml-2 text-lg">
+          <div className="m-2! text-lg">
             {getCategoryIcon(post.type)}
           </div>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+        <p className="text-gray-600 text-sm  line-clamp-3 m-1!">
           {post.description}
         </p>
 
@@ -160,13 +160,13 @@ const FreelancingCard = ({ post }) => {
               {post.skills.slice(0, 3).map((skill, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-md"
+                  className="p-2! bg-indigo-50 text-indigo-700 text-xs rounded-md"
                 >
                   {skill}
                 </span>
               ))}
               {post.skills.length > 3 && (
-                <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+                <span className="p-2! bg-gray-100 text-gray-600 text-xs rounded-md">
                   +{post.skills.length - 3} more
                 </span>
               )}
@@ -175,7 +175,7 @@ const FreelancingCard = ({ post }) => {
         )}
 
         {/* Details Grid */}
-        <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
+        <div className="grid grid-cols-2 gap-3 text-sm text-gray-700 p-2!">
           {/* Price/Budget */}
           {(post.budget || post.price) && (
             <div className="flex items-center gap-2">
@@ -213,7 +213,7 @@ const FreelancingCard = ({ post }) => {
 
         {/* User Info */}
         {post.user && (
-          <div className="mt-4 pt-4 border-t border-gray-200 flex items-center gap-3">
+          <div className=" pt-3! border-t border-gray-200 flex items-center gap-3">
             {post.user.avatar ? (
               <img
                 src={getImageUrl(post.user.avatar)}

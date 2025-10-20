@@ -43,13 +43,13 @@ const FreelancingForm = ({ onSubmit, isSubmitting = false }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 p-3!">
       <div>
-        <label className="block text-sm font-medium text-gray-700">Category</label>
+        <label className="block text-sm font-medium text-gray-700 m-1!">Category</label>
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
+          className="mt-1 block w-full border border-gray-300 rounded-md p-2! focus:ring-indigo-500 focus:border-indigo-500"
         >
           <option value="job">Job</option>
           <option value="service">Service</option>
@@ -59,31 +59,32 @@ const FreelancingForm = ({ onSubmit, isSubmitting = false }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Title</label>
+        <label className="block text-sm font-medium text-gray-700 m-1!">Title</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
-          placeholder="e.g., Senior React Developer Needed"
+          className="p-2! block w-full border border-gray-300 rounded-md p-2! focus:ring-indigo-500 focus:border-indigo-500"
+          placeholder="  e.g., Senior React Developer Needed"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Description</label>
+        <label className="block text-sm font-medium text-gray-700 m-1!">Description</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
-          rows={4}
+        
           className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
-          placeholder="Describe the job, service, or work in detail..."
+          placeholder="  Describe the job, service, or work in detail..."
+          rows={2}  
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 m-1!">
           Skills (comma-separated)
           <span className="text-xs text-gray-500 ml-1">e.g., React, JavaScript, Node.js</span>
         </label>
@@ -91,8 +92,8 @@ const FreelancingForm = ({ onSubmit, isSubmitting = false }) => {
           type="text"
           value={skills}
           onChange={(e) => setSkills(e.target.value)}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
-          placeholder="React, JavaScript, CSS, Node.js"
+          className="p-2! block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
+          placeholder="  React, JavaScript, CSS, Node.js"
         />
       </div>
 
@@ -100,34 +101,34 @@ const FreelancingForm = ({ onSubmit, isSubmitting = false }) => {
       {["job", "part-time"].includes(category) && (
         <>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Budget ($)</label>
+            <label className="block text-sm font-medium text-gray-700 m-1!">Budget ($)</label>
             <input
               type="number"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="e.g., 5000"
+              className="p-2! block w-full border border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="  e.g., 5000"
               min="0"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Duration</label>
+            <label className="block text-sm font-medium text-gray-700 m-1!">Duration</label>
             <input
               type="text"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="e.g., 3 months, 6 weeks"
+              className=" w-full border border-gray-300 rounded-md p-2! focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="  e.g., 3 months, 6 weeks"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Location</label>
+            <label className="block text-sm font-medium text-gray-700 m-1!">Location</label>
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="e.g., Remote, New York, Hybrid"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2! focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="  e.g., Remote, New York, Hybrid"
             />
           </div>
         </>
@@ -136,31 +137,31 @@ const FreelancingForm = ({ onSubmit, isSubmitting = false }) => {
       {["service", "private-work"].includes(category) && (
         <>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Price ($)</label>
+            <label className="block text-sm font-medium text-gray-700 m-1!">Price ($)</label>
             <input
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="e.g., 500"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2! focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="  e.g., 500"
               min="0"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Delivery Time</label>
+            <label className="block text-sm font-medium text-gray-700 m-1!">Delivery Time</label>
             <input
               type="text"
               value={deliveryTime}
               onChange={(e) => setDeliveryTime(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="e.g., 7 days, 2 weeks"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2! focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder= "  e.g., 7 days, 2 weeks"
             />
           </div>
         </>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 m-1!">
           Attachments
           <span className="text-xs text-gray-500 ml-1">(images, PDF, DOC - max 5 files)</span>
         </label>
@@ -168,7 +169,7 @@ const FreelancingForm = ({ onSubmit, isSubmitting = false }) => {
           type="file"
           multiple
           onChange={(e) => setAttachments(e.target.files)}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-indigo-500 focus:border-indigo-500"
+          className="m-!1 block w-full border border-gray-300 rounded-md p-2! focus:ring-indigo-500 focus:border-indigo-500"
           accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx"
         />
         {attachments && (
@@ -181,7 +182,7 @@ const FreelancingForm = ({ onSubmit, isSubmitting = false }) => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className={`w-full px-6 py-3 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 ${
+        className={`w-full p-2! bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 ${
           isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-700'
         }`}
       >

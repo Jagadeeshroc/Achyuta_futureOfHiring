@@ -11,9 +11,9 @@ import {
 } from "react-icons/fa";
 
 const UserCard = ({ user, type, onAction, onCancel, getAvatarUrl, loadingRequests }) => (
-  <div className="bg-gray rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 p-2">
+  <div className="bg-gray rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 p-2!">
     <div className="flex flex-col items-center text-center">
-      <div className="relative mb-4">
+      <div className="relative mb-4!">
         <img
           src={getAvatarUrl(user.avatar)}
           alt={user.name}

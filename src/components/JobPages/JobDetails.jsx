@@ -182,45 +182,45 @@ export default function JobDetails() {
 
   return (
     <motion.div
-      className="min-h-screen bg-gray-100 py-4 px-2 sm:py-6 sm:px-4 lg:py-8 lg:px-6"
+      className="bg-gray-100 py-4 px-2 sm:py-6 sm:px-4 lg:py-8 lg:px-6"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden sm:rounded-xl lg:rounded-2xl">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden sm:rounded-xl lg:rounded-2xl">
         {/* Job Header */}
         <motion.div 
-          className="p-3 border-b border-gray-200 sm:p-5 lg:p-6" 
+          className="p-3! border-b border-gray-200 sm:p-5 lg:p-6" 
           variants={itemVariants}
         >
-          <h2 className="text-xl font-bold text-gray-900 sm:text-2xl lg:text-3xl">{job.title}</h2>
-          <div className="mt-2 flex items-center text-gray-600">
+          <h2 className="text-xl font-bold text-gray-900 sm:text-2xl lg:text-3xl m-1!">{job.title}</h2>
+          <div className="mt-2 flex items-center text-gray-600 m-2!">
             <FaBuilding className="mr-2 text-blue-500" />
-            <h3 className="text-base font-semibold sm:text-lg">{job.company}</h3>
+            <h3 className="text-base font-semibold sm:text-lg m-1!">{job.company}</h3>
           </div>
-          <div className="mt-3 flex flex-wrap gap-2 text-sm text-gray-600 sm:gap-3 sm:text-base">
+          <div className="m-2! flex flex-wrap gap-2 text-sm text-gray-600 sm:gap-3 sm:text-base">
             <div className="flex items-center">
-              <FaMapMarkerAlt className="mr-2 text-blue-500" />
+              <FaMapMarkerAlt className="m-2! text-blue-500" />
               <span>{job.location}</span>
             </div>
             <div className="flex items-center">
-              <FaMoneyBillWave className="mr-2 text-green-500" />
+              <FaMoneyBillWave className="m-2! text-green-500" />
               <span>{job.salary || 'Not specified'}</span>
             </div>
             <div className="flex items-center">
-              <FaBriefcase className="mr-2 text-purple-500" />
+              <FaBriefcase className="m-2! text-purple-500" />
               <span>{job.type}</span>
             </div>
             <div className="flex items-center">
-              <FaClock className="mr-2 text-red-500" />
+              <FaClock className="m-2! text-red-500" />
               <span>Apply by {formatDate(job.deadline)}</span>
             </div>
             <div className="flex items-center">
-              <FaUsers className="mr-2 text-indigo-500" />
+              <FaUsers className="m-2! text-indigo-500" />
               <span>{job.applicantsCount} Applicants</span>
             </div>
             <div className="flex items-center">
-              <FaTag className="mr-2 text-yellow-500" />
+              <FaTag className="m-2! text-yellow-500" />
               <span>{job.status}</span>
             </div>
           </div>
@@ -228,27 +228,27 @@ export default function JobDetails() {
 
         {/* Job Description */}
         <motion.div 
-          className="p-3 border-b border-gray-200 sm:p-5 lg:p-6" 
+          className="p-3! border-b border-gray-200 sm:p-5 lg:p-6" 
           variants={itemVariants}
         >
-          <h4 className="text-lg font-semibold text-gray-900 mb-2 sm:text-xl">Description</h4>
-          <p className="text-gray-700 leading-relaxed">{job.description}</p>
+          <h4 className="text-lg font-semibold text-gray-900 mb-2 sm:text-xl m-1!">Description</h4>
+          <p className="text-gray-700 leading-relaxed m-2!">{job.description}</p>
         </motion.div>
 
         {/* Job Requirements */}
         <motion.div 
-          className="p-3 border-b border-gray-200 sm:p-5 lg:p-6" 
+          className="p-3! border-b border-gray-200 sm:p-5 lg:p-6" 
           variants={itemVariants}
         >
-          <h4 className="text-lg font-semibold text-gray-900 mb-2 sm:text-xl">Requirements</h4>
+          <h4 className="text-lg font-semibold text-gray-900 mb-2 sm:text-xl m-1!">Requirements</h4>
           <div className="mb-3">
-            <h5 className="text-base font-medium text-gray-800 sm:text-lg">Skills Required</h5>
-            <div className="flex flex-wrap gap-2 mt-2">
+            <h5 className="text-base font-medium text-gray-800 sm:text-lg m-1!">Skills Required</h5>
+            <div className="flex flex-wrap gap-2 m-3!">
               {Array.isArray(job.skillsRequired) && job.skillsRequired.length > 0 ? (
                 job.skillsRequired.map((skill, index) => (
                   <span
                     key={index}
-                    className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full sm:text-sm sm:px-3"
+                    className="inline-block bg-blue-100 text-blue-800 text-xs font-medium p-2! rounded-full sm:text-sm sm:px-3"
                   >
                     {skill}
                   </span>
@@ -259,22 +259,22 @@ export default function JobDetails() {
             </div>
           </div>
           <div>
-            <h5 className="text-base font-medium text-gray-800 sm:text-lg">Experience Required</h5>
+            <h5 className="text-base font-medium text-gray-800 sm:text-lg m-1!">Experience Required</h5>
             <p className="text-gray-700">{job.experienceRequired || 'Not specified'}</p>
           </div>
         </motion.div>
 
         {/* Posted By */}
         <motion.div 
-          className="p-3 border-b border-gray-200 sm:p-5 lg:p-6" 
+          className="p-3! border-b border-gray-200 sm:p-5 lg:p-6" 
           variants={itemVariants}
         >
-          <h4 className="text-lg font-semibold text-gray-900 mb-2 sm:text-xl">Posted By</h4>
+          <h4 className="text-lg font-semibold text-gray-900 mb-2! sm:text-xl">Posted By</h4>
           <div className="flex items-center text-gray-700">
             <motion.img
               src={getAvatarUrl(job.posted_By?.avatar)}
               alt={`${job.posted_By?.name || 'User'} avatar`}
-              className="w-10 h-10 rounded-full mr-3 object-cover"
+              className="w-10 h-10 rounded-full m-2! object-cover"
               onError={(e) => {
                 console.log('Avatar failed to load, using fallback:', job.posted_By?.avatar);
                 e.target.onerror = null;
@@ -324,7 +324,7 @@ export default function JobDetails() {
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
-            className={`w-full px-4 py-2 rounded-full text-white font-semibold transition-all sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 ${
+            className={ ` m-5! p-2! rounded-lg! text-white font-semibold transition-all sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 ${
               isApplying || success
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600'

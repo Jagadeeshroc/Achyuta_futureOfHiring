@@ -44,13 +44,13 @@ const Sidebar = ({
   };
 
   return (
-    <div className="bg-white border-r border-gray-200 flex flex-col h-full">
-      <div className="p-4 bg-indigo-950 text-white flex justify-between items-center">
+    <div className="bg-white border-r border-gray-200 flex flex-col h-full ">
+      <div className="p-3! bg-indigo-600 text-white flex justify-between items-center">
         <h1 className="text-xl font-bold">Messages</h1>
         <div className="flex space-x-3">
           <button
             onClick={() => setShowSearch(!showSearch)}
-            className="p-1 rounded-full hover:bg-indigo-700 transition-colors duration-200"
+            className="p-1! m-2! rounded-full hover:bg-indigo-700 transition-colors duration-200"
             aria-label="Toggle search"
           >
             <BsThreeDotsVertical size={20} />
@@ -58,7 +58,7 @@ const Sidebar = ({
         </div>
       </div>
 
-      <SearchBar
+      <SearchBar className="m-2! p-2!"
         term={searchTerm}
         setTerm={setSearchTerm}
         show={showSearch}
@@ -77,7 +77,7 @@ const Sidebar = ({
             {showSearch && (
               <>
                 {searchLoading && (
-                  <div className="p-4 text-center">
+                  <div className="p-4! text-center">
                     <LoadingSpinner />
                   </div>
                 )}

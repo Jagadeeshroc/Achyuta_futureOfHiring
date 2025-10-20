@@ -118,7 +118,7 @@ const MyNetwork = () => {
       case "connections":
         return (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ">
               {currentConnections.length === 0 ? (
                 <div className="col-span-full text-center py-12">
                   <FaUserFriends className="text-6xl text-gray-300 mx-auto mb-4" />
@@ -245,8 +245,8 @@ const MyNetwork = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
+      <div className="flex flex-col items-center justify-center  bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+        <div className="bg-white rounded-3xl shadow-2xl   w-full text-center">
           <FaExclamationTriangle className="text-6xl text-red-400 mx-auto mb-6" />
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Oops! Something went wrong</h2>
           <p className="text-gray-600 mb-6">{error}</p>
@@ -263,7 +263,7 @@ const MyNetwork = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="p-3!">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">

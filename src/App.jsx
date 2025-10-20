@@ -47,6 +47,9 @@ import FreelanceCreatePage from './components/freelancePage/FreelanceCreatePage.
 import FreelanceLandingPage from './components/freelancePage/FreelanceLandingPage.jsx';
 import FreelancePostDetails from './components/freelancePage/FreelancePostDetails.jsx';
 
+import ToastContainer from './components/Notifications/ToastContainer.jsx';
+
+
 
 // Simple 404 Component
 const NotFound = () => (
@@ -86,12 +89,14 @@ function App() {
   }, []);
 
   return (
-    <NotificationProvider>
+    
+         <BrowserRouter>
     <SocketProvider>
-
-      <BrowserRouter>
+      <NotificationProvider>
+      
         <div className="App min-h-screen bg-gray-50">
           <Header /> {/* Assuming Header is global; move inside Routes if needed */}
+             <ToastContainer />
           <Routes>
             {/* Public routes */}
               <Route path="/" element={<StartPage />} />
@@ -135,9 +140,11 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
-      </BrowserRouter>
+     
+       </NotificationProvider>
     </SocketProvider>
-    </NotificationProvider>
+     </BrowserRouter>
+   
   );
 }
 

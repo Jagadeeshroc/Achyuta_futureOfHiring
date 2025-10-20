@@ -16,10 +16,10 @@ export default function JobPreview({ formData,
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.3, duration: 0.5 }}
-      className="bg-white rounded-2xl shadow-2xl overflow-hidden h-full"
+      className="bg-white rounded-2xl shadow-2xl overflow-hidden h-full m-1!"
     >
-      <div className="p-3">
-        <h3 className="text-xl font-bold text-indigo-900 mb-4">Job Preview</h3>
+      <div className="p-3!">
+        <h3 className="text-xl font-bold text-indigo-900 m-4!">Job Preview</h3>
 {/* 
         <div className="mb-6">
           <button

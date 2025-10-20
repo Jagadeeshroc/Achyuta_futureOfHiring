@@ -25,7 +25,7 @@ const ChatArea = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-white p-2!">
       <ChatHeader otherUser={otherUser} typing={typing} isMobile={isMobile} goBack={goBack} />
       <MessageList groupedMessages={grouped} currentUserId={currentUserId} />
       <MessageInput

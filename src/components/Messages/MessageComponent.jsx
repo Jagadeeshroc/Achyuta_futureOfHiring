@@ -70,7 +70,7 @@ const MessageComponent = ({ apiBaseUrl = 'http://localhost:5000' }) => {
   const chatVisible = !isMobile || showChat;
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-180! bg-gray-100 p-3! m-1!">
       {sidebarVisible && (
         <div className={isMobile ? 'w-full' : 'w-1/3'}>
           <Sidebar

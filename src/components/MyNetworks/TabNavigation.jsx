@@ -16,7 +16,7 @@ const TabNavigation = ({ activeTab, setActiveTab, counts = {} }) => {
   ];
 
   return (
-    <div className="w-full px-2 rounded-lg! sm:px-4 md:px-6 p-2 m-2">
+    <div className="w-full  rounded-lg! sm:px-4 md:px-6 p-2! m-2!">
       <div
         className="
           flex flex-wrap md:flex-nowrap 
@@ -35,8 +35,7 @@ const TabNavigation = ({ activeTab, setActiveTab, counts = {} }) => {
               onClick={() => setActiveTab(tab.id)}
               className={`
                 relative flex items-center justify-center
-                flex-1 min-w-[45%] sm:min-w-[40%] md:min-w-0
-                px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3
+                flex-1 min-w-[45%] sm:min-w-[40%] md:min-w-0 p-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3
                 rounded-xl! transition-all duration-300 ease-in-out
                 text-sm sm:text-base md:text-lg font-medium
                 ${isActive 
@@ -44,12 +43,12 @@ const TabNavigation = ({ activeTab, setActiveTab, counts = {} }) => {
                   : "text-gray-600 hover:text-gray-900 hover:bg-white/50"}
               `}
             >
-              <Icon className="text-base sm:text-lg md:text-xl m-1" />
+              <Icon className="text-base sm:text-lg md:text-xl m-1!" />
               <span className="ml-1 sm:ml-2">{tab.label}</span>
               <span
                 className={`
                   ml-1 sm:ml-2 px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold
-                  ${isActive ? "bg-blue-100 text-blue-700 m-2" : "bg-gray-200 text-red-700 m-1"}
+                  ${isActive ? "bg-blue-100 text-blue-700 m-2!" : "bg-gray-200 text-red-700 m-1"}
                 `}
               >
                 {tab.count}

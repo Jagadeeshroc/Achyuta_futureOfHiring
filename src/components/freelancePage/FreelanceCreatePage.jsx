@@ -35,14 +35,14 @@ const FreelanceCreatePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-10">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-3!">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="max-w-2xl w-full bg-white shadow-2xl rounded-2xl p-8"
+        className="max-w-2xl w-full bg-white shadow-2xl rounded-2xl p-3!"
       >
-        <h2 className="text-3xl font-bold text-indigo-900 mb-6 text-center">
+        <h2 className="text-3xl font-bold text-indigo-900 mb-4! text-center">
           Create a New Freelance Post
         </h2>
         

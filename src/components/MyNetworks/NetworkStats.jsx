@@ -8,8 +8,8 @@ const NetworkStats = ({
   pendingCount, 
   sentCount 
 }) => (
-  <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-2 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-6 m-4! p-2!">
+    <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-2! text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-blue-100 text-sm font-medium">Connections</p>
@@ -18,7 +18,7 @@ const NetworkStats = ({
         <FaUserFriends className="text-3xl opacity-80" />
       </div>
     </div>
-    <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-2 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-2! text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-green-100 text-sm font-medium">Recommendations</p>
@@ -27,7 +27,7 @@ const NetworkStats = ({
         <FaUserCheck className="text-3xl opacity-80" />
       </div>
     </div>
-    <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl p-2 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl p-2! text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-purple-100 text-sm font-medium">Pending Requests</p>
@@ -36,7 +36,7 @@ const NetworkStats = ({
         <FaClock className="text-3xl opacity-80" />
       </div>
     </div>
-    <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-2 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-2! text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-orange-100 text-sm font-medium">Sent Requests</p>

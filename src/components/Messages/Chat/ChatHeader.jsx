@@ -5,7 +5,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 
 const ChatHeader = ({ otherUser, typing, isMobile, goBack }) => (
-  <div className="p-3 border-b border-gray-200 flex items-center bg-indigo-600 text-white">
+  <div className="p-3! border-b border-gray-200 flex items-center bg-indigo-600 text-white">
     {isMobile && (
       <button
         className="mr-2 p-1 rounded-full hover:bg-indigo-500 transition"
@@ -20,7 +20,7 @@ const ChatHeader = ({ otherUser, typing, isMobile, goBack }) => (
         name: otherUser?.name || otherUser?.email || 'Unknown User',
       }}
       size={40}
-      className="border-2 border-white"
+      className="border-2  m-1! border-white"
     />
     <div className="ml-3 flex-1">
       <h3 className="font-medium">{otherUser?.name || otherUser?.email || 'Unknown User'}</h3>
