@@ -244,20 +244,21 @@ class Home extends React.Component {
         {/* ========== CALL TO ACTION SECTION ========== */}
         <section className="cta-section">
           <motion.div 
-            className="cta-content"
+            className="p-5!  rounded-md! bg-gradient-to-br from-purple-300 to-indigo-300"
             initial={{ opacity: 0, y: 50 }} // Start invisible and slightly below
             whileInView={{ opacity: 1, y: 0 }} // Fade in and slide up when in view
             transition={{ duration: 0.6 }} // Animation duration
             viewport={{ once: true }} // Only animate once
           >
-            <h2>Ready to find your dream job?</h2>
-            <p className="para">Thousands of professionals who found their perfect matched in our platform</p>
+            <h2 className='m-5! text-center! text-gray-900! text-4xl! font-bold'>Ready to find your dream job?</h2>
+            <p className=" text-center! m-3!">Thousands of professionals who found their perfect matched in our platform</p>
             {/* Animated button */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              className="text-center! mt-4!"
             >
-              <Link to="/jobs" className="cta-button">
+              <Link to="/jobs" className="rounded-md! bg-gray-600  text-white! m-3! p-2!">
                 Browse Jobs 
               </Link>
             </motion.div>
