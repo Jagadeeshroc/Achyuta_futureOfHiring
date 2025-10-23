@@ -8,7 +8,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("user");
 
     if (token && userId) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

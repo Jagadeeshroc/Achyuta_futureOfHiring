@@ -5,13 +5,17 @@ import './index.css';
 
 import App from './App.jsx';
 import { UserProvider } from './components/context/userContext.jsx';
+import { SocketProvider } from './components/context/SocketContext.jsx';
 
 const root = createRoot(document.getElementById('root')); // Create root
 root.render(
   <React.StrictMode>
   <UserProvider>
+      <SocketProvider>
+         <App />
+      </SocketProvider>
     
-      <App />
+     
   
   </UserProvider>
   </React.StrictMode>

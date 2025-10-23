@@ -1,65 +1,45 @@
-import React, { useEffect, useRef } from 'react';
-import MessageBubble from './MessageBubble';
+// src/components/messages/Chat/MessageList.jsx
+import React from 'react';
+import classNames from 'classnames';
 
-const MessageList = ({ groupedMessages, currentUserId }) => {
-  const messagesEndRef = useRef(null);
-
-  // Auto-scroll to bottom on new messages or updates
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [groupedMessages]);
-
-  return (
-    <div className="flex-1 bg-gray-50 overflow-y-auto p-3! bg-gray-50 scrollbar-thin scrollbar-thumb-gray-300">
-      {Object.entries(groupedMessages).map(([date, msgs]) => (
-        <div key={date} className="mb-6!">
-          {/* Date Separator - Classic centered pill */}
-          <div className="flex justify-center">
-            <span className="p-2! bg-white text-xs font-medium text-gray-600 rounded-full shadow-md border border-gray-200">
-              {date}
-            </span>
+const MessageList = ({ messages, currentUserId }) => (
+  <>
+    {messages.map((msg) => {
+      const isCurrentUser = msg.sender === currentUserId;
+      return (
+        <div
+          key={msg._id || msg.createdAt}
+          className={classNames(
+            'flex items-end space-x-2 ',
+            isCurrentUser ? 'justify-end' : 'justify-start'
+          )}
+        >
+          {!isCurrentUser && (
+            <img
+              src={msg.senderAvatar || 'https://i.pravatar.cc/40'}
+              alt="sender avatar"
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          )}
+          <div
+            className={classNames(
+              'max-w-xs px-4 py-2 rounded-lg whitespace-pre-wrap',
+              isCurrentUser ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-gray-200 text-gray-900 rounded-bl-none'
+            )}
+          >
+            {msg.content}
           </div>
-
-          {msgs.map((msg, index) => {
-            const isOwn = msg.sender === currentUserId; // True for sent (right), False for received (left)
-            const showAvatar = !isOwn && (index === 0 || msgs[index - 1].sender !== msg.sender); // Avatar grouping for received
-
-            return (
-              <div
-                key={msg._id}
-                className={`flex my-3 ${isOwn ? 'justify-end' : 'justify-start'} items-end gap-4`}
-              >
-                {/* Left side: Avatar for received messages (only on first in group) */}
-                {!isOwn && showAvatar && (
-                  <img
-                    src={msg.senderAvatar || '/default-avatar.png'} // Use avatar from msg or fallback
-                    alt="Sender"
-                    className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 shadow-md m-1! "
-                  />
-                )}
-
-                {/* Spacer if no avatar (keeps bubble alignment) */}
-                {!isOwn && !showAvatar && <div className="w-10 bg-red-500" />}
-
-                {/* Message Bubble */}
-                <div
-                  className={`max-w-xs md:max-w-md ${isOwn ? 'order-2' : 'order-1'}`}
-                >
-                  <MessageBubble msg={msg} isOwn={isOwn} read={msg.read} />
-                </div>
-
-                {/* Right side spacer for sent messages (symmetry) */}
-                {isOwn && <div className="w-10" />}
-              </div>
-            );
-          })}
+          {isCurrentUser && (
+            <img
+              src={msg.senderAvatar || 'https://i.pravatar.cc/40'}
+              alt="sender avatar"
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          )}
         </div>
-      ))}
-
-      {/* Anchor for auto-scroll */}
-      <div ref={messagesEndRef} />
-    </div>
-  );
-};
+      );
+    })}
+  </>
+);
 
 export default MessageList;

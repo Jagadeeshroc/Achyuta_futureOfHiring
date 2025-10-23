@@ -1,30 +1,23 @@
 // src/components/messages/Sidebar/SearchResults.jsx
 import React from 'react';
-import Avatar from '../../ui/Avatar';
 
 const SearchResults = ({ results, onSelect }) => (
-  <div className="p-2! border-b border-gray-200">
-    <h4 className="p-2! text-sm font-medium text-gray-500">Search Results</h4>
+  <ul className="divide-y divide-gray-200">
     {results.map((user) => (
-      <div
+      <li
         key={user._id}
-        className="flex items-center p-3! hover:bg-gray-100 rounded-lg cursor-pointer transition"
+        className="flex items-center p-3 hover:bg-indigo-100 cursor-pointer rounded-md transition"
         onClick={() => onSelect(user._id)}
       >
-        <Avatar
-          user={{
-            avatar: user.avatar,
-            name: user.name || user.email || 'Unknown User',
-          }}
-          size={48}
+        <img
+          src={user.avatar || 'https://i.pravatar.cc/40'}
+          alt={user.username}
+          className="w-10 h-10 rounded-full mr-3 object-cover"
         />
-        <div className="m-2!">
-          <h3 className="font-medium text-gray-900">{user.name || user.email || 'Unknown User'}</h3>
-          <p className="text-sm text-gray-500">{user.headline || 'Start conversation'}</p>
-        </div>
-      </div>
+        <span className="font-medium">{user.name}</span>
+      </li>
     ))}
-  </div>
+  </ul>
 );
 
 export default SearchResults;

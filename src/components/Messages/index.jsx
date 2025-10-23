@@ -39,7 +39,7 @@
 //       navigate('/login');
 //     }
 
-//     const id = localStorage.getItem('userId');
+//     const id = localStorage.getItem('user');
 //     if (id) {
 //       setCurrentUserId(id);
 //     } else {
