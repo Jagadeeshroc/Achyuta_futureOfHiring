@@ -16,21 +16,20 @@ const MyProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const userId = localStorage.getItem('userId');
-
-        if (!token || !userId) throw new Error('Authentication data missing');
-
         const storedUser = localStorage.getItem('user');
-        if (storedUser) {
+
+        if (!token || !storedUser) throw new Error('Authentication data missing');
+
+        let userId = null;
+        try {
           const parsedUser = JSON.parse(storedUser);
-          if (parsedUser._id === userId) {
-            setUser(parsedUser);
-            setLoading(false);
-            return;
-          }
+          userId = parsedUser._id || parsedUser.id;
+        } catch {
+          throw new Error('Invalid user data in localStorage');
         }
 
-        // Fetch specific user data instead of all users
+        if (!userId) throw new Error('User ID missing');
+
         const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
