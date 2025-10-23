@@ -33,7 +33,7 @@ import Feedback from './components/ProfileIcon/MyProfile/Feedback';
 import CreateJob from './components/JobPages/CreateJob';
 import EditJob from './components/JobPages/EditJob';
 import RegisterForm from './components/RegisterForm/RegisterForm.jsx';
-import MessageComponent from './components/messages/MessageComponent.jsx';
+import MessageComponent from './components/Messages/MessageComponent.jsx';
 import JobDetails from './components/JobPages/JobDetails';
 // import UserDetails from './components/MyNetworks/userDetails.jsx';
 import MyNetwork from './components/MyNetworks/MyNetwork.jsx';

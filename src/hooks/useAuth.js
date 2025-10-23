@@ -1,21 +1,25 @@
 // src/hooks/useAuth.js
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export const useAuth = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem('token');
-  const userId = localStorage.getItem('userId');
+  const [authenticated, setAuthenticated] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (!token || !userId) {
-      navigate('/login');
-      return;
-    }
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    // No return of object here—hook returns below
-  }, [token, userId, navigate]); // Re-run if token/userId changes
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
 
-  return { userId }; // Return value for use in component
+    if (token && userId) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setAuthenticated(true);
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+      setAuthenticated(false);
+    }
+
+    setChecked(true);
+  }, []);
+
+  return { authenticated, checked };
 };
