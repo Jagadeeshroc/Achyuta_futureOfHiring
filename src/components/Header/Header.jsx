@@ -104,8 +104,8 @@ export default function JobbyNavbar() {
             alt="Logo"
             className="w-14 h-14 rounded-full hover:scale-120 "
           />
-          <span className=" m-2! hidden lg:block no-underline! font-bold text-lg text-gray-900! hover:text-amber-400!"
-           style={{ fontFamily: '"Rubik Glitch Pop", cursive' }}
+          <span className=" m-2! hidden lg:block no-underline! font-bold text-lg text-blue-950! hover:text-amber-400!"
+           style={{ fontFamily: '"Gugi", cursive' }}
           >Achyuta</span>
         </Link>
 

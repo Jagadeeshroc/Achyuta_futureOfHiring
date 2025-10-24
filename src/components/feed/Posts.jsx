@@ -19,6 +19,7 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
   const [error, setError] = useState(null);
   const [following, setFollowing] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('following');
 
   useEffect(() => {
     axios.defaults.baseURL = apiBaseUrl;
@@ -190,20 +191,20 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
   const renderPostCard = (post, column) => (
     <div
       key={post._id}
-      className="bg-gray-50 rounded-lg! shadow-lg overflow-hidden mb-3! cursor-pointer hover:shadow-xl transition-shadow p-1!"
+      className="bg-white rounded-2xl shadow-md overflow-hidden m-3! cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
       onClick={() => handlePostClick(post._id)}
     >
-      <div className="p-3! border-b border-gray-100">
+      <div className="p-4! border-b border-gray-100">
         <div className="flex items-start justify-between">
-          <div className="  flex items-start space-x-4 flex-1">
+          <div className="flex items-start space-x-4 flex-1">
             <img
               src={post.user.avatar ? `${axios.defaults.baseURL}${post.user.avatar}` : '/default-avatar.png'}
               alt={post.user.name || post.user.email || 'Unknown User'}
-              className="w-12 h-12 rounded-full m-2!"
+              className="w-12 h-12 rounded-full object-cover m-1!"
               onError={(e) => (e.target.src = '/default-avatar.png')}
             />
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 truncate m-1!">
+              <h3 className="font-semibold text-gray-900 truncate text-lg">
                 {post.user.name || post.user.email || 'Unknown User'}
               </h3>
               <p className="text-sm text-gray-500">{post.user.headline || 'No headline'}</p>
@@ -216,9 +217,9 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
                 e.stopPropagation();
                 handleFollow(post.user._id);
               }}
-              className={` p-2! rounded-full text-sm font-semibold transition-colors ${
+              className={`p-2! rounded-full text-sm font-medium transition-colors ${
                 isFollowing(post.user._id)
-                  ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                  ? 'bg-red-100 text-red-600 hover:bg-red-200'
                   : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
             >
@@ -228,147 +229,203 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
         </div>
       </div>
 
-      <div className="p-3! bg-gray-200">
-        <p className="text-gray-800 m-2! whitespace-pre-wrap">{post.content}</p>
+      <div className="p-4! h-180 w-180">
+        <p className="text-gray-800 whitespace-pre-wrap mb-4!">{post.content}</p>
         {post.image && (
           <img
             src={post.image.startsWith('http') ? post.image : `${axios.defaults.baseURL}${post.image}`}
             alt="Post"
-            className="w-full h-64 object-cover rounded-xl mb-4"
+            className="w-full! h-full object-cover rounded-xl m-1!"
             onError={(e) => (e.target.src = '/default-placeholder.jpg')}
           />
         )}
       </div>
 
-      <div className="flex justify-around border-t border-gray-100 p-2! m-2! bg-gray-50">
-        <div className="flex items-center space-x-2 text-gray-500 p-2!">
-          <FaThumbsUp size={16} />
+      <div className="flex justify-around border-t border-gray-100 p-3! bg-gray-50">
+        <button
+          className="flex items-center space-x-2 p-2! text-gray-600 hover:text-blue-600 transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleLike(post._id, column);
+          }}
+        >
+          <FaThumbsUp size={18} />
           <span className="text-sm">{post.likes.length}</span>
-        </div>
-        <div className="flex items-center space-x-2 text-gray-500 p-2!">
-          <FaComment size={16} />
+        </button>
+        <button
+          className="flex items-center space-x-2 p-2! text-gray-600 hover:text-blue-600 transition-colors"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <FaComment size={18} />
           <span className="text-sm">{post.comments.length}</span>
-        </div>
-        <div className="flex items-center space-x-2 text-gray-500 p-2!">
-          <FaShare size={16} />
+        </button>
+        <button
+          className="flex items-center space-x-2 p-2! text-gray-600 hover:text-blue-600 transition-colors"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <FaShare size={18} />
           <span className="text-sm">Share</span>
-        </div>
+        </button>
       </div>
     </div>
   );
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <FaSpinner className="animate-spin text-4xl text-blue-600" />
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <FaSpinner className="animate-spin text-5xl text-blue-600" />
       </div>
     );
   }
 
   return (
-    <div className={`sticky top-0  bg-gray-50 p-4! ${className}`}>
-      <div className="">
-     
-
-        {/* Post form only for logged-in users */}
-        {currentUser ? (
-          <div className=" sticky top-0 z-5 bg-white rounded-2xl shadow-lg p-2! w-full! mb-8! mx-auto!">
-            <form onSubmit={handlePostSubmit} className="space-y-4">
-              <div className="flex items-start space-x-4 p-2!">
-                <img
-                  src={
-                    currentUser?.avatar
-                      ? currentUser.avatar.startsWith('http')
-                        ? currentUser.avatar
-                        : `${apiBaseUrl}${currentUser.avatar.replace(/^\/Uploads/, '/uploads')}`
-                      : '/default-avatar.png'
-                  }
-                  alt={currentUser?.name || currentUser?.email || 'Unknown User'}
-                  className="w-12 h-12 rounded-full m-2!"
-                />
-                <textarea
-                  value={newPost}
-                  onChange={(e) => setNewPost(e.target.value)}
-                  placeholder="    What's on your mind?"
-                  className="flex-1 p-3! m-2! border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows={2}
-                />
+    <div className={`min-h-screen bg-gray-100 ${className}`}>
+      {/* Sticky Header Section */}
+      <div className="sticky top-0 z-50 max-w-4xl ml-15! mx-auto bg-transparent backdrop-blur-lg border-b border-gray-200 shadow-sm">
+        <div className="max-w-4xl mx-auto p-1.5!">
+          {/* First Row: Post Form */}
+          {currentUser ? (
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-3">
+              <div className="flex items-center justify-between">
+                {/* User Info and Input */}
+                <div className="flex items-center space-x-3 flex-1">
+                  <img
+                    src={
+                      currentUser?.avatar
+                        ? currentUser.avatar.startsWith('http')
+                          ? currentUser.avatar
+                          : `${apiBaseUrl}${currentUser.avatar.replace(/^\/Uploads/, '/uploads')}`
+                        : '/default-avatar.png'
+                    }
+                    alt={currentUser?.name || currentUser?.email || 'Unknown User'}
+                    className="w-12 h-12 m-1! rounded-xl object-cover border-2 border-white shadow-sm"
+                  />
+                  <div className="flex-1">
+                    <form onSubmit={handlePostSubmit} className="flex items-center space-x-3">
+                      <textarea
+                        value={newPost}
+                        onChange={(e) => setNewPost(e.target.value)}
+                        placeholder="  What's inspiring you today?"
+                        className="flex-1 p-2! border-0 bg-gray-50 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all text-sm placeholder-gray-400 min-h-[50px]"
+                        rows={1}
+                      />
+                      
+                      {/* Action Buttons */}
+                      <div className="flex items-center space-x-2">
+                        {/* Add Photo Button */}
+                        <label className="flex items-center cursor-pointer text-gray-500 hover:text-blue-500 transition-all duration-200 p-2! rounded-lg hover:bg-blue-50 group">
+                          <FaImage size={20} className="group-hover:scale-110 transition-transform m-1!" />
+                          <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                        </label>
+                        
+                        {/* Share Post Button */}
+                        <button
+                          type="submit"
+                          disabled={submitting || !newPost.trim()}
+                          className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-2! rounded-xl font-semibold hover:shadow-lg disabled:opacity-50 flex items-center space-x-2 transition-all duration-200 disabled:transform-none transform hover:scale-105 text-sm min-w-[100px] justify-center"
+                        >
+                          {submitting ? (
+                            <FaSpinner className="animate-spin m-1!" size={14} />
+                          ) : (
+                            <FaPaperPlane className="transform -rotate-45 m-1!" size={14} />
+                          )}
+                          <span>{submitting ? 'Posting...' : 'Post'}</span>
+                        </button>
+                      </div>
+                      <div className="flex justify-center ml-10!">
+            <div className="flex space-x-1 bg-white/80 backdrop-blur-sm rounded-xl p-1 border border-gray-200 shadow-sm w-full max-w-md">
+              <button
+                className={`flex-1 flex items-center justify-center space-x-2 m-2! p-2! rounded-lg font-semibold transition-all duration-200 text-sm ${
+                  activeTab === 'following'
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                }`}
+                onClick={() => setActiveTab('following')}
+              >
+                <FaUsers size={16} />
+                <span>Following</span>
+              </button>
+              <button
+                className={`flex-1 flex items-center justify-center space-x-2 p-2! rounded-lg font-semibold transition-all duration-200 text-sm ${
+                  activeTab === 'discover'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                }`}
+                onClick={() => setActiveTab('discover')}
+              >
+                <FaCompass size={16} />
+                <span>Discover</span>
+              </button>
+            </div>
+          </div>
+                    </form>
+                  </div>
+                </div>
               </div>
 
+              {/* Image Preview */}
               {imagePreview && (
-                <div className="relative bg-gray-100 rounded-xl overflow-hidden p-2!">
-                  <img src={imagePreview} alt="Preview" className="w-full h-64 object-cover" />
+                <div className="mt-3 relative bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
+                  <img src={imagePreview} alt="Preview" className="w-full h-40 object-cover" />
                   <button
                     type="button"
                     onClick={removeImage}
-                    className="absolute top-2 right-2 bg-red-500 text-white p-2! rounded-full"
+                    className="absolute top-2 right-2 bg-white/90 text-gray-600 p-1.5 rounded-lg hover:bg-white hover:text-red-500 transition-all shadow-sm backdrop-blur-sm"
                   >
-                    <FaTimes size={16} />
+                    <FaTimes size={14} />
                   </button>
                 </div>
               )}
-
-              <div className="flex items-center justify-between  pt-3!">
-                <label className="flex items-center space-x-2 cursor-pointer text-gray-500 hover:text-blue-500">
-                  <FaImage size={20} className='m-2!'/>
-                  <span className="text-sm m-2!">Add Photo</span>
-                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-                </label>
+            </div>
+          ) : (
+            <div className="text-center bg-gradient-to-r from-blue-500 to-purple-500 p-3! rounded-2xl shadow-lg mb-3! text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <FaUserCircle className="text-2xl opacity-90 mr-2! " />
+                  <div className="text-left">
+                    <h3 className="text-lg font-bold">Join the Conversation</h3>
+                    <p className="text-blue-100 text-sm">
+                      Sign in to share your thoughts
+                    </p>
+                  </div>
+                </div>
                 <button
-                  type="submit"
-                  disabled={submitting || !newPost.trim()}
-                  className="bg-blue-600 text-white p-1! rounded-md! font-semibold hover:bg-blue-700 disabled:opacity-50 flex items-center space-x-2"
+                  onClick={() => navigate('/login')}
+                  className="bg-white text-blue-600 p-1! rounded-xl font-bold hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-sm"
                 >
-                  {submitting ? <FaSpinner className="animate-spin m-1!" /> : <FaPaperPlane />}
-                  <span className='m-1!'>{submitting ? 'Posting...' : 'Post'}</span>
+                  Sign In
                 </button>
               </div>
-            </form>
-          </div>
-        ) : (
-          <div className="text-center bg-white p-6 rounded-2xl shadow-md mb-8 max-w-2xl mx-auto">
-            <p className="text-gray-600 mb-4">Want to share something?</p>
-            <button
-              onClick={() => navigate('/login')}
-              className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
-            >
-              Log in to post
-            </button>
-          </div>
-        )}
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {currentUser && (
-            <div className="space-y-6">
-              <div className="flex items-center space-x-2 mb-4! p-2!">
-                <FaUsers className="text-blue-600" size={24} />
-                <h2 className="text-xl font-bold text-gray-900">Following</h2>
-              </div>
-              {followingPosts.length === 0 ? (
-                <div className="text-center py-12">
-                  <FaUserCircle className="text-4xl text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">Follow more people to see their posts here.</p>
-                </div>
-              ) : (
-                followingPosts.map((post) => renderPostCard(post, 'following'))
-              )}
+
+              
             </div>
           )}
+        </div>
+      </div>
 
-          <div className="space-y-6 ">
-            <div className="flex items-center space-x-2 mb-4! p-2!">
-              <FaCompass className="text-purple-600" size={24} />
-              <h2 className="text-xl font-bold text-gray-900">Discover</h2>
-            </div>
-            {discoverPosts.length === 0 ? (
-              <div className="text-center py-12">
-                <FaCompass className="text-4xl text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Discover new posts and people.</p>
+      {/* Posts Display */}
+      <div className="flex justify-center p-3! m-3!">
+        <div className="space-y-6 m-3!">
+          {activeTab === 'following' && currentUser ? (
+            followingPosts.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-2xl shadow-md">
+                <FaUserCircle className="text-5xl text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 text-lg">Follow more people to see their posts here.</p>
+              </div>
+            ) : (
+              followingPosts.map((post) => renderPostCard(post, 'following'))
+            )
+          ) : activeTab === 'discover' ? (
+            discoverPosts.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-2xl shadow-md">
+                <FaCompass className="text-5xl text-gray-300 mx-auto mb-4! " />
+                <p className="text-gray-500 text-lg">Discover new posts and people.</p>
               </div>
             ) : (
               discoverPosts.map((post) => renderPostCard(post, 'discover'))
-            )}
-          </div>
+            )
+          ) : null}
         </div>
       </div>
     </div>
