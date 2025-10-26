@@ -66,5 +66,34 @@ router.post('/:id', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Failed to send' });
   }
 });
+// Add this to routes/conversations.js
+
+// Mark messages as read
+router.put('/:conversationId/read', authMiddleware, async (req, res) => {
+  try {
+    const conversation = await Conversation.findOne({
+      _id: req.params.conversationId,
+      participants: req.user.id
+    });
+
+    if (!conversation) {
+      return res.status(404).json({ error: 'Conversation not found' });
+    }
+
+    await Message.updateMany(
+      {
+        conversation: req.params.conversationId,
+        sender: { $ne: req.user.id },
+        read: false
+      },
+      { $set: { read: true } }
+    );
+    
+    res.json({ message: 'Messages marked as read' });
+  } catch (err) {
+    console.error('Error marking messages as read:', err.message);
+    res.status(500).json({ error: 'Server error while marking messages as read' });
+  }
+});
 
 module.exports = router;

@@ -1,70 +1,111 @@
+// src/hooks/useMessages.js
 import { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
+import axios from 'axios'; // Import axios to use auth headers
 
-export const useMessages = (conversationId, currentUserId, apiBaseUrl) => {
-  const [messages, setMessages] = useState([]);
-  const [typing, setTyping] = useState(null);
-  const socketRef = useRef(null);
+export const useMessages = (conversation, currentUser, apiBaseUrl) => {
+  const [messages, setMessages] = useState([]);
+  const [typing, setTyping] = useState(null);
+  const socketRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
 
-  useEffect(() => {
-    if (!conversationId) return;
+  useEffect(() => {
+    if (!conversation || !currentUser || !apiBaseUrl) return;
 
-    // Connect socket
-    socketRef.current = io(apiBaseUrl);
+    const conversationId = conversation._id;
+    socketRef.current = io(apiBaseUrl, { withCredentials: true });
+    socketRef.current.emit('joinConversation', conversationId);
+    socketRef.current.emit('joinUser', currentUser._id);
 
-    // Join the conversation room
-    socketRef.current.emit('joinRoom', conversationId);
+    const fetchMessages = async () => {
+      try {
+        const { data } = await axios.get(
+          `${apiBaseUrl}/api/conversations/${conversationId}/messages`
+        );
+        setMessages(data);
+        await axios.put(
+          `${apiBaseUrl}/api/conversations/${conversationId}/read`,
+          {}
+        );
+      } catch (error) {
+        console.error('Failed to fetch messages:', error);
+      }
+    };
+    fetchMessages();
 
-    // Fetch initial messages via API
-    const fetchMessages = async () => {
-      try {
-        const res = await fetch(`${apiBaseUrl}/api/messages/${conversationId}`);
-        const data = await res.json();
-        setMessages(data);
-      } catch (error) {
-        console.error('Failed to fetch messages:', error);
-      }
+    socketRef.current.on('newMessage', (message) => {
+      if (message.conversation === conversationId) {
+        
+        // --- FIX FOR DUPLICATES ---
+        // If the incoming message is from the current user, ignore it
+        // because we've already added it optimistically.
+        if (message.sender._id === currentUser._id) {
+          return;
+        }
+        // --- END OF FIX ---
+
+        setMessages((prev) => [...prev, message]);
+      }
+    });
+
+    socketRef.current.on('typing', (data) => {
+      if (data.userId === currentUser._id) return; 
+      setTyping(`${data.userName} is typing...`);
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      typingTimeoutRef.current = setTimeout(() => setTyping(null), 3000);
+    });
+
+    return () => {
+      socketRef.current.emit('leaveConversation', conversationId);
+      socketRef.current.disconnect();
+    };
+  }, [conversation, currentUser, apiBaseUrl]);
+
+  const sendMessage = async (content) => {
+    if (!socketRef.current || !conversation || !currentUser) return;
+    
+    // --- THIS IS THE FIX: OPTIMISTIC UPDATE ---
+    
+    // 1. Create a temporary message object.
+    // It must match the structure of a real message.
+    const optimisticMessage = {
+      _id: 'temp-' + Date.now(), // Give it a temporary unique ID
+      conversation: conversation._id,
+      content: content,
+      createdAt: new Date().toISOString(),
+      read: false, // Senders read their own messages
+      sender: currentUser // Use the full currentUser object
     };
-    fetchMessages();
 
-    // Listen for new incoming messages
-    socketRef.current.on('newMessage', (message) => {
-      setMessages((prev) => [...prev, message]);
-    });
+    // 2. Add it to the local state immediately
+    setMessages((prev) => [...prev, optimisticMessage]);
 
-    // Listen for typing indicator
-    socketRef.current.on('typing', (userName) => {
-      setTyping(`${userName} is typing...`);
-      // Clear after 3 sec
-      setTimeout(() => setTyping(null), 3000);
-    });
+    // --- END OF FIX ---
 
-    return () => {
-      // Leave room & disconnect on cleanup
-      socketRef.current.emit('leaveRoom', conversationId);
-      socketRef.current.disconnect();
-    };
-  }, [conversationId, apiBaseUrl]);
+    // 3. Send the message to the backend in the background
+    try {
+      await axios.post(
+        `${apiBaseUrl}/api/conversations/${conversation._id}`,
+        { content }
+      );
+      // The backend will broadcast to everyone *else*.
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      // If the send fails, remove the optimistic message
+      setMessages((prev) => prev.filter(m => m._id !== optimisticMessage._id));
+    }
+  };
 
-  const sendMessage = (content) => {
-    if (!socketRef.current) return;
-    const message = {
-      conversationId,
-      sender: currentUserId,
-      content,
-      createdAt: new Date(),
-    };
-    // Emit message to server
-    socketRef.current.emit('sendMessage', message);
+  const emitTyping = () => {
+    if (!socketRef.current || !conversation) return;
+    socketRef.current.emit('typing', { 
+      conversationId: conversation._id, 
+      userId: currentUser._id,
+      userName: currentUser.name
+    });
+  };
 
-    // Optimistic UI update
-    setMessages((prev) => [...prev, message]);
-  };
-
-  const emitTyping = () => {
-    if (!socketRef.current) return;
-    socketRef.current.emit('typing', { conversationId, userName: 'You' });
-  };
-
-  return { messages, typing, sendMessage, emitTyping };
+  return { messages, typing, sendMessage, emitTyping };
 };
