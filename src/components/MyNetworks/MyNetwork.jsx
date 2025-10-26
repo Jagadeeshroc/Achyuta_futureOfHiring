@@ -245,7 +245,7 @@ const MyNetwork = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center  bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="flex flex-col items-center justify-center  bg-gradient-to-br from-purple-400 to-indigo-200 p-4">
         <div className="bg-white rounded-3xl shadow-2xl   w-full text-center">
           <FaExclamationTriangle className="text-6xl text-red-400 mx-auto mb-6" />
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Oops! Something went wrong</h2>
@@ -262,7 +262,7 @@ const MyNetwork = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-50 py-8 px-4">
       <div className="p-3!">
         {/* Header */}
         <div className="text-center mb-12">

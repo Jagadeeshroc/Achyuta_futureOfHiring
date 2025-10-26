@@ -20,7 +20,7 @@ const PostHeader = ({ user, createdAt, className = '', renderName }) => (
           name: renderName ? renderName(user) : (user?.name || user?.email || 'Unknown User'),
         }}
         size={48}
-        className="flex-shrink-0"
+        className="flex-shrink-0 mr-2!"
       />
       <div className="flex-1">
         <h3 className="font-semibold text-gray-900 text-lg">
@@ -334,7 +334,7 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
           <p className="text-gray-500 text-lg mb-4">{error || 'Post not found'}</p>
           <button
             onClick={() => navigate(-1)}
-            className="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition-colors flex items-center space-x-2 mx-auto"
+            className="bg-blue-600 text-white p-5! m-2! rounded-full hover:bg-blue-700 transition-colors flex items-center space-x-2 mx-auto"
           >
             <FaArrowLeft size={16} />
             <span>Go Back</span>
@@ -345,8 +345,8 @@ const PostDetails = ({ apiBaseUrl = 'http://localhost:5000', className = '', act
   }
 
   return (
-    <div className={`h-190! overflow-auto bg-gray-200  ${className}`}>
-      <div className=" p-6">
+    <div className={`h-190! overflow-auto bg-purple-200  ${className}`}>
+      <div className=" p-3!">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 mb-6 transition-colors"

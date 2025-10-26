@@ -405,7 +405,7 @@ const Posts = ({ apiBaseUrl = 'http://localhost:5000', className = '' }) => {
       </div>
 
       {/* Posts Display */}
-      <div className="flex justify-center p-3! m-3!">
+      <div className="flex justify-center p-3! m-3! bg-purple-100">
         <div className="space-y-6 m-3!">
           {activeTab === 'following' && currentUser ? (
             followingPosts.length === 0 ? (
